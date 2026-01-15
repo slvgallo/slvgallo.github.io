@@ -9,7 +9,7 @@
         "media": [
           {"type": "image", "src": "img/270115.jpg"},
           {"type": "video", "src": "https://www.youtube.com/embed/GrGOUfwJXWg?si=AbE65EAPHP8ylM-8"},
-          {"type": "processing", "src": "https://www.openprocessing.org/sketch/2785494/embed/"},
+          {"type": "processing", "src": "https://openprocessing.org/sketch/2785494/embed/"},
           {"type": "sketchfab", "src": "https://sketchfab.com/models/4ce3fa471bd14b93b9d7adb6e1e7fef9/embed"},
           {"type": "soundcloud", "src": "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/522738729&color=%230b0b0b&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true"},
           {"type": "flickr", "src": "https://live.staticflickr.com/6060/6273435104_8ed66fd11e_b.jpg"},
@@ -38,7 +38,7 @@
         "thumb": "https://www.youtube.com/watch?v=BZdc3rEtxLw",
         "tags": ["video"],
         "media": [
-          {"type": "processing", "src": "https://www.openprocessing.org/sketch/2785494/embed/"},
+          {"type": "processing", "src": "https://openprocessing.org/sketch/2785494/embed/"},
           {"type": "video", "src": "https://www.youtube.com/watch?v=BZdc3rEtxLw"}
         ]
       },
