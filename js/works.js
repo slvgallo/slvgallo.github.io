@@ -121,6 +121,7 @@ const mediaHandlers = {
 
   // Processingの処理
   processing: (mediaItem, fullContainer, contentContainer) => {
+    console.log('Processing URL:', mediaItem.src);
     const processingWrap = document.createElement('div');
     processingWrap.className = 'processing-wrap';
     
