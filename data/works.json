@@ -1,0 +1,315 @@
+[
+    {
+        "id": "2612",
+        "date": "NOV 2025",
+        "title": "Phase Shifting",
+        "thumb": "img/270115.jpg",
+        "tags": ["sound","video"],
+        "desc": "Short description of Project 01",
+        "media": [
+          {"type": "image", "src": "img/270115.jpg"},
+          {"type": "video", "src": "https://www.youtube.com/embed/GrGOUfwJXWg?si=AbE65EAPHP8ylM-8"},
+          {"type": "processing", "src": "https://www.openprocessing.org/sketch/2785494/embed/"},
+          {"type": "sketchfab", "src": "https://sketchfab.com/models/4ce3fa471bd14b93b9d7adb6e1e7fef9/embed"},
+          {"type": "soundcloud", "src": "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/522738729&color=%230b0b0b&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true"},
+          {"type": "flickr", "src": "https://live.staticflickr.com/6060/6273435104_8ed66fd11e_b.jpg"},
+          {"type": "flickr", "src": "https://live.staticflickr.com/8632/28156322252_48ae846a22_b.jpg"}
+          
+        ]
+      },
+
+    
+
+
+
+      {
+        "id": "2511-2",
+        "title": "Phase Shifting",
+        "thumb": "https://www.youtube.com/watch?v=GrGOUfwJXWg",
+        "tags": ["video","sound"],
+        "desc": "sampling: Octet (Eight Lines) : Eight Lines · Ensemble Modern · Steve Reich",
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=GrGOUfwJXWg"}
+        ]
+      },
+      {
+        "id": "2511-1",
+        "title": "◯◯◯",
+        "thumb": "https://www.youtube.com/watch?v=BZdc3rEtxLw",
+        "tags": ["video"],
+        "media": [
+          {"type": "processing", "src": "https://www.openprocessing.org/sketch/2785494/embed/"},
+          {"type": "video", "src": "https://www.youtube.com/watch?v=BZdc3rEtxLw"}
+        ]
+      },
+      {
+        "id": "2510-2",
+        "title": "CLAP - Sora2",
+        "thumb": "https://www.youtube.com/shorts/86xP06Y3VjM",
+        "tags": ["video"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/shorts/86xP06Y3VjM"}
+        ]
+      },
+      {
+        "id": "2510-1",
+        "title": "CLAP - Sora2",
+        "thumb": "https://www.youtube.com/shorts/-3WdCFiSZhQ",
+        "tags": ["video"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/shorts/-3WdCFiSZhQ"}
+        ]
+      },
+
+       
+      {
+        "id": "2211-2",
+        "title": "VDSD",
+        "thumb": "https://www.youtube.com/shorts/399Yh1cvjEA",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "processing", "src": "https://www.openprocessing.org/sketch/1262126/embed/"},
+          {"type": "video", "src": "https://www.youtube.com/shorts/399Yh1cvjEA"}
+        ]
+      },
+      {
+        "id": "2211-1",
+        "title": "TXSD",
+        "thumb": "https://www.youtube.com/shorts/k5hZ1fkSA9A",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "processing", "src": "https://www.openprocessing.org/sketch/1257872/embed/"},
+          {"type": "video", "src": "https://www.youtube.com/shorts/k5hZ1fkSA9A"}
+        ]
+      },
+      {
+        "id": "2210-1",
+        "title": "Hight Speed Clapping Music / Steve Reich",
+        "thumb": "https://www.youtube.com/shorts/_jZsb-BivfI",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/shorts/_jZsb-BivfI"}
+        ]
+      },
+{
+        "id": "2102-3",
+        "title": "Clapping Music (1972) / Steve Reich",
+        "thumb": "https://www.youtube.com/watch?v=YPU5XrmORCQ",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=YPU5XrmORCQ"}
+        ]
+      },
+{
+        "id": "2102-2",
+        "title": "SP-303 TAPE ECHO",
+        "thumb": "https://www.youtube.com/watch?v=Qh1ELPFEOaM",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=Qh1ELPFEOaM"}
+        ]
+      },
+{
+        "id": "2102-1",
+        "title": "Piano",
+        "thumb": "https://www.youtube.com/watch?v=WW0gvwtz_40",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=WW0gvwtz_40"}
+        ]
+      },
+{
+        "id": "1602-1",
+        "title": "JTM",
+        "thumb": "https://www.youtube.com/watch?v=X3h-1oupwkM",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=X3h-1oupwkM"}
+        ]
+      },
+      {
+        "id": "1501-1",
+        "title": "Polar",
+        "thumb": "https://www.youtube.com/shorts/ltPvOl9vZUU",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/shorts/ltPvOl9vZUU"}
+        ]
+      },
+{
+        "id": "1408-1",
+        "title": "MANGA SHOCK - DUM-DUM PARTY 2014",
+        "thumb": "https://www.youtube.com/watch?v=t2A-NoLmdEg",
+        "tags": ["video"],
+        "desc": "[video/edit]<br><br>DUM-DUM PARTY 2014<br>Artist: MANGA SHOCK<br>Place: TSUTAYA O-nest<br>Date: Jun. 14, 2014<br><br>MANGA SHOCK: <a href=\"https://x.com/MANGASHOCK_7\" target=\"_blank\">https://x.com/MANGASHOCK_7</a><br>DUM-DUM PARTY: <a href=\"http://party.dum-dum.tv/\" target=\"_blank\">http://party.dum-dum.tv/</a><br>Shibuya-O Group: <a href=\"http://shibuya-o.com/\" target=\"_blank\">http://shibuya-o.com/</a><br><br>Client: MANGA SHOCK",
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=t2A-NoLmdEg"}
+        ]
+      },
+      {
+        "id": "1212-2",
+        "title": "Hands",
+        "thumb": "https://www.youtube.com/watch?v=PuqUP_ffECI",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=PuqUP_ffECI"}
+        ]
+      },
+      {
+        "id": "1212-1",
+        "title": "Wave",
+        "thumb": "https://www.youtube.com/watch?v=RRNXrklfYqM",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=RRNXrklfYqM"}
+        ]
+      },
+{
+        "id": "1211-7",
+        "title": "Tridots",
+        "thumb": "https://www.youtube.com/watch?v=aQrSBUc4nNo",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=aQrSBUc4nNo"}
+        ]
+      },
+      {
+        "id": "1211-7",
+        "title": "Underwater",
+        "thumb": "https://www.youtube.com/watch?v=10o-b_h6daY",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=10o-b_h6daY"}
+        ]
+      },
+{
+        "id": "1211-6",
+        "title": "Washing Machine",
+        "thumb": "https://www.youtube.com/watch?v=Go_IHrx7Tf4",
+        "tags": ["video"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=Go_IHrx7Tf4"}
+        ]
+      },
+{
+        "id": "1211-5",
+        "title": "Arduino with Ribbon Controller Ver. 1.0 – Arduino",
+        "thumb": "https://www.youtube.com/watch?v=qyldvD9WPGI",
+        "tags": ["video","sound"],
+                "desc": "Model: Arduino with Ribbon Controller<br>Materials: 5052 Aluminum, Rosewood, Arduino UNO<br><br>Model: 2ch Passive Mixer<br>Materials: 5052 Aluminum, Rosewood, 50 mm Speaker",
+
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=qyldvD9WPGI"}
+        ]
+      },
+{
+        "id": "1211-4",
+        "title": "Tape Music",
+        "thumb": "https://www.youtube.com/watch?v=d8RUtWsXaZo",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=d8RUtWsXaZo"}
+        ]
+      },
+{
+        "id": "1211-3",
+        "title": "Step Sequencer Ver. 2.3 – Arduino",
+        "thumb": "https://www.youtube.com/watch?v=lGAkuM0IOZ8",
+        "tags": ["video","sound"],
+        "desc": "Model: 8-Step Sequencer<br>Materials: 5052 Aluminum, Rosewood, Arduino Duemilanove 328<br><br>Model: 2ch Passive Mixer<br>Materials: 5052 Aluminum, Rosewood, 50 mm speaker",
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=lGAkuM0IOZ8"}
+        ]
+      },
+{
+        "id": "1211-2",
+        "title": "devotion.",
+        "thumb": "https://www.youtube.com/watch?v=H9PgumYHmps",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=H9PgumYHmps"}
+        ]
+      },
+      {
+        "id": "1211-1",
+        "title": "Kaleidoscope",
+        "thumb": "https://www.youtube.com/watch?v=cQqQlKRTW6E",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=cQqQlKRTW6E"}
+        ]
+      },
+{
+        "id": "1010-1",
+        "title": "Falling Objects",
+        "thumb": "https://www.youtube.com/watch?v=UJUFGfkpluY",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=UJUFGfkpluY"}
+        ]
+      },
+{
+        "id": "0910-1",
+        "title": "Tape Music",
+        "thumb": "https://www.youtube.com/watch?v=5n3f5rm1_XE",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=5n3f5rm1_XE"}
+        ]
+      },
+      {
+        "id": "0906-1",
+        "title": "Camera Toss",
+        "thumb": "https://www.youtube.com/watch?v=8EtjfGwnh10",
+        "tags": ["video"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=8EtjfGwnh10"}
+        ]
+      },
+    {
+        "id": "0903-1",
+        "title": "Camera Toss",
+        "thumb": "https://www.youtube.com/watch?v=F8FofEhkmWw",
+        "tags": ["video"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=F8FofEhkmWw"}
+        ]
+      },
+    {
+        "id": "0812-2",
+        "title": "Tape Loop",
+        "thumb": "https://www.youtube.com/watch?v=hICJCtOKd3Q",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=hICJCtOKd3Q"}
+        ]
+      },
+    {
+        "id": "0812-1",
+        "title": "Cow",
+        "thumb": "https://www.youtube.com/watch?v=p-FHRbeO-t8",
+        "tags": ["video","sound"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=p-FHRbeO-t8"}
+        ]
+      },
+    {
+        "id": "0810-2",
+        "title": "Camera Toss",
+        "thumb": "https://www.youtube.com/watch?v=I0VTk0MCBOo",
+        "tags": ["video"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=I0VTk0MCBOo"}
+        ]
+      },
+    {
+        "id": "0810-1",
+        "title": "Camera Toss",
+        "thumb": "https://www.youtube.com/watch?v=KjKgfdstyQs",
+        "tags": ["video"],
+        "media": [
+          {"type": "video", "src": "https://www.youtube.com/watch?v=KjKgfdstyQs"}
+        ]
+      }
+
+]

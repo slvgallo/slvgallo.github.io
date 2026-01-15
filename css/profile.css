@@ -1,0 +1,263 @@
+/* プロフィールページ専用スタイル */
+
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2em 0;
+}
+
+/* プロフィールヘッダー */
+.profile-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 2em;
+  margin-bottom: 3em;
+  padding-bottom: 2em;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.profile-avatar {
+  flex-shrink: 0;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-avatar img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-name {
+  font-size: 2.5em;
+  font-weight: 400;
+  margin: 0 0 0.5em 0;
+  color: #36393d;
+}
+
+.profile-title {
+  font-size: 1.2em;
+  color: #666;
+  margin: 0 0 1em 0;
+  font-weight: 300;
+}
+
+.profile-bio {
+  font-size: 1.1em;
+  line-height: 1.6;
+  color: #555;
+  margin: 0;
+}
+
+/* プロフィールセクション */
+.profile-section {
+  margin-bottom: 3em;
+}
+
+.profile-section h2 {
+  font-size: 1.8em;
+  font-weight: 400;
+  margin: 0 0 1.5em 0;
+  color: #36393d;
+  border-bottom: 2px solid #5289db;
+  padding-bottom: 0.5em;
+  display: inline-block;
+}
+
+.profile-section p {
+  font-size: 1.1em;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 1.5em;
+}
+
+/* スキルグリッド */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5em;
+}
+
+.skill-item {
+  background: #fff;
+  padding: 1.5em;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.skill-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.skill-item h3 {
+  font-size: 1.2em;
+  font-weight: 500;
+  margin: 0 0 0.8em 0;
+  color: #36393d;
+}
+
+.skill-item p {
+  font-size: 0.95em;
+  line-height: 1.5;
+  color: #666;
+  margin: 0;
+}
+
+/* コンタクトリンク */
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.contact-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em 1.5em;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #36393d;
+  transition: all 0.2s ease;
+}
+
+.contact-link:hover {
+  background: #f8f8f8;
+  border-color: #5289db;
+  color: #5289db;
+}
+
+.contact-platform {
+  font-weight: 500;
+  font-size: 1.1em;
+}
+
+.contact-url {
+  color: #666;
+  font-size: 0.95em;
+}
+
+/* 注目作品 */
+.featured-works {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2em;
+}
+
+.featured-work {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.featured-work:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+.featured-work a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.featured-work img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.featured-work-info {
+  padding: 1.5em;
+}
+
+.featured-work-info h3 {
+  font-size: 1.2em;
+  font-weight: 500;
+  margin: 0 0 0.5em 0;
+  color: #36393d;
+}
+
+.featured-work-info p {
+  font-size: 0.95em;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 1em 0;
+  }
+  
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5em;
+  }
+  
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .profile-name {
+    font-size: 2em;
+  }
+  
+  .profile-title {
+    font-size: 1.1em;
+  }
+  
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .featured-works {
+    grid-template-columns: 1fr;
+  }
+  
+  .contact-link {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 0.5em 0;
+  }
+  
+  .profile-section {
+    margin-bottom: 2em;
+  }
+  
+  .profile-section h2 {
+    font-size: 1.5em;
+  }
+  
+  .skill-item {
+    padding: 1em;
+  }
+}

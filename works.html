@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>slvgallo portfolio</title>
+  <title id="page-title"></title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="page-index">
+<body class="page-permalink">
 
 <div class="header">
   <div class="header-wrapper">
@@ -19,22 +19,10 @@
         </h1>
       </header>
     </div>
-    <button class="menu-toggle" aria-label="メニューを開く">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <div class="menu-overlay"></div>
     <div class="header-box-nav">
       <nav class="nav" role="navigation" aria-label="Main navigation">
         <ul>
-          <li><a href="#" data-filter="sound" class="filter-link">sound</a></li>
-          <li><a href="#" data-filter="video" class="filter-link">video</a></li>
-          <li><a href="#" data-filter="photo" class="filter-link">photo</a></li>
-          <li><a href="#" data-filter="product" class="filter-link">product</a></li>
-          <li><a href="#" data-filter="2d" class="filter-link">2d</a></li>
-          <li><a href="#" data-filter="3d" class="filter-link">3d</a></li>
-          <li><a href="#" data-filter="event" class="filter-link">event</a></li>
+          <li><a href="index.html">← Works</a></li>
         </ul>
       </nav>
     </div>
@@ -42,14 +30,32 @@
 </div>
 
 <div class="site-content">
+  <article class="post permalink-post">
+    <!-- フルサイズメディアコンテナ -->
+    <div id="project-media-full" class="l-container full-image"></div>
+    
+    <!-- コンテンツエリア -->
+    <div class="l-container-mini section">
+      <header class="entry-header">
+        <h1 id="project-title" class="entry-title"></h1>
+        
+      </header>
+      
+      <div class="entry-content">
+        <p id="project-desc"></p>
+        <div id="project-media"></div>
+      </div>
+      <div class="entry-footer">
+        <div class="project-meta">
+          <div id="project-date" class="project-date"></div>
+          <div id="project-tags" class="project-tags"></div>
+        </div>
+      </div>
 
-
-  <div class="top-post-container">
-    <div id="works-grid" class="index-post-wrapper"></div>
-  </div>
+  </article>
 </div>
 
-<script src="js/index.js"></script>
+<script src="js/works.js"></script>
 <script src="js/scroll-control.js"></script>
 
 <!-- プロフィールフロートボタン -->
