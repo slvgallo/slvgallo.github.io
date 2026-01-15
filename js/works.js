@@ -121,18 +121,25 @@ const mediaHandlers = {
 
   // Processingの処理
   processing: (mediaItem, fullContainer, contentContainer) => {
+    console.log('=== Processing Handler Called ===');
     console.log('Processing URL:', mediaItem.src);
+    console.log('mediaItem:', mediaItem);
+    console.log('fullContainer:', fullContainer);
+    
     const processingWrap = document.createElement('div');
     processingWrap.className = 'processing-wrap';
     
     const iframe = document.createElement('iframe');
     iframe.src = mediaItem.src;
     console.log('iframe.src set to:', iframe.src);
+    console.log('iframe element:', iframe);
+    
     iframe.frameBorder = 0;
     iframe.allowFullscreen = true;
     
     processingWrap.appendChild(iframe);
     fullContainer.appendChild(processingWrap);
+    console.log('=== Processing Handler Complete ===');
   },
 
   // Sketchfabの処理
