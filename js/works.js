@@ -127,6 +127,7 @@ const mediaHandlers = {
     
     const iframe = document.createElement('iframe');
     iframe.src = mediaItem.src;
+    console.log('iframe.src set to:', iframe.src);
     iframe.frameBorder = 0;
     iframe.allowFullscreen = true;
     
