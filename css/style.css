@@ -497,7 +497,7 @@ img {
   background-position: center;
   background-repeat: no-repeat;
   transition: opacity 0.2s;
-  transform: scale(1.02);
+  transform: scale(1.0);
 }
 
 .post-content-anchor:hover .post-photo-thumb {
@@ -820,7 +820,7 @@ img {
   margin-bottom: 2em;
   background: #f5f5f5;
   border: none;
-  transform: scale(1.01);
+  transform: scale(1.0);
 }
 
 .video-wrap:last-child {

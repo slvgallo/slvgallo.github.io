@@ -126,11 +126,21 @@ const mediaHandlers = {
     console.log('mediaItem:', mediaItem);
     console.log('fullContainer:', fullContainer);
     
+    // openprocessing.orgのURLを埋め込み用URLに変換
+    let embedUrl = mediaItem.src;
+    if (embedUrl.includes('openprocessing.org/sketch/')) {
+      // https://openprocessing.org/sketch/123456 → https://openprocessing.org/sketch/123456/embed/
+      if (!embedUrl.endsWith('/embed/')) {
+        const sketchId = embedUrl.split('/sketch/')[1];
+        embedUrl = `https://openprocessing.org/sketch/${sketchId}/embed/`;
+      }
+    }
+    
     const processingWrap = document.createElement('div');
     processingWrap.className = 'processing-wrap';
     
     const iframe = document.createElement('iframe');
-    iframe.src = mediaItem.src;
+    iframe.src = embedUrl;
     console.log('iframe.src set to:', iframe.src);
     console.log('iframe element:', iframe);
     
