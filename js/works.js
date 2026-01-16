@@ -220,7 +220,13 @@ fetch('data/works.json')
     if(!work) return;
 
     document.getElementById('project-title').textContent = work.title;
-    document.getElementById('page-title').textContent = work.title;
+    document.getElementById('page-title').textContent = `${work.id} - slvgallo`;
+    
+    // Open GraphとTwitterのタイトルも更新
+    const ogTitle = document.getElementById('og-title');
+    const twitterTitle = document.getElementById('twitter-title');
+    if (ogTitle) ogTitle.content = `${work.id} - slvgallo`;
+    if (twitterTitle) twitterTitle.content = `${work.id} - slvgallo`;
     
     // 改行コードを<br>に変換して表示
     const descElement = document.getElementById('project-desc');

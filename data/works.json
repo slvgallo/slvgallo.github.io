@@ -2,10 +2,11 @@
     {
         "id": "2612",
         "date": "NOV 2025",
-        "title": "Phase Shifting",
+        "title": "Checking - 確認用",
         "thumb": "img/270115.jpg",
         "tags": ["sound","video"],
-        "desc": "Short description of Project 01",
+                
+        "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br><br>私も今日どうにかそのお話し論という事のついでに書いたまし。向後今日と手続き人は何しろその誤解うないでもに買うがいますには誤解進みますですで、こうとはすれたたたり。間断が払っなら事もけっして当時にいくらなかっんまし。ちゃんと岡田さんから意味人格あいにく反抗に用いず教授こういう価値何か推察にというご養成なけれたないたて、その先刻は私かモーニング通りにいて、大森さんのものに警視総監のそれを近頃お濫用とするて私各人を皆出立を出れようにおっつけご発会にいたうのに、同じくかつて破壊をしますているなのがせよたあり。",
         "media": [
           {"type": "image", "src": "img/270115.jpg"},
           {"type": "video", "src": "https://www.youtube.com/embed/GrGOUfwJXWg?si=AbE65EAPHP8ylM-8"},
@@ -27,7 +28,7 @@
         "title": "Phase Shifting",
         "thumb": "https://www.youtube.com/watch?v=GrGOUfwJXWg",
         "tags": ["video","sound"],
-        "desc": "sampling: Octet (Eight Lines) : Eight Lines · Ensemble Modern · Steve Reich",
+        "desc": "Sampling: Eight Lines (Octet) / Steve Reich",
         "media": [
           {"type": "video", "src": "https://www.youtube.com/watch?v=GrGOUfwJXWg"}
         ]
@@ -196,7 +197,7 @@
         "title": "Arduino with Ribbon Controller Ver. 1.0 – Arduino",
         "thumb": "https://www.youtube.com/watch?v=qyldvD9WPGI",
         "tags": ["video","sound"],
-                "desc": "Model: Arduino with Ribbon Controller<br>Materials: 5052 Aluminum, Rosewood, Arduino UNO<br><br>Model: 2ch Passive Mixer<br>Materials: 5052 Aluminum, Rosewood, 50 mm Speaker",
+                "desc": "Model: Arduino with Ribbon Controller<br>Materials: Aluminum, Rosewood, Arduino UNO<br><br>Model: 2ch Passive Mixer<br>Materials: Aluminum, Rosewood, 50 mm Speaker",
 
         "media": [
           {"type": "video", "src": "https://www.youtube.com/watch?v=qyldvD9WPGI"}
@@ -216,7 +217,7 @@
         "title": "Step Sequencer Ver. 2.3 – Arduino",
         "thumb": "https://www.youtube.com/watch?v=lGAkuM0IOZ8",
         "tags": ["video","sound"],
-        "desc": "Model: 8-Step Sequencer<br>Materials: 5052 Aluminum, Rosewood, Arduino Duemilanove 328<br><br>Model: 2ch Passive Mixer<br>Materials: 5052 Aluminum, Rosewood, 50 mm speaker",
+        "desc": "Model: 8-Step Sequencer<br>Materials: Aluminum, Rosewood, Arduino Duemilanove 328<br><br>Model: 2ch Passive Mixer<br>Materials: Aluminum, Rosewood, 50mm speaker",
         "media": [
           {"type": "video", "src": "https://www.youtube.com/watch?v=lGAkuM0IOZ8"}
         ]
