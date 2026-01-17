@@ -45,18 +45,11 @@
   color: #36393d;
 }
 
-.profile-title {
+.profile-location {
   font-size: 1.2em;
   color: #666;
-  margin: 0 0 1em 0;
+  margin: 0 0 1.5em 0;
   font-weight: 300;
-}
-
-.profile-bio {
-  font-size: 1.1em;
-  line-height: 1.6;
-  color: #555;
-  margin: 0;
 }
 
 /* プロフィールセクション */
@@ -64,144 +57,133 @@
   margin-bottom: 3em;
 }
 
-.profile-section h2 {
+.profile-account {
+  margin-top: 1.5em;
+}
+
+.social-links {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  color: #36393d;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #5289db;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.social-link img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  filter: grayscale(100%);
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover img {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+/* Aboutセクションヘッダー */
+.profile-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5em;
+}
+
+.profile-section-header h2 {
+  margin: 0;
   font-size: 1.8em;
   font-weight: 400;
-  margin: 0 0 1.5em 0;
   color: #36393d;
-  border-bottom: 2px solid #5289db;
   padding-bottom: 0.5em;
-  display: inline-block;
 }
 
 .profile-section p {
-  font-size: 1.1em;
+  font-size: 1.2em;
   line-height: 1.7;
   color: #555;
   margin-bottom: 1.5em;
 }
 
-/* スキルグリッド */
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5em;
-}
-
-.skill-item {
-  background: #fff;
-  padding: 1.5em;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.skill-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-}
-
-.skill-item h3 {
-  font-size: 1.2em;
-  font-weight: 500;
-  margin: 0 0 0.8em 0;
-  color: #36393d;
-}
-
-.skill-item p {
-  font-size: 0.95em;
-  line-height: 1.5;
-  color: #666;
-  margin: 0;
-}
-
-/* コンタクトリンク */
-.contact-links {
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-}
-
-.contact-link {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1em 1.5em;
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  text-decoration: none;
-  color: #36393d;
-  transition: all 0.2s ease;
-}
-
-.contact-link:hover {
-  background: #f8f8f8;
-  border-color: #5289db;
-  color: #5289db;
-}
-
-.contact-platform {
-  font-weight: 500;
+.profile-statement {
   font-size: 1.1em;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 1.5em;
+  text-align: justify;
+  text-indent: 0;
 }
 
-.contact-url {
-  color: #666;
-  font-size: 0.95em;
+.profile-statement span {
+  white-space: pre-wrap;
 }
 
-/* 注目作品 */
-.featured-works {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2em;
+.profile-signature {
+  font-size: 0.7em;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 1.5em;
+  text-align: right;
+  padding-bottom: 5em;
 }
 
-.featured-work {
-  position: relative;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.profile-signature:last-child {
+  padding-bottom: 0;
 }
 
-.featured-work:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+/* 言語切り替えボタン */
+.lang-buttons {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  flex-shrink: 0;
 }
 
-.featured-work a {
-  display: block;
-  text-decoration: none;
-  color: inherit;
+.lang-btn {
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.3s ease;
 }
 
-.featured-work img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
+.lang-btn:hover {
+  background-color: #f0f0f0;
+  border-color: #999;
 }
 
-.featured-work-info {
-  padding: 1.5em;
+.lang-btn.active {
+  background-color: #36393d;
+  color: white;
+  border-color: #36393d;
 }
 
-.featured-work-info h3 {
-  font-size: 1.2em;
-  font-weight: 500;
-  margin: 0 0 0.5em 0;
-  color: #36393d;
+.lang-btn.active:hover {
+  background-color: #5289db;
+  border-color: #5289db;
 }
 
-.featured-work-info p {
-  font-size: 0.95em;
-  color: #666;
-  margin: 0;
-  line-height: 1.4;
-}
+
 
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
@@ -217,30 +199,16 @@
   }
   
   .profile-avatar {
-    width: 100px;
-    height: 100px;
+    width: 170px;
+    height: 170px;
   }
   
   .profile-name {
     font-size: 2em;
   }
   
-  .profile-title {
+  .profile-location {
     font-size: 1.1em;
-  }
-  
-  .skills-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .featured-works {
-    grid-template-columns: 1fr;
-  }
-  
-  .contact-link {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5em;
   }
 }
 
@@ -255,9 +223,5 @@
   
   .profile-section h2 {
     font-size: 1.5em;
-  }
-  
-  .skill-item {
-    padding: 1em;
   }
 }

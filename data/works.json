@@ -1,40 +1,5 @@
 [
-  {
-    "id": "2612",
-    "date": "NOV 2025",
-    "title": "Checking - 確認用",
-    "thumb": "img/270115.jpg",
-    "tags": ["sound", "video"],
-
-    "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br><br>私も今日どうにかそのお話し論という事のついでに書いたまし。向後今日と手続き人は何しろその誤解うないでもに買うがいますには誤解進みますですで、こうとはすれたたたり。間断が払っなら事もけっして当時にいくらなかっんまし。ちゃんと岡田さんから意味人格あいにく反抗に用いず教授こういう価値何か推察にというご養成なけれたないたて、その先刻は私かモーニング通りにいて、大森さんのものに警視総監のそれを近頃お濫用とするて私各人を皆出立を出れようにおっつけご発会にいたうのに、同じくかつて破壊をしますているなのがせよたあり。",
-    "media": [
-      { "type": "image", "src": "img/270115.jpg" },
-      {
-        "type": "video",
-        "src": "https://www.youtube.com/embed/GrGOUfwJXWg?si=AbE65EAPHP8ylM-8"
-      },
-      {
-        "type": "processing",
-        "src": "https://openprocessing.org/sketch/2785494/embed/"
-      },
-      {
-        "type": "sketchfab",
-        "src": "https://sketchfab.com/models/4ce3fa471bd14b93b9d7adb6e1e7fef9/embed"
-      },
-      {
-        "type": "soundcloud",
-        "src": "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/522738729&color=%230b0b0b&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true"
-      },
-      {
-        "type": "flickr",
-        "src": "https://live.staticflickr.com/6060/6273435104_8ed66fd11e_b.jpg"
-      },
-      {
-        "type": "flickr",
-        "src": "https://live.staticflickr.com/8632/28156322252_48ae846a22_b.jpg"
-      }
-    ]
-  },
+ 
 
   {
     "id": "2511-2",
