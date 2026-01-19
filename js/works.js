@@ -167,6 +167,20 @@ const mediaHandlers = {
     fullContainer.appendChild(sketchfabWrap);
   },
 
+  // HTMLの処理
+  html: (mediaItem, fullContainer, contentContainer) => {
+    const htmlWrap = document.createElement('div');
+    htmlWrap.className = 'html-wrap';
+    
+    const iframe = document.createElement('iframe');
+    iframe.src = mediaItem.src;
+    iframe.frameBorder = 0;
+    iframe.allowFullscreen = true;
+    
+    htmlWrap.appendChild(iframe);
+    fullContainer.appendChild(htmlWrap);
+  },
+
   // SoundCloudの処理
   soundcloud: (mediaItem, fullContainer, contentContainer) => {
     const soundcloudWrap = document.createElement('div');

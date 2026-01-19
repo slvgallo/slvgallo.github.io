@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>SVG Koch - Centered Glow Neon with Pointer Zoom</title>
+<style>
+  body { margin: 0; overflow: hidden; background: #000; }
+  #canvas-container { width: 100vw; height: 100vh; cursor: grab; }
+  svg { width: 100%; height: 100%; stroke-linecap: square; stroke-linejoin: miter; }
+</style>
+</head>
+<body>
+
+<div id="canvas-container">
+  <svg id="outputSvg" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- 光彩フィルター -->
+      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+        <feMerge>
+          <feMergeNode in="blur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+    <g id="viewport"></g>
+  </svg>
+</div>
+
+<script>
+const viewport = document.getElementById('viewport');
+let pathDataGroups = [];
+let scale = 1.0, offsetX = 0, offsetY = 0;
+let isDragging = false, lastMousePos = { x: 0, y: 0 }, time = 0;
+
+// ドラッグ
+window.addEventListener('mousedown', (e) => { isDragging = true; lastMousePos = { x: e.clientX, y: e.clientY }; });
+window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    offsetX += e.clientX - lastMousePos.x;
+    offsetY += e.clientY - lastMousePos.y;
+    lastMousePos = { x: e.clientX, y: e.clientY };
+    updateTransform();
+});
+window.addEventListener('mouseup', () => isDragging = false);
+
+// マウスポインタ中心ズーム
+window.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const zoomFactor = Math.pow(1.1, -e.deltaY / 100);
+
+    const mx = e.clientX;
+    const my = e.clientY;
+
+    // マウス座標を現在のトランスフォーム空間に変換
+    const x0 = (mx - offsetX) / scale;
+    const y0 = (my - offsetY) / scale;
+
+    // scale更新
+    scale *= zoomFactor;
+
+    // 新しいoffsetX/Yを計算してマウス位置を固定
+    offsetX = mx - x0 * scale;
+    offsetY = my - y0 * scale;
+
+    updateTransform();
+}, { passive: false });
+
+// SVG変換反映
+function updateTransform() { 
+    viewport.setAttribute('transform', `translate(${offsetX}, ${offsetY}) scale(${scale})`); 
+}
+
+// SVGロード
+fetch('https://slvgallo.github.io/img/common/slvgallo.svg')
+  .then(resp => resp.text())
+  .then(svgText => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgText, 'image/svg+xml');
+    pathDataGroups = Array.from(doc.querySelectorAll('path')).map(path => {
+      const len = path.getTotalLength();
+      let subPaths = [], currentSubPath = [];
+      const step = 2;
+      let prevP = path.getPointAtLength(0);
+      for (let d = 0; d <= len; d += step) {
+        const p = path.getPointAtLength(d);
+        if (Math.sqrt((p.x - prevP.x)**2 + (p.y - prevP.y)**2) > step * 6) {
+          if (currentSubPath.length > 1) subPaths.push(currentSubPath);
+          currentSubPath = [];
+        }
+        currentSubPath.push({x: p.x, y: p.y});
+        prevP = p;
+      }
+      if (currentSubPath.length > 1) subPaths.push(currentSubPath);
+      return subPaths;
+    });
+
+    // 中央配置
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    pathDataGroups.forEach(subPaths => {
+      subPaths.forEach(points => {
+        points.forEach(p => {
+          if(p.x < minX) minX = p.x;
+          if(p.y < minY) minY = p.y;
+          if(p.x > maxX) maxX = p.x;
+          if(p.y > maxY) maxY = p.y;
+        });
+      });
+    });
+    const centerX = (minX + maxX) / 2;
+    const centerY = (minY + maxY) / 2;
+    offsetX = window.innerWidth / 2 - centerX;
+    offsetY = window.innerHeight / 2 - centerY;
+    updateTransform();
+  });
+
+// コッホ曲線生成
+function getKochPoints(p0, p1, depth, glitch, localPhase) {
+    if (depth <= 0) return [p0, p1];
+    const dx = p1.x - p0.x, dy = p1.y - p0.y;
+    const pA = { x: p0.x + dx / 3, y: p0.y + dy / 3 };
+    const pC = { x: p0.x + (dx * 2) / 3, y: p0.y + (dy * 2) / 3 };
+    const isBurst = Math.sin(time * 2 + localPhase) > 0.97;
+    const burstMult = isBurst ? (Math.random() * 20) : 1.0;
+    const noise = Math.sin(time * 1.5 + localPhase) * 0.5 + Math.sin(time * 3.5 + localPhase * 0.5) * 0.5;
+    const angle = -Math.PI / 3 + (noise * glitch * 0.08);
+    const hMult = (1.0 + (Math.cos(time * 0.8 + localPhase) * glitch * 0.05)) * burstMult;
+    const pB = {
+        x: pA.x + (dx / 3) * Math.cos(angle) * hMult - (dy / 3) * Math.sin(angle) * hMult,
+        y: pA.y + (dx / 3) * Math.sin(angle) * hMult + (dy / 3) * Math.cos(angle) * hMult
+    };
+    return [
+        ...getKochPoints(p0, pA, depth - 1, glitch, localPhase),
+        ...getKochPoints(pA, pB, depth - 1, glitch, localPhase).slice(1),
+        ...getKochPoints(pB, pC, depth - 1, glitch, localPhase).slice(1),
+        ...getKochPoints(pC, p1, depth - 1, glitch, localPhase).slice(1)
+    ];
+}
+
+// アニメーション
+function animate() {
+    time += 0.08;
+    if (pathDataGroups.length > 0) {
+        viewport.innerHTML = '';
+        pathDataGroups.forEach((subPaths, groupIdx) => {
+            subPaths.forEach((points, subIdx) => {
+                let dString = "";
+                const baseStep = 12;
+                const dynamicStep = baseStep + Math.floor(Math.sin(time * 0.5 + subIdx) * 6);
+                for (let i = 0; i < points.length - dynamicStep; i += dynamicStep) {
+                    const localPhase = (groupIdx * 23) + (subIdx * 13) + (i * 0.7);
+                    const localDepth = Math.random() > 0.5 ? 3 : 2;
+                    const localGlitch = 15 + Math.abs(Math.sin(time * 0.6 + localPhase)) * 120;
+                    const jitter = (f) => (Math.random() - 0.5) * f;
+                    const p0 = { x: points[i].x + jitter(2), y: points[i].y + jitter(2) };
+                    const p1 = { x: points[i + dynamicStep].x + jitter(2), y: points[i + dynamicStep].y + jitter(2) };
+                    const kPoints = getKochPoints(p0, p1, localDepth, localGlitch, localPhase);
+                    dString += (i === 0 ? `M${kPoints[0].x},${kPoints[0].y} ` : "");
+                    for(let j = 1; j < kPoints.length; j++) dString += `L${kPoints[j].x},${kPoints[j].y} `;
+                }
+
+                const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                pathEl.setAttribute("d", dString);
+                pathEl.setAttribute("fill", "none");
+                pathEl.setAttribute("stroke", "#00ffff"); // ネオンブルー
+                pathEl.setAttribute("stroke-width", 1.5 / scale);
+                pathEl.setAttribute("opacity", 0.5 + Math.abs(Math.sin(time*2 + subIdx))*0.5); // 脈打つ
+                pathEl.setAttribute("filter", "url(#glow)");
+                viewport.appendChild(pathEl);
+            });
+        });
+    }
+    requestAnimationFrame(animate);
+}
+
+updateTransform();
+animate();
+</script>
+
+</body>
+</html>

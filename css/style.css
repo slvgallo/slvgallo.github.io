@@ -904,6 +904,31 @@ img {
   border: none;
 }
 
+/* HTMLラッパー */
+.html-wrap {
+  position: relative;
+  padding-bottom: 75%; /* 4:3 アスペクト比 */
+  padding-top: 0;
+  height: 0;
+  overflow: hidden;
+  margin-bottom: 2em;
+  max-width: 1320px;
+}
+
+.html-wrap embed,
+.html-wrap iframe,
+.html-wrap object {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.html-wrap:last-child {
+  margin-bottom: 0;
+}
+
 /* SoundCloudラッパー */
 .soundcloud-wrap {
   position: relative;

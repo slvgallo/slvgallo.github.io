@@ -1,6 +1,38 @@
 [
  
+  {
+    "id": "2601-1",
+    "title": "KHGL",
+    "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768661103/KHGL-3_bb0now.png",
+    "tags": ["2d"],
+    "media": [
+      {
+        "type": "html",
+        "src": "/works/2601-1/KHGL.html"
+      },
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768661103/KHGL-3_bb0now.png"
+      },
 
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768661103/KHGL-2_ygskpy.png"
+      },
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768661102/KHGL-1_kpg0aj.png"
+      },
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768661101/KHGL-4_wsoyhw.png"
+      },
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768661102/KHGL-5_zd4smx.png"
+      }
+    ]
+  },
   {
     "id": "2511-2",
     "title": "Phase Shifting",
@@ -9,6 +41,31 @@
     "desc": "Sampling: Eight Lines (Octet) / Steve Reich",
     "media": [
       { "type": "video", "src": "https://www.youtube.com/watch?v=GrGOUfwJXWg" }
+    ]
+  },
+    {
+    "id": "2511-1",
+    "title": "◯◯◯",
+    "thumb": "https://www.youtube.com/watch?v=BZdc3rEtxLw",
+    "tags": ["video"],
+    "media": [
+      {
+        "type": "processing",
+        "src": "https://openprocessing.org/sketch/2785494/embed/"
+      },
+      { "type": "video", "src": "https://www.youtube.com/watch?v=BZdc3rEtxLw" },
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768664708/000-1_s1nfa1.png"
+      },
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768664708/000-2_m8m4e9.png"
+      },
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768664708/000-3_phc1vv.png"
+      }
     ]
   },
   {
@@ -41,19 +98,6 @@
     ]
   },
   {
-    "id": "2511-1",
-    "title": "◯◯◯",
-    "thumb": "https://www.youtube.com/watch?v=BZdc3rEtxLw",
-    "tags": ["video"],
-    "media": [
-      {
-        "type": "processing",
-        "src": "https://openprocessing.org/sketch/2785494/embed/"
-      },
-      { "type": "video", "src": "https://www.youtube.com/watch?v=BZdc3rEtxLw" }
-    ]
-  },
-  {
     "id": "2510-2",
     "title": "CLAP - Sora2",
     "thumb": "https://www.youtube.com/shorts/86xP06Y3VjM",
@@ -76,7 +120,7 @@
     "id": "2211-2",
     "title": "VDSD",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768592441/VDSD_r2rnao.png",
-    "tags": ["video", "sound"],
+    "tags": ["video", "sound", "2d"],
     "media": [
       {
         "type": "processing",
@@ -89,7 +133,7 @@
     "id": "2211-1",
     "title": "TXSD",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768587429/TXSD_ivwj5d.png",
-    "tags": ["video", "sound"],
+    "tags": ["video", "sound", "2d"],
     "media": [
       {
         "type": "processing",
@@ -225,7 +269,7 @@
     ]
   },
   {
-    "id": "1211-7",
+    "id": "1211-8",
     "title": "Tridots",
     "thumb": "https://www.youtube.com/watch?v=aQrSBUc4nNo",
     "tags": ["video", "sound"],
