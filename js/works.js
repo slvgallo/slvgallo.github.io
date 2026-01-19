@@ -72,11 +72,22 @@ async function getYouTubeAspectRatio(videoId) {
 const mediaHandlers = {
   // 画像の処理
   image: (mediaItem, fullContainer, contentContainer) => {
-    const img = document.createElement('img');
-    img.src = mediaItem.src;
-    img.alt = 'Project image';
-    img.loading = 'lazy';
-    fullContainer.appendChild(img);
+    // srcが配列の場合は各画像を個別に表示、文字列の場合は単一画像を表示
+    if (Array.isArray(mediaItem.src)) {
+      mediaItem.src.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = 'Project image';
+        img.loading = 'lazy';
+        fullContainer.appendChild(img);
+      });
+    } else {
+      const img = document.createElement('img');
+      img.src = mediaItem.src;
+      img.alt = 'Project image';
+      img.loading = 'lazy';
+      fullContainer.appendChild(img);
+    }
   },
   
   // 動画の処理
@@ -234,6 +245,22 @@ const mediaHandlers = {
     });
     
     fullContainer.appendChild(img);
+  },
+
+  // 2カラム画像の処理
+  image2column: (mediaItem, fullContainer, contentContainer) => {
+    const image2columnWrap = document.createElement('div');
+    image2columnWrap.className = 'image2column-wrap';
+    
+    mediaItem.src.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = 'Project image';
+      img.loading = 'lazy';
+      image2columnWrap.appendChild(img);
+    });
+    
+    fullContainer.appendChild(image2columnWrap);
   }
 };
 

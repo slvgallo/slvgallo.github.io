@@ -954,6 +954,33 @@ img {
   border: none;
 }
 
+/* 2カラム画像ラッパー */
+.image2column-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 2em;
+  width: 100%;
+  margin-bottom: 2em;
+}
+
+.image2column-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.image2column-wrap:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  .image2column-wrap {
+    grid-template-columns: 1fr;
+    gap: 2em;
+  }
+}
+
 @media (max-width: 767px) {
   .processing-wrap,
   .sketchfab-wrap,
