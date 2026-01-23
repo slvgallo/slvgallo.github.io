@@ -2,11 +2,49 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>SVG Koch - Centered Glow Neon with Pointer Zoom</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>KHGL - slvgallo</title>
 <style>
-  body { margin: 0; overflow: hidden; background: #000; }
-  #canvas-container { width: 100vw; height: 100vh; cursor: grab; }
-  svg { width: 100%; height: 100%; stroke-linecap: square; stroke-linejoin: miter; }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    touch-action: none; /* タッチ操作を完全にJSで制御 */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  #canvas-container {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh; /* モバイルブラウザのダイナミックビューポート対応 */
+    cursor: grab;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  
+  #canvas-container.dragging {
+    cursor: grabbing;
+  }
+  
+  svg {
+    width: 100%;
+    height: 100%;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+    display: block;
+  }
 </style>
 </head>
 <body>
@@ -28,94 +66,233 @@
 </div>
 
 <script>
-const viewport = document.getElementById('viewport');
-let pathDataGroups = [];
-let scale = 1.0, offsetX = 0, offsetY = 0;
-let isDragging = false, lastMousePos = { x: 0, y: 0 }, time = 0;
-
-// ドラッグ
-window.addEventListener('mousedown', (e) => { isDragging = true; lastMousePos = { x: e.clientX, y: e.clientY }; });
-window.addEventListener('mousemove', (e) => {
+(function() {
+  'use strict';
+  
+  const viewport = document.getElementById('viewport');
+  const container = document.getElementById('canvas-container');
+  
+  let pathDataGroups = [];
+  let scale = 1.0, offsetX = 0, offsetY = 0;
+  let time = 0;
+  let animationId = null;
+  
+  // デバイス判定
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isAndroid = /Android/.test(navigator.userAgent);
+  const isMobile = isTouchDevice && (window.innerWidth <= 768 || isIOS || isAndroid);
+  
+  // パフォーマンス設定（デバイスに応じて調整）
+  const config = {
+    baseStep: isMobile ? 16 : 12,           // モバイルは粗く描画
+    maxDepth: isMobile ? 2 : 3,             // 再帰深度制限
+    animationSpeed: isMobile ? 0.06 : 0.08, // アニメーション速度
+    pathStep: isMobile ? 3 : 2              // SVGパス解析のステップ
+  };
+  
+  // ドラッグ状態管理
+  let isDragging = false;
+  let lastPos = { x: 0, y: 0 };
+  
+  // ピンチズーム用
+  let lastPinchDistance = 0;
+  let pinchCenter = { x: 0, y: 0 };
+  
+  // マウスイベント（PC用）
+  container.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    lastPos = { x: e.clientX, y: e.clientY };
+    container.classList.add('dragging');
+  });
+  
+  window.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
-    offsetX += e.clientX - lastMousePos.x;
-    offsetY += e.clientY - lastMousePos.y;
-    lastMousePos = { x: e.clientX, y: e.clientY };
-    updateTransform();
-});
-window.addEventListener('mouseup', () => isDragging = false);
-
-// マウスポインタ中心ズーム
-window.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    const zoomFactor = Math.pow(1.1, -e.deltaY / 100);
-
-    const mx = e.clientX;
-    const my = e.clientY;
-
-    // マウス座標を現在のトランスフォーム空間に変換
-    const x0 = (mx - offsetX) / scale;
-    const y0 = (my - offsetY) / scale;
-
-    // scale更新
-    scale *= zoomFactor;
-
-    // 新しいoffsetX/Yを計算してマウス位置を固定
-    offsetX = mx - x0 * scale;
-    offsetY = my - y0 * scale;
-
-    updateTransform();
-}, { passive: false });
-
-// SVG変換反映
-function updateTransform() { 
-    viewport.setAttribute('transform', `translate(${offsetX}, ${offsetY}) scale(${scale})`); 
-}
-
-// SVGロード
-fetch('https://slvgallo.github.io/img/common/slvgallo.svg')
-  .then(resp => resp.text())
-  .then(svgText => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(svgText, 'image/svg+xml');
-    pathDataGroups = Array.from(doc.querySelectorAll('path')).map(path => {
-      const len = path.getTotalLength();
-      let subPaths = [], currentSubPath = [];
-      const step = 2;
-      let prevP = path.getPointAtLength(0);
-      for (let d = 0; d <= len; d += step) {
-        const p = path.getPointAtLength(d);
-        if (Math.sqrt((p.x - prevP.x)**2 + (p.y - prevP.y)**2) > step * 6) {
-          if (currentSubPath.length > 1) subPaths.push(currentSubPath);
-          currentSubPath = [];
-        }
-        currentSubPath.push({x: p.x, y: p.y});
-        prevP = p;
-      }
-      if (currentSubPath.length > 1) subPaths.push(currentSubPath);
-      return subPaths;
-    });
-
-    // 中央配置
-    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    pathDataGroups.forEach(subPaths => {
-      subPaths.forEach(points => {
-        points.forEach(p => {
-          if(p.x < minX) minX = p.x;
-          if(p.y < minY) minY = p.y;
-          if(p.x > maxX) maxX = p.x;
-          if(p.y > maxY) maxY = p.y;
-        });
-      });
-    });
-    const centerX = (minX + maxX) / 2;
-    const centerY = (minY + maxY) / 2;
-    offsetX = window.innerWidth / 2 - centerX;
-    offsetY = window.innerHeight / 2 - centerY;
+    offsetX += e.clientX - lastPos.x;
+    offsetY += e.clientY - lastPos.y;
+    lastPos = { x: e.clientX, y: e.clientY };
     updateTransform();
   });
-
-// コッホ曲線生成
-function getKochPoints(p0, p1, depth, glitch, localPhase) {
+  
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+    container.classList.remove('dragging');
+  });
+  
+  // ホイールズーム（PC用）
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const zoomFactor = Math.pow(1.1, -e.deltaY / 100);
+    zoomAt(e.clientX, e.clientY, zoomFactor);
+  }, { passive: false });
+  
+  // タッチイベント（スマホ・タブレット用）
+  container.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    
+    if (e.touches.length === 1) {
+      // シングルタッチ: ドラッグ開始
+      isDragging = true;
+      lastPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      container.classList.add('dragging');
+    } else if (e.touches.length === 2) {
+      // ダブルタッチ: ピンチズーム準備
+      isDragging = false;
+      lastPinchDistance = getPinchDistance(e.touches);
+      pinchCenter = getPinchCenter(e.touches);
+    }
+  }, { passive: false });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    
+    if (e.touches.length === 1 && isDragging) {
+      // シングルタッチ: ドラッグ
+      const touch = e.touches[0];
+      offsetX += touch.clientX - lastPos.x;
+      offsetY += touch.clientY - lastPos.y;
+      lastPos = { x: touch.clientX, y: touch.clientY };
+      updateTransform();
+    } else if (e.touches.length === 2) {
+      // ダブルタッチ: ピンチズーム
+      const newDistance = getPinchDistance(e.touches);
+      const newCenter = getPinchCenter(e.touches);
+      
+      if (lastPinchDistance > 0) {
+        const zoomFactor = newDistance / lastPinchDistance;
+        zoomAt(pinchCenter.x, pinchCenter.y, zoomFactor);
+      }
+      
+      lastPinchDistance = newDistance;
+      pinchCenter = newCenter;
+    }
+  }, { passive: false });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isDragging = false;
+      container.classList.remove('dragging');
+    } else if (e.touches.length === 1) {
+      // 1本指に戻ったらドラッグモードに
+      isDragging = true;
+      lastPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      lastPinchDistance = 0;
+    }
+  });
+  
+  // ピンチ距離計算
+  function getPinchDistance(touches) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  
+  // ピンチ中心計算
+  function getPinchCenter(touches) {
+    return {
+      x: (touches[0].clientX + touches[1].clientX) / 2,
+      y: (touches[0].clientY + touches[1].clientY) / 2
+    };
+  }
+  
+  // 指定座標を中心にズーム
+  function zoomAt(x, y, factor) {
+    // ズーム制限
+    const newScale = scale * factor;
+    if (newScale < 0.1 || newScale > 50) return;
+    
+    const x0 = (x - offsetX) / scale;
+    const y0 = (y - offsetY) / scale;
+    
+    scale = newScale;
+    
+    offsetX = x - x0 * scale;
+    offsetY = y - y0 * scale;
+    
+    updateTransform();
+  }
+  
+  // SVG変換反映
+  function updateTransform() { 
+    viewport.setAttribute('transform', `translate(${offsetX}, ${offsetY}) scale(${scale})`); 
+  }
+  
+  // ウィンドウリサイズ対応
+  window.addEventListener('resize', () => {
+    // 再センタリング（オプション）
+  });
+  
+  // 画面回転対応
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => {
+      // 回転後に再センタリング
+    }, 100);
+  });
+  
+  // SVGロード
+  fetch('https://slvgallo.github.io/img/common/slvgallo.svg')
+    .then(resp => resp.text())
+    .then(svgText => {
+      
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(svgText, 'image/svg+xml');
+      pathDataGroups = Array.from(doc.querySelectorAll('path')).map(path => {
+        const len = path.getTotalLength();
+        let subPaths = [], currentSubPath = [];
+        const step = config.pathStep;
+        let prevP = path.getPointAtLength(0);
+        for (let d = 0; d <= len; d += step) {
+          const p = path.getPointAtLength(d);
+          if (Math.sqrt((p.x - prevP.x)**2 + (p.y - prevP.y)**2) > step * 6) {
+            if (currentSubPath.length > 1) subPaths.push(currentSubPath);
+            currentSubPath = [];
+          }
+          currentSubPath.push({x: p.x, y: p.y});
+          prevP = p;
+        }
+        if (currentSubPath.length > 1) subPaths.push(currentSubPath);
+        return subPaths;
+      });
+  
+      // 中央配置
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      pathDataGroups.forEach(subPaths => {
+        subPaths.forEach(points => {
+          points.forEach(p => {
+            if(p.x < minX) minX = p.x;
+            if(p.y < minY) minY = p.y;
+            if(p.x > maxX) maxX = p.x;
+            if(p.y > maxY) maxY = p.y;
+          });
+        });
+      });
+      
+      const svgWidth = maxX - minX;
+      const svgHeight = maxY - minY;
+      const centerX = (minX + maxX) / 2;
+      const centerY = (minY + maxY) / 2;
+      
+      // 画面サイズに合わせて初期スケール調整
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      const padding = isMobile ? 0.7 : 0.8;
+      const fitScale = Math.min(
+        (screenWidth * padding) / svgWidth,
+        (screenHeight * padding) / svgHeight
+      );
+      
+      scale = Math.min(fitScale, 2); // 最大2倍まで
+      offsetX = screenWidth / 2 - centerX * scale;
+      offsetY = screenHeight / 2 - centerY * scale;
+      
+      updateTransform();
+    })
+    .catch(err => {
+      console.error('SVG load error:', err);
+    });
+  
+  // コッホ曲線生成
+  function getKochPoints(p0, p1, depth, glitch, localPhase) {
     if (depth <= 0) return [p0, p1];
     const dx = p1.x - p0.x, dy = p1.y - p0.y;
     const pA = { x: p0.x + dx / 3, y: p0.y + dy / 3 };
@@ -126,55 +303,81 @@ function getKochPoints(p0, p1, depth, glitch, localPhase) {
     const angle = -Math.PI / 3 + (noise * glitch * 0.08);
     const hMult = (1.0 + (Math.cos(time * 0.8 + localPhase) * glitch * 0.05)) * burstMult;
     const pB = {
-        x: pA.x + (dx / 3) * Math.cos(angle) * hMult - (dy / 3) * Math.sin(angle) * hMult,
-        y: pA.y + (dx / 3) * Math.sin(angle) * hMult + (dy / 3) * Math.cos(angle) * hMult
+      x: pA.x + (dx / 3) * Math.cos(angle) * hMult - (dy / 3) * Math.sin(angle) * hMult,
+      y: pA.y + (dx / 3) * Math.sin(angle) * hMult + (dy / 3) * Math.cos(angle) * hMult
     };
     return [
-        ...getKochPoints(p0, pA, depth - 1, glitch, localPhase),
-        ...getKochPoints(pA, pB, depth - 1, glitch, localPhase).slice(1),
-        ...getKochPoints(pB, pC, depth - 1, glitch, localPhase).slice(1),
-        ...getKochPoints(pC, p1, depth - 1, glitch, localPhase).slice(1)
+      ...getKochPoints(p0, pA, depth - 1, glitch, localPhase),
+      ...getKochPoints(pA, pB, depth - 1, glitch, localPhase).slice(1),
+      ...getKochPoints(pB, pC, depth - 1, glitch, localPhase).slice(1),
+      ...getKochPoints(pC, p1, depth - 1, glitch, localPhase).slice(1)
     ];
-}
-
-// アニメーション
-function animate() {
-    time += 0.08;
+  }
+  
+  // アニメーション
+  function animate() {
+    time += config.animationSpeed;
+    
     if (pathDataGroups.length > 0) {
-        viewport.innerHTML = '';
-        pathDataGroups.forEach((subPaths, groupIdx) => {
-            subPaths.forEach((points, subIdx) => {
-                let dString = "";
-                const baseStep = 12;
-                const dynamicStep = baseStep + Math.floor(Math.sin(time * 0.5 + subIdx) * 6);
-                for (let i = 0; i < points.length - dynamicStep; i += dynamicStep) {
-                    const localPhase = (groupIdx * 23) + (subIdx * 13) + (i * 0.7);
-                    const localDepth = Math.random() > 0.5 ? 3 : 2;
-                    const localGlitch = 15 + Math.abs(Math.sin(time * 0.6 + localPhase)) * 120;
-                    const jitter = (f) => (Math.random() - 0.5) * f;
-                    const p0 = { x: points[i].x + jitter(2), y: points[i].y + jitter(2) };
-                    const p1 = { x: points[i + dynamicStep].x + jitter(2), y: points[i + dynamicStep].y + jitter(2) };
-                    const kPoints = getKochPoints(p0, p1, localDepth, localGlitch, localPhase);
-                    dString += (i === 0 ? `M${kPoints[0].x},${kPoints[0].y} ` : "");
-                    for(let j = 1; j < kPoints.length; j++) dString += `L${kPoints[j].x},${kPoints[j].y} `;
-                }
-
-                const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                pathEl.setAttribute("d", dString);
-                pathEl.setAttribute("fill", "none");
-                pathEl.setAttribute("stroke", "#00ffff"); // ネオンブルー
-                pathEl.setAttribute("stroke-width", 1.5 / scale);
-                pathEl.setAttribute("opacity", 0.5 + Math.abs(Math.sin(time*2 + subIdx))*0.5); // 脈打つ
-                pathEl.setAttribute("filter", "url(#glow)");
-                viewport.appendChild(pathEl);
-            });
+      viewport.innerHTML = '';
+      
+      pathDataGroups.forEach((subPaths, groupIdx) => {
+        subPaths.forEach((points, subIdx) => {
+          let dString = "";
+          const baseStep = config.baseStep;
+          const dynamicStep = baseStep + Math.floor(Math.sin(time * 0.5 + subIdx) * 6);
+          
+          for (let i = 0; i < points.length - dynamicStep; i += dynamicStep) {
+            const localPhase = (groupIdx * 23) + (subIdx * 13) + (i * 0.7);
+            const localDepth = Math.random() > 0.5 ? config.maxDepth : Math.max(1, config.maxDepth - 1);
+            const localGlitch = 15 + Math.abs(Math.sin(time * 0.6 + localPhase)) * 120;
+            const jitter = (f) => (Math.random() - 0.5) * f;
+            const p0 = { x: points[i].x + jitter(2), y: points[i].y + jitter(2) };
+            const p1 = { x: points[i + dynamicStep].x + jitter(2), y: points[i + dynamicStep].y + jitter(2) };
+            const kPoints = getKochPoints(p0, p1, localDepth, localGlitch, localPhase);
+            dString += (i === 0 ? `M${kPoints[0].x},${kPoints[0].y} ` : "");
+            for(let j = 1; j < kPoints.length; j++) dString += `L${kPoints[j].x},${kPoints[j].y} `;
+          }
+  
+          const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          pathEl.setAttribute("d", dString);
+          pathEl.setAttribute("fill", "none");
+          pathEl.setAttribute("stroke", "#00ffff");
+          pathEl.setAttribute("stroke-width", Math.max(0.1, 0.5 / scale)); // 線幅を細く調整
+          pathEl.setAttribute("opacity", 0.5 + Math.abs(Math.sin(time*2 + subIdx))*0.5);
+          pathEl.setAttribute("filter", "url(#glow)");
+          viewport.appendChild(pathEl);
         });
+      });
     }
-    requestAnimationFrame(animate);
-}
-
-updateTransform();
-animate();
+    
+    animationId = requestAnimationFrame(animate);
+  }
+  
+  // ページ離脱時のクリーンアップ
+  window.addEventListener('beforeunload', () => {
+    if (animationId) {
+      cancelAnimationFrame(animationId);
+    }
+  });
+  
+  // 可視性変更時のパフォーマンス最適化
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+    } else {
+      if (!animationId) {
+        animationId = requestAnimationFrame(animate);
+      }
+    }
+  });
+  
+  updateTransform();
+  animate();
+})();
 </script>
 
 </body>

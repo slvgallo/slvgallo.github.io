@@ -1,56 +1,7 @@
+// extractYouTubeId関数はutils.jsで定義
+
 const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
-
-// YouTube IDを抽出する関数
-function extractYouTubeId(url) {
-  const patterns = [
-    // 通常のYouTube動画
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
-    /(?:youtube\.com\/vi\/)([^&\n?#]+)/,
-    // YouTube Shorts
-    /(?:youtube\.com\/shorts\/)([^&\n?#]+)/,
-  ];
-
-  for (const pattern of patterns) {
-    const match = url.match(pattern);
-    if (match) {
-      return match[1];
-    }
-  }
-  return null;
-}
-
-// IDから日付を自動生成する関数
-function generateDateFromId(id) {
-  if (id.length >= 4) {
-    const yearMonth = id.substring(0, 4);
-    const year = yearMonth.substring(0, 2);
-    const month = yearMonth.substring(2, 4);
-
-    // 年を2000年代に変換
-    const fullYear = `20${year}`;
-
-    // 月を英語に変換
-    const monthNames = {
-      "01": "JAN",
-      "02": "FEB",
-      "03": "MAR",
-      "04": "APR",
-      "05": "MAY",
-      "06": "JUNE",
-      "07": "JULY",
-      "08": "AUG",
-      "09": "SEPT",
-      10: "OCT",
-      11: "NOV",
-      12: "DEC",
-    };
-
-    const monthName = monthNames[month] || month;
-    return `${monthName} ${fullYear}`;
-  }
-  return id; // フォーマットが違う場合はそのまま返す
-}
+const initialFilter = params.get("filter");
 
 fetch("data/works.json")
   .then((res) => res.json())
@@ -58,8 +9,12 @@ fetch("data/works.json")
     const grid = document.getElementById("works-grid");
 
     works.forEach((work) => {
+      const isYoutubeThumb =
+        typeof work.thumb === "string" &&
+        (work.thumb.includes("youtube.com") || work.thumb.includes("youtu.be"));
+
       // YouTubeサムネイルを自動生成
-      if (work.thumb && work.thumb.includes("youtube.com")) {
+      if (isYoutubeThumb) {
         const videoId = extractYouTubeId(work.thumb);
         if (videoId) {
           work.thumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
@@ -90,11 +45,7 @@ fetch("data/works.json")
       thumb.style.backgroundImage = `url(${thumbUrl})`;
       
       // YouTubeサムネイルのみtransformを適用
-      if (work.thumb.includes('youtube.com') || work.thumb.includes('youtu.be')) {
-        thumb.style.transform = 'scale(1.02)';
-      } else {
-        thumb.style.transform = 'scale(1.0)';
-      }
+      thumb.style.transform = isYoutubeThumb ? "scale(1.02)" : "scale(1.0)";
 
       link.appendChild(thumb);
       postInner.appendChild(link);
@@ -104,36 +55,40 @@ fetch("data/works.json")
 
     // フィルタ機能
     const filterLinks = document.querySelectorAll(".filter-link");
-    let currentFilter = "all";
+
+    function applyFilter(filter) {
+      // アクティブ状態の更新
+      filterLinks.forEach((l) => l.classList.remove("active"));
+      const activeLink = document.querySelector(`[data-filter="${filter}"]`);
+      if (activeLink) {
+        activeLink.classList.add("active");
+      }
+
+      // フィルタリング
+      const posts = grid.querySelectorAll(".index-post");
+      posts.forEach((post) => {
+        const tags = post.dataset.tags.split(" ");
+        if (filter === "all" || tags.includes(filter)) {
+          post.style.display = "";
+        } else {
+          post.style.display = "none";
+        }
+      });
+    }
 
     filterLinks.forEach((link) => {
       link.addEventListener("click", (e) => {
         e.preventDefault();
         const filter = link.dataset.filter;
-        currentFilter = filter;
-
-        // アクティブ状態の更新
-        filterLinks.forEach((l) => l.classList.remove("active"));
-        link.classList.add("active");
-
-        // フィルタリング
-        const posts = grid.querySelectorAll(".index-post");
-        posts.forEach((post, i) => {
-          const tags = post.dataset.tags.split(" ");
-          if (filter === "all" || tags.includes(filter)) {
-            post.style.display = "";
-          } else {
-            post.style.display = "none";
-          }
-        });
+        applyFilter(filter);
       });
     });
 
-    // 初期状態でAllをアクティブに
-    const allLink = document.querySelector('[data-filter="all"]');
-    if (allLink) {
-      allLink.classList.add("active");
-    }
+    // 初期状態: URLパラメータ filter があればそれを適用
+    const initial = initialFilter && document.querySelector(`[data-filter="${initialFilter}"]`)
+      ? initialFilter
+      : "all";
+    applyFilter(initial);
   });
 
 // ハンバーガーメニューの制御

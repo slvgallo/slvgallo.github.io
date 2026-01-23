@@ -1,24 +1,7 @@
+// extractYouTubeId関数はutils.jsで定義
+
 const params = new URLSearchParams(window.location.search);
 const id = params.get('id');
-
-// YouTube IDを抽出する関数
-function extractYouTubeId(url) {
-  const patterns = [
-    // 通常のYouTube動画
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
-    /(?:youtube\.com\/vi\/)([^&\n?#]+)/,
-    // YouTube Shorts
-    /(?:youtube\.com\/shorts\/)([^&\n?#]+)/
-  ];
-  
-  for (const pattern of patterns) {
-    const match = url.match(pattern);
-    if (match) {
-      return match[1];
-    }
-  }
-  return null;
-}
 
 // IDから日付を自動生成する関数
 function generateDateFromId(id) {
@@ -132,17 +115,12 @@ const mediaHandlers = {
 
   // Processingの処理
   processing: (mediaItem, fullContainer, contentContainer) => {
-    console.log('=== Processing Handler Called ===');
-    console.log('Processing URL:', mediaItem.src);
-    console.log('mediaItem:', mediaItem);
-    console.log('fullContainer:', fullContainer);
-    
     // openprocessing.orgのURLを埋め込み用URLに変換
     let embedUrl = mediaItem.src;
     if (embedUrl.includes('openprocessing.org/sketch/')) {
       // https://openprocessing.org/sketch/123456 → https://openprocessing.org/sketch/123456/embed/
       if (!embedUrl.endsWith('/embed/')) {
-        const sketchId = embedUrl.split('/sketch/')[1];
+        const sketchId = embedUrl.split('/sketch/')[1].split('/')[0];
         embedUrl = `https://openprocessing.org/sketch/${sketchId}/embed/`;
       }
     }
@@ -152,15 +130,12 @@ const mediaHandlers = {
     
     const iframe = document.createElement('iframe');
     iframe.src = embedUrl;
-    console.log('iframe.src set to:', iframe.src);
-    console.log('iframe element:', iframe);
     
     iframe.frameBorder = 0;
     iframe.allowFullscreen = true;
     
     processingWrap.appendChild(iframe);
     fullContainer.appendChild(processingWrap);
-    console.log('=== Processing Handler Complete ===');
   },
 
   // Sketchfabの処理
@@ -198,7 +173,15 @@ const mediaHandlers = {
     soundcloudWrap.className = 'soundcloud-wrap';
     
     const iframe = document.createElement('iframe');
-    iframe.src = mediaItem.src;
+    const src = (mediaItem.src || '').trim();
+    if (/^https?:\/\//i.test(src)) {
+      iframe.src = src;
+    } else if (/^\d+$/.test(src)) {
+      const trackUrl = `https://api.soundcloud.com/tracks/${src}`;
+      iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(trackUrl)}`;
+    } else {
+      iframe.src = src;
+    }
     iframe.frameBorder = 0;
     iframe.allow = "autoplay";
     
@@ -289,11 +272,11 @@ fetch('data/works.json')
     
     // YouTube URLを処理
     work.media.forEach(mediaItem => {
-      if (mediaItem.type === 'video' && mediaItem.src.includes('youtube.com')) {
+      if (mediaItem.type === 'video' && (mediaItem.src.includes('youtube.com') || mediaItem.src.includes('youtu.be'))) {
         const videoId = extractYouTubeId(mediaItem.src);
         if (videoId) {
           // サムネイルを自動生成
-          if (work.thumb && work.thumb.includes('youtube.com')) {
+          if (work.thumb && (work.thumb.includes('youtube.com') || work.thumb.includes('youtu.be'))) {
             work.thumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
           }
           // 埋め込みコードを自動生成

@@ -117,16 +117,11 @@ class FaviconController {
   }
 }
 
-// DOMが読み込まれたら実行
-document.addEventListener('DOMContentLoaded', () => {
-  new FaviconController();
-});
-
-// すでにDOMが読み込まれている場合も実行
+// 1回だけ初期化
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     new FaviconController();
-  });
+  }, { once: true });
 } else {
   new FaviconController();
 }
