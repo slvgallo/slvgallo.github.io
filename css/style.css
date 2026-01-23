@@ -496,12 +496,75 @@ img {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.3s ease;
   transform: scale(1.0);
 }
 
 .post-content-anchor:hover .post-photo-thumb {
   opacity: 0.85;
+  transform: scale(1.05);
+}
+
+/* タイトルとタグのホバー表示 */
+.post-title,
+.post-tags {
+  position: absolute;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.post-title {
+  top: 10px;
+  left: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: rgba(0,0,0,0.6);
+  padding: 4px 8px;
+  max-width: calc(100% - 20px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-tags {
+  bottom: 10px;
+  left: 10px;
+  font-size: 0.8rem;
+  background: rgba(0,0,0,0.6);
+  padding: 4px 8px;
+  max-width: calc(100% - 20px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* デスクトップ：ホバーで表示 */
+@media (min-width: 769px) {
+  .post-content-anchor:hover .post-title,
+  .post-content-anchor:hover .post-tags {
+    opacity: 1;
+  }
+}
+
+/* モバイル・タブレット：常に表示 */
+@media (max-width: 768px) {
+  .post-title,
+  .post-tags {
+    opacity: 1;
+  }
+  
+  .post-title {
+    font-size: 0.8rem;
+    padding: 3px 6px;
+  }
+  
+  .post-tags {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
 }
 
 /* コンテナスタイル */
@@ -932,7 +995,7 @@ img {
 /* SoundCloudラッパー */
 .soundcloud-wrap {
   position: relative;
-  padding-bottom: 56.25%;
+  padding-bottom: 75%; /* 4:3 アスペクト比 */
   padding-top: 0;
   height: 0;
   overflow: hidden;
@@ -983,8 +1046,7 @@ img {
 
 @media (max-width: 767px) {
   .processing-wrap,
-  .sketchfab-wrap,
-  .soundcloud-wrap {
+  .sketchfab-wrap {
     padding-bottom: 56.25%;
     padding-top: 0;
   }

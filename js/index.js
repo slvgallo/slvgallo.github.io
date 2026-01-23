@@ -47,7 +47,43 @@ fetch("data/works.json")
       // YouTubeサムネイルのみtransformを適用
       thumb.style.transform = isYoutubeThumb ? "scale(1.02)" : "scale(1.0)";
 
+      // タイトル要素を追加
+      const title = document.createElement("div");
+      title.className = "post-title";
+      title.textContent = work.title;
+
+      // 日付とタグ要素を追加
+      const tags = document.createElement("div");
+      tags.className = "post-tags";
+      
+      // 日付を生成
+      let dateText = "";
+      if (work.id.length >= 4) {
+        const yearMonth = work.id.substring(0, 4);
+        const year = yearMonth.substring(0, 2);
+        const month = yearMonth.substring(2, 4);
+        
+        // 年を2000年代に変換
+        const fullYear = `20${year}`;
+        
+        // 月を英語に変換
+        const monthNames = {
+          '01': 'JAN', '02': 'FEB', '03': 'MAR', '04': 'APR',
+          '05': 'MAY', '06': 'JUNE', '07': 'JULY', '08': 'AUG',
+          '09': 'SEPT', '10': 'OCT', '11': 'NOV', '12': 'DEC'
+        };
+        
+        const monthName = monthNames[month] || month;
+        dateText = `${monthName} ${fullYear} | `;
+      }
+      
+      // 日付とタグを結合
+      const tagTexts = work.tags.map(tag => `#${tag}`).join(' ');
+      tags.textContent = dateText + tagTexts;
+
       link.appendChild(thumb);
+      link.appendChild(title);
+      link.appendChild(tags);
       postInner.appendChild(link);
       article.appendChild(postInner);
       grid.appendChild(article);
