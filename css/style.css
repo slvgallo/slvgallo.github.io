@@ -441,8 +441,8 @@ img {
 /* インデックス投稿ラッパー */
 .index-post-wrapper {
   display: grid;
-  gap: 10px;
-  padding: 10px 20px;
+  gap: 2.0em;
+  padding: 20px 20px;
   box-sizing: border-box;
   grid-template-columns: 1fr;
   width: 100%;
@@ -452,6 +452,7 @@ img {
 @media (min-width: 768px) {
   .index-post-wrapper {
     grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
     padding: 10px;
   }
 }
@@ -459,12 +460,14 @@ img {
 @media (min-width: 1024px) {
   .index-post-wrapper {
     grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
   }
 }
 
 @media (min-width: 1440px) {
   .index-post-wrapper {
     grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
   }
 }
 
@@ -704,12 +707,13 @@ img {
 
 @media (max-width: 767px) {
   .l-container.full-image {
-    margin: 10px auto 2em auto;
+    margin: 0 auto 2em auto;
+    padding: 20px 20px;
   }
   
   .l-container.full-image img,
   .l-container.full-image iframe {
-    margin: 0 auto 1.5em auto;
+    margin: 0 auto 2.0em auto;
   }
   
   .l-container.full-image img:last-child,
@@ -720,11 +724,16 @@ img {
   .video-wrap {
     padding-bottom: 56.25%;
     padding-top: 0;
+    margin-bottom: 2.0em;
+  }
+  
+  .video-wrap:last-child {
+    margin-bottom: 0;
   }
   
   .entry-header {
     margin-top: 1em;
-    margin-bottom: 1.5em;
+    margin-bottom: 2.0em;
   }
   
   .entry-content {
@@ -732,7 +741,7 @@ img {
   }
   
   #project-media {
-    margin-top: 1.5em;
+    margin-top: 2.0em;
   }
 }
 
@@ -780,7 +789,7 @@ img {
 }
 
 .entry-content p {
-  margin: 1.5em 0;
+  margin: 2.0em 0;
   text-align: justify;
   white-space: pre-wrap;
 }
@@ -842,7 +851,7 @@ img {
 
 @media (min-width: 768px) {
   .entry-content blockquote {
-    margin: 1.5em 2em;
+    margin: 2.0em 2em;
     padding: 5px 20px;
   }
 }
@@ -904,7 +913,7 @@ img {
   left: 0;
   width: 100%;
   height: 100%;
-  transform: scale(1.02);
+  transform: scale(1.0);
 }
 
 /* Processingラッパー */
@@ -1048,6 +1057,42 @@ img {
   .sketchfab-wrap {
     padding-bottom: 56.25%;
     padding-top: 0;
+    margin-bottom: 2.0em;
+  }
+  
+  .processing-wrap:last-child,
+  .sketchfab-wrap:last-child {
+    margin-bottom: 0;
+  }
+  
+  .html-wrap {
+    padding-bottom: 56.25%;
+    padding-top: 0;
+    margin-bottom: 2.0em;
+  }
+  
+  .html-wrap:last-child {
+    margin-bottom: 0;
+  }
+  
+  .soundcloud-wrap {
+    padding-bottom: 56.25%;
+    padding-top: 0;
+    margin-bottom: 2.0em;
+  }
+  
+  .soundcloud-wrap:last-child {
+    margin-bottom: 0;
+  }
+  
+  .image2column-wrap {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 2.0em;
+  }
+  
+  .image2column-wrap:last-child {
+    margin-bottom: 0;
   }
 }
 
@@ -1089,7 +1134,7 @@ img {
 }
 
 #project-media p {
-  margin-bottom: 1.5em;
+  margin-bottom: 2.0em;
   line-height: 1.6;
 }
 
