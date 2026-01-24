@@ -3,140 +3,38 @@
 const params = new URLSearchParams(window.location.search);
 const initialFilter = params.get("filter");
 
+// 段階的読み込みの設定
+const ITEMS_PER_LOAD = 16;
+let allWorks = [];
+let filteredWorks = [];
+let displayedCount = 0;
+let currentFilter = "all";
+let isLoading = false;
+
 fetch("data/works.json")
   .then((res) => res.json())
   .then((works) => {
-    const grid = document.getElementById("works-grid");
-
-    works.forEach((work) => {
+    allWorks = works;
+    
+    // YouTubeサムネイルの事前処理
+    allWorks.forEach((work) => {
       const isYoutubeThumb =
         typeof work.thumb === "string" &&
         (work.thumb.includes("youtube.com") || work.thumb.includes("youtu.be"));
 
-      // YouTubeサムネイルを自動生成
       if (isYoutubeThumb) {
         const videoId = extractYouTubeId(work.thumb);
         if (videoId) {
           work.thumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
         }
+        work.isYoutubeThumb = true;
+      } else {
+        work.isYoutubeThumb = false;
       }
-
-      const article = document.createElement("article");
-      article.className = "post index-post";
-      article.dataset.tags = work.tags.join(" ");
-
-      const postInner = document.createElement("div");
-      postInner.className = "post-inner";
-
-      const link = document.createElement("a");
-      link.href = `works.html?id=${work.id}`;
-      link.className = "post-content-anchor";
-
-      const thumb = document.createElement("div");
-      thumb.className = "post-photo-thumb";
-      
-      // Cloudinary URLの最適化
-      let thumbUrl = work.thumb;
-      if (thumbUrl.includes('cloudinary.com')) {
-        // Cloudinaryの最適化パラメータを追加
-        const optimizationParams = 'q_auto,f_auto,w_800,h_450,c_fill';
-        thumbUrl = thumbUrl.replace('/upload/', `/upload/${optimizationParams}/`);
-      }
-      thumb.style.backgroundImage = `url(${thumbUrl})`;
-      
-      // YouTubeサムネイルのみtransformを適用
-      thumb.style.transform = isYoutubeThumb ? "scale(1.02)" : "scale(1.0)";
-
-      // タイトル要素を追加
-      const title = document.createElement("div");
-      title.className = "post-title";
-      title.textContent = work.title;
-
-      // 日付とタグ要素を追加
-      const tags = document.createElement("div");
-      tags.className = "post-tags";
-      
-      // 日付を生成
-      let dateText = "";
-      if (work.id.length >= 4) {
-        const yearMonth = work.id.substring(0, 4);
-        const year = yearMonth.substring(0, 2);
-        const month = yearMonth.substring(2, 4);
-        
-        // 年を2000年代に変換
-        const fullYear = `20${year}`;
-        
-        // 月を英語に変換
-        const monthNames = {
-          '01': 'JAN', '02': 'FEB', '03': 'MAR', '04': 'APR',
-          '05': 'MAY', '06': 'JUNE', '07': 'JULY', '08': 'AUG',
-          '09': 'SEPT', '10': 'OCT', '11': 'NOV', '12': 'DEC'
-        };
-        
-        const monthName = monthNames[month] || month;
-        dateText = `${monthName} ${fullYear} | `;
-      }
-      
-      // 日付とタグを結合
-      const tagTexts = work.tags.map(tag => `#${tag}`).join(' ');
-      tags.textContent = dateText + tagTexts;
-
-      link.appendChild(thumb);
-      link.appendChild(title);
-      link.appendChild(tags);
-      postInner.appendChild(link);
-      article.appendChild(postInner);
-      grid.appendChild(article);
     });
-
-    // モバイル用スクロールイベントリスナー
-    if (window.innerWidth <= 768) {
-      let scrollTimeout;
-      
-      document.addEventListener('scroll', function(e) {
-        // すべてのタイトルとタグを表示
-        document.querySelectorAll('.post-title').forEach(title => {
-          title.classList.add('show');
-        });
-        document.querySelectorAll('.post-tags').forEach(tags => {
-          tags.classList.add('show');
-        });
-        
-        // スクロール停止を検知して非表示
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-          document.querySelectorAll('.post-title').forEach(title => {
-            title.classList.remove('show');
-          });
-          document.querySelectorAll('.post-tags').forEach(tags => {
-            tags.classList.remove('show');
-          });
-        }, 1000); // 1秒後に非表示
-      });
-    }
 
     // フィルタ機能
     const filterLinks = document.querySelectorAll(".filter-link");
-
-    function applyFilter(filter) {
-      // アクティブ状態の更新
-      filterLinks.forEach((l) => l.classList.remove("active"));
-      const activeLink = document.querySelector(`[data-filter="${filter}"]`);
-      if (activeLink) {
-        activeLink.classList.add("active");
-      }
-
-      // フィルタリング
-      const posts = grid.querySelectorAll(".index-post");
-      posts.forEach((post) => {
-        const tags = post.dataset.tags.split(" ");
-        if (filter === "all" || tags.includes(filter)) {
-          post.style.display = "";
-        } else {
-          post.style.display = "none";
-        }
-      });
-    }
 
     filterLinks.forEach((link) => {
       link.addEventListener("click", (e) => {
@@ -151,7 +49,202 @@ fetch("data/works.json")
       ? initialFilter
       : "all";
     applyFilter(initial);
+
+    // Intersection Observerの設定（スクロール検知用）
+    setupInfiniteScroll();
+
+    // モバイル用スクロールイベントリスナー
+    if (window.innerWidth <= 768) {
+      setupMobileScrollEvents();
+    }
   });
+
+// 作品アイテムを生成する関数
+function createWorkItem(work) {
+  const article = document.createElement("article");
+  article.className = "post index-post";
+  article.dataset.tags = work.tags.join(" ");
+
+  const postInner = document.createElement("div");
+  postInner.className = "post-inner";
+
+  const link = document.createElement("a");
+  link.href = `works.html?id=${work.id}`;
+  link.className = "post-content-anchor";
+
+  const thumb = document.createElement("div");
+  thumb.className = "post-photo-thumb";
+  
+  // Cloudinary URLの最適化
+  let thumbUrl = work.thumb;
+  if (thumbUrl.includes('cloudinary.com')) {
+    const optimizationParams = 'q_auto,f_auto,w_800,h_450,c_fill';
+    thumbUrl = thumbUrl.replace('/upload/', `/upload/${optimizationParams}/`);
+  }
+  thumb.style.backgroundImage = `url(${thumbUrl})`;
+  
+  // YouTubeサムネイルのみtransformを適用
+  thumb.style.transform = work.isYoutubeThumb ? "scale(1.02)" : "scale(1.0)";
+
+  // タイトル要素を追加
+  const title = document.createElement("div");
+  title.className = "post-title";
+  title.textContent = work.title;
+
+  // 日付とタグ要素を追加
+  const tags = document.createElement("div");
+  tags.className = "post-tags";
+  
+  // 日付を生成
+  let dateText = "";
+  if (work.id.length >= 4) {
+    const yearMonth = work.id.substring(0, 4);
+    const year = yearMonth.substring(0, 2);
+    const month = yearMonth.substring(2, 4);
+    
+    const fullYear = `20${year}`;
+    
+    const monthNames = {
+      '01': 'JAN', '02': 'FEB', '03': 'MAR', '04': 'APR',
+      '05': 'MAY', '06': 'JUNE', '07': 'JULY', '08': 'AUG',
+      '09': 'SEPT', '10': 'OCT', '11': 'NOV', '12': 'DEC'
+    };
+    
+    const monthName = monthNames[month] || month;
+    dateText = `${monthName} ${fullYear} | `;
+  }
+  
+  const tagTexts = work.tags.map(tag => `#${tag}`).join(' ');
+  tags.textContent = dateText + tagTexts;
+
+  link.appendChild(thumb);
+  link.appendChild(title);
+  link.appendChild(tags);
+  postInner.appendChild(link);
+  article.appendChild(postInner);
+  
+  return article;
+}
+
+// 次のバッチをロードする関数
+function loadMoreItems() {
+  if (isLoading || displayedCount >= filteredWorks.length) return;
+  
+  isLoading = true;
+  const grid = document.getElementById("works-grid");
+  const endIndex = Math.min(displayedCount + ITEMS_PER_LOAD, filteredWorks.length);
+  
+  for (let i = displayedCount; i < endIndex; i++) {
+    const article = createWorkItem(filteredWorks[i]);
+    grid.appendChild(article);
+  }
+  
+  displayedCount = endIndex;
+  isLoading = false;
+  
+  // ローディングインジケーターの更新
+  updateLoadingIndicator();
+}
+
+// フィルタを適用する関数
+function applyFilter(filter) {
+  currentFilter = filter;
+  const grid = document.getElementById("works-grid");
+  const filterLinks = document.querySelectorAll(".filter-link");
+  
+  // アクティブ状態の更新
+  filterLinks.forEach((l) => l.classList.remove("active"));
+  const activeLink = document.querySelector(`[data-filter="${filter}"]`);
+  if (activeLink) {
+    activeLink.classList.add("active");
+  }
+
+  // フィルタリングされた作品リストを作成
+  if (filter === "all") {
+    filteredWorks = [...allWorks];
+  } else {
+    filteredWorks = allWorks.filter(work => work.tags.includes(filter));
+  }
+  
+  // グリッドをクリアして最初からロード
+  grid.innerHTML = "";
+  displayedCount = 0;
+  
+  // 最初のバッチをロード
+  loadMoreItems();
+}
+
+// Infinite Scrollのセットアップ
+function setupInfiniteScroll() {
+  // センチネル要素を作成（監視対象）
+  const sentinel = document.createElement("div");
+  sentinel.id = "scroll-sentinel";
+  sentinel.style.height = "1px";
+  document.querySelector(".top-post-container").appendChild(sentinel);
+
+  // Intersection Observerを設定
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && !isLoading) {
+        loadMoreItems();
+      }
+    });
+  }, {
+    rootMargin: "200px" // 200px手前で発火
+  });
+
+  observer.observe(sentinel);
+}
+
+// ローディングインジケーターの更新
+function updateLoadingIndicator() {
+  let indicator = document.getElementById("loading-indicator");
+  
+  if (displayedCount >= filteredWorks.length) {
+    // すべて表示済み - インジケーターを削除
+    if (indicator) {
+      indicator.remove();
+    }
+  } else {
+    // まだ残りがある場合 - インジケーターを表示
+    if (!indicator) {
+      indicator = document.createElement("div");
+      indicator.id = "loading-indicator";
+      indicator.className = "loading-indicator";
+      indicator.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
+      const sentinel = document.getElementById("scroll-sentinel");
+      if (sentinel) {
+        sentinel.parentNode.insertBefore(indicator, sentinel);
+      }
+    }
+  }
+}
+
+// モバイル用スクロールイベント
+function setupMobileScrollEvents() {
+  let scrollTimeout;
+  
+  document.addEventListener('scroll', function(e) {
+    // すべてのタイトルとタグを表示
+    document.querySelectorAll('.post-title').forEach(title => {
+      title.classList.add('show');
+    });
+    document.querySelectorAll('.post-tags').forEach(tags => {
+      tags.classList.add('show');
+    });
+    
+    // スクロール停止を検知して非表示
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      document.querySelectorAll('.post-title').forEach(title => {
+        title.classList.remove('show');
+      });
+      document.querySelectorAll('.post-tags').forEach(tags => {
+        tags.classList.remove('show');
+      });
+    }, 1000);
+  });
+}
 
 // ウィンドウリサイズ時の処理
 window.addEventListener('resize', function() {
