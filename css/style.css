@@ -552,10 +552,16 @@ img {
   }
 }
 
-/* モバイル・タブレット：常に表示 */
+/* モバイル・タブレット：タッチで表示 */
 @media (max-width: 768px) {
   .post-title,
   .post-tags {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .post-title.show,
+  .post-tags.show {
     opacity: 1;
   }
   

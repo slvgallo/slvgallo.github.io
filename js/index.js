@@ -89,6 +89,41 @@ fetch("data/works.json")
       grid.appendChild(article);
     });
 
+    // モバイル用画面全体のタッチイベントリスナー
+    if (window.innerWidth <= 768) {
+      document.addEventListener('touchstart', function(e) {
+        // すべてのタイトルとタグを表示
+        document.querySelectorAll('.post-title').forEach(title => {
+          title.classList.add('show');
+        });
+        document.querySelectorAll('.post-tags').forEach(tags => {
+          tags.classList.add('show');
+        });
+      });
+      
+      document.addEventListener('touchend', function(e) {
+        // すべてのタイトルとタグを非表示
+        setTimeout(() => {
+          document.querySelectorAll('.post-title').forEach(title => {
+            title.classList.remove('show');
+          });
+          document.querySelectorAll('.post-tags').forEach(tags => {
+            tags.classList.remove('show');
+          });
+        }, 100);
+      });
+      
+      document.addEventListener('touchcancel', function(e) {
+        // すべてのタイトルとタグを非表示
+        document.querySelectorAll('.post-title').forEach(title => {
+          title.classList.remove('show');
+        });
+        document.querySelectorAll('.post-tags').forEach(tags => {
+          tags.classList.remove('show');
+        });
+      });
+    }
+
     // フィルタ機能
     const filterLinks = document.querySelectorAll(".filter-link");
 
@@ -126,6 +161,23 @@ fetch("data/works.json")
       : "all";
     applyFilter(initial);
   });
+
+// ウィンドウリサイズ時の処理
+window.addEventListener('resize', function() {
+  const isMobile = window.innerWidth <= 768;
+  const allTitles = document.querySelectorAll('.post-title');
+  const allTags = document.querySelectorAll('.post-tags');
+  
+  if (isMobile) {
+    // モバイル表示：すべて非表示
+    allTitles.forEach(title => title.classList.remove('show'));
+    allTags.forEach(tags => tags.classList.remove('show'));
+  } else {
+    // デスクトップ表示：すべてリセット
+    allTitles.forEach(title => title.classList.remove('show'));
+    allTags.forEach(tags => tags.classList.remove('show'));
+  }
+});
 
 // ハンバーガーメニューの制御
 (function () {
