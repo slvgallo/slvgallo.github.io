@@ -89,9 +89,11 @@ fetch("data/works.json")
       grid.appendChild(article);
     });
 
-    // モバイル用画面全体のタッチイベントリスナー
+    // モバイル用スクロールイベントリスナー
     if (window.innerWidth <= 768) {
-      document.addEventListener('touchstart', function(e) {
+      let scrollTimeout;
+      
+      document.addEventListener('scroll', function(e) {
         // すべてのタイトルとタグを表示
         document.querySelectorAll('.post-title').forEach(title => {
           title.classList.add('show');
@@ -99,28 +101,17 @@ fetch("data/works.json")
         document.querySelectorAll('.post-tags').forEach(tags => {
           tags.classList.add('show');
         });
-      });
-      
-      document.addEventListener('touchend', function(e) {
-        // すべてのタイトルとタグを非表示
-        setTimeout(() => {
+        
+        // スクロール停止を検知して非表示
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
           document.querySelectorAll('.post-title').forEach(title => {
             title.classList.remove('show');
           });
           document.querySelectorAll('.post-tags').forEach(tags => {
             tags.classList.remove('show');
           });
-        }, 100);
-      });
-      
-      document.addEventListener('touchcancel', function(e) {
-        // すべてのタイトルとタグを非表示
-        document.querySelectorAll('.post-title').forEach(title => {
-          title.classList.remove('show');
-        });
-        document.querySelectorAll('.post-tags').forEach(tags => {
-          tags.classList.remove('show');
-        });
+        }, 1000); // 1秒後に非表示
       });
     }
 
