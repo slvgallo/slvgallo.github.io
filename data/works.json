@@ -231,15 +231,29 @@
   },
     {
     "id": "2209-1",
-    "title": "Iron Leg Furniture",
-    "thumb": "Iron Leg Furniture",
+    "title": "Steel Leg Furniture",
+    "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769235997/SteelLegFurniture-1_lkgw7z.png",
     "tags": [
       "product"
     ],
-    "desc": "[Product Design]<br><br>Model: Table, Shelf<br>Materials: Iron, Laminated Wood",
+    "desc": "[Product Design]<br><br>Model: Table, Shelf<br>Materials: Black Steel, Laminated Wood",
     "media": [
       {
-        
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769235997/SteelLegFurniture-1_lkgw7z.png"
+      },
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769238234/SteelLegFurniture-2_qxvdfo.png"
+      },
+      {
+        "type": "image2column",
+        "src": [
+          "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769238235/SteelLegFurniture-3_xxsjxx.png",
+          "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769238235/SteelLegFurniture-4_r8jr2t.png",
+          "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769238234/SteelLegFurniture-5_nwqtzx.png",
+          "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769238236/SteelLegFurniture-6_kza8cf.png"
+        ]
       }
     ]
   },

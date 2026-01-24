@@ -75,16 +75,50 @@ function createWorkItem(work) {
   const thumb = document.createElement("div");
   thumb.className = "post-photo-thumb";
   
-  // Cloudinary URLの最適化
-  let thumbUrl = work.thumb;
-  if (thumbUrl.includes('cloudinary.com')) {
-    const optimizationParams = 'q_auto,f_auto,w_800,h_450,c_fill';
-    thumbUrl = thumbUrl.replace('/upload/', `/upload/${optimizationParams}/`);
+  // SoundCloudの場合はプレーヤーを表示
+  if (work.thumb && work.thumb.includes('soundcloud.com')) {
+    // SoundCloudトラックIDをmedia配列から取得
+    const soundCloudMedia = work.media.find(m => m.type === 'soundcloud');
+    if (soundCloudMedia && soundCloudMedia.src) {
+      const trackId = soundCloudMedia.src;
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&color=%230b0b0b&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=true&visual=true&sharing=false`;
+      iframe.width = "100%";
+      iframe.height = "100%";
+      iframe.frameBorder = "no";
+      iframe.allow = "autoplay";
+      iframe.style.position = "absolute";
+      iframe.style.top = "0";
+      iframe.style.left = "0";
+      iframe.style.width = "100%";
+      iframe.style.height = "100%";
+      
+      thumb.appendChild(iframe);
+      thumb.style.position = "relative";
+      thumb.style.paddingBottom = "56.25%"; // 16:9 アスペクト比
+      thumb.style.height = "0";
+      thumb.style.overflow = "hidden";
+    } else {
+      // フォールバック：通常のサムネイル
+      let thumbUrl = work.thumb;
+      if (thumbUrl.includes('cloudinary.com')) {
+        const optimizationParams = 'q_auto,f_auto,w_800,h_450,c_fill';
+        thumbUrl = thumbUrl.replace('/upload/', `/upload/${optimizationParams}/`);
+      }
+      thumb.style.backgroundImage = `url(${thumbUrl})`;
+    }
+  } else {
+    // 通常の画像サムネイル
+    let thumbUrl = work.thumb;
+    if (thumbUrl.includes('cloudinary.com')) {
+      const optimizationParams = 'q_auto,f_auto,w_800,h_450,c_fill';
+      thumbUrl = thumbUrl.replace('/upload/', `/upload/${optimizationParams}/`);
+    }
+    thumb.style.backgroundImage = `url(${thumbUrl})`;
+    
+    // YouTubeサムネイルのみtransformを適用
+    thumb.style.transform = work.isYoutubeThumb ? "scale(1.02)" : "scale(1.0)";
   }
-  thumb.style.backgroundImage = `url(${thumbUrl})`;
-  
-  // YouTubeサムネイルのみtransformを適用
-  thumb.style.transform = work.isYoutubeThumb ? "scale(1.02)" : "scale(1.0)";
 
   // タイトル要素を追加
   const title = document.createElement("div");

@@ -63,8 +63,9 @@
 
 .social-links {
   display: flex;
-  gap: 1em;
+  gap: 0.7em;
   flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .social-link {
@@ -81,9 +82,7 @@
 }
 
 .social-link:hover {
-  background-color: rgba(0, 0, 0, 0.2);
-  color: #5289db;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
 }
 
 .social-link img {
@@ -160,7 +159,6 @@
 .lang-btn {
   background: none;
   border: 1px solid #ccc;
-  border-radius: 4px;
   padding: 4px 8px;
   cursor: pointer;
   font-size: 0.9em;
@@ -178,10 +176,6 @@
   border-color: #36393d;
 }
 
-.lang-btn.active:hover {
-  background-color: #5289db;
-  border-color: #5289db;
-}
 
 
 
@@ -209,6 +203,10 @@
   
   .profile-location {
     font-size: 1.1em;
+  }
+  
+  .profile-section p {
+    font-size: 1em;
   }
 }
 
