@@ -236,7 +236,7 @@
     "tags": [
       "product"
     ],
-    "desc": "[Product Design]<br><br>Model: Table, Shelf<br>Materials: Black Steel, Laminated Wood",
+    "desc": "Model: Table, Shelf<br>Materials: Black Steel, Laminated Wood",
     "media": [
       {
         "type": "image",
@@ -463,6 +463,7 @@
     "tags": [
       "product"
     ],
+    "desc": "Model: Cat House<br>Materials: Cardboard",
     "media": [
       {
         "type": "image",
@@ -671,12 +672,16 @@
     {
     "id": "1211-6",
     "title": "Arduino Synthesizer",
-    "thumb": "https://www.youtube.com/watch?v=lGAkuM0IOZ8",
+    "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769282488/ArduinoSynthesizer-1_zad4un.png",
     "tags": [
       "product"
     ],
-    "desc": "[product design]<br><br>Model: 8-Step Sequencer<br>Materials: Aluminum, Rosewood, Arduino Duemilanove 328<br><br>Model: Arduino with Ribbon Controller<br>Materials: Aluminum, Rosewood, Arduino UNO<br><br>Model: 2ch Passive Mixer<br>Materials: Aluminum, Rosewood, 50 mm Speaker",
+    "desc": "Model: 8-Step Sequencer- Arduino<br>Materials: Aluminum, Rosewood, Arduino Duemilanove 328<br><br>Model: Ribbon Synthesizer - Arduino<br>Materials: Aluminum, Rosewood, Arduino UNO<br><br>Model: 2ch Passive Mixer<br>Materials: Aluminum, Rosewood, 50 mm Speaker",
     "media": [
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769282488/ArduinoSynthesizer-1_zad4un.png"
+      },
       {
         "type": "video",
         "src": "https://www.youtube.com/watch?v=lGAkuM0IOZ8"
@@ -689,13 +694,13 @@
   },
   {
     "id": "1211-5",
-    "title": "Arduino with Ribbon Controller Ver. 1.0 – Arduino",
+    "title": "Ribbon Synthesizer Ver. 1.0 – Arduino",
     "thumb": "https://www.youtube.com/watch?v=qyldvD9WPGI",
     "tags": [
       "video",
       "sound"
     ],
-    "desc": "Model: Arduino with Ribbon Controller<br>Materials: Aluminum, Rosewood, Arduino UNO<br><br>Model: 2ch Passive Mixer<br>Materials: Aluminum, Rosewood, 50 mm Speaker",
+    "desc": "Model: Ribbon Synthesizer - Arduino<br>Materials: Aluminum, Rosewood, Arduino UNO<br><br>Model: 2ch Passive Mixer<br>Materials: Aluminum, Rosewood, 50 mm Speaker",
     "media": [
       {
         "type": "video",

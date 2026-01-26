@@ -457,7 +457,7 @@ img {
 /* インデックス投稿ラッパー */
 .index-post-wrapper {
   display: grid;
-  gap: 2.0em;
+  gap: 20px;
   padding: 20px 20px;
   box-sizing: border-box;
   grid-template-columns: 1fr;
@@ -709,7 +709,8 @@ img {
     width: calc(100% - 40px);
     max-width: calc(1320px - 0px);
     padding-left: 20px;
-    padding-right: 20px;
+    padding-right: 20px; 
+   
     margin: 20px auto 3em auto;
   }
 
@@ -736,13 +737,13 @@ img {
 
 @media (max-width: 767px) {
   .l-container.full-image {
-    margin: 0 auto 2em auto;
-    padding: 20px 20px;
+    margin: 0 auto 20px auto;
+    padding: 20px 20px 0 20px;
   }
 
   .l-container.full-image img,
   .l-container.full-image iframe {
-    margin: 0 auto 2.0em auto;
+    margin: 0 auto 20px auto;
   }
 
   .l-container.full-image img:last-child,
@@ -753,10 +754,20 @@ img {
   .video-wrap {
     padding-bottom: 56.25%;
     padding-top: 0;
-    margin-bottom: 2.0em;
+    margin-bottom: 20px;
   }
 
   .video-wrap:last-child {
+    margin-bottom: 0;
+  }
+
+  .processing-wrap {
+    padding-bottom: 75%;
+    padding-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .processing-wrap:last-child {
     margin-bottom: 0;
   }
 
@@ -1088,7 +1099,7 @@ img {
   .sketchfab-wrap {
     padding-bottom: 56.25%;
     padding-top: 0;
-    margin-bottom: 2.0em;
+    margin-bottom: 20px;
   }
   
   .sketchfab-wrap:last-child {
@@ -1098,7 +1109,7 @@ img {
   .html-wrap {
     padding-bottom: 56.25%;
     padding-top: 0;
-    margin-bottom: 2.0em;
+    margin-bottom: 20px;
   }
 
   .html-wrap:last-child {
@@ -1108,17 +1119,31 @@ img {
   .soundcloud-wrap {
     padding-bottom: 56.25%;
     padding-top: 0;
-    margin-bottom: 2.0em;
+    margin-bottom: 20px;
   }
 
   .soundcloud-wrap:last-child {
     margin-bottom: 0;
   }
 
+  .processing-wrap {
+    padding-bottom: 75%;
+    padding-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .processing-wrap:last-child {
+    margin-bottom: 0;
+  }
+
+  .l-container.full-image .video-wrap {
+    margin-bottom: 20px;
+  }
+
   .image2column-wrap {
     grid-template-columns: 1fr;
     gap: 0;
-    margin-bottom: 2.0em;
+    margin-bottom: 20px;
   }
 
   .image2column-wrap:last-child {
