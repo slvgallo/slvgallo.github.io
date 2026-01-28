@@ -218,46 +218,7 @@ const mediaHandlers = {
     fullContainer.appendChild(soundcloudWrap);
   },
 
-  // Flickrの処理
-  flickr: (mediaItem, fullContainer, contentContainer) => {
-    const img = document.createElement('img');
-    img.src = mediaItem.src;
-    img.alt = 'Flickr image';
-    img.loading = 'lazy';
-    img.style.cursor = 'pointer';
-    img.style.maxWidth = '100%';
-    img.style.height = 'auto';
-    
-    // 画像読み込み後に縦横比をチェック
-    img.addEventListener('load', () => {
-      const aspectRatio = img.naturalHeight / img.naturalWidth;
-      if (aspectRatio > 1.2) { // 縦長の場合
-        img.style.maxHeight = '1024px';
-        img.style.objectFit = 'contain';
-        
-        // 親コンテナに左寄せクラスを追加
-        const wrapper = document.createElement('div');
-        wrapper.style.textAlign = 'left';
-        wrapper.style.display = 'inline-block';
-        
-        // 画像をwrapperに移動
-        img.parentNode.insertBefore(wrapper, img);
-        wrapper.appendChild(img);
-      }
-    });
-    
-    // Flickr画像クリックで元ページに飛ぶ
-    img.addEventListener('click', () => {
-      // Flickrの写真IDを抽出してURLを生成
-      const flickrMatch = mediaItem.src.match(/\/(\d+)_[a-f0-9]{10}_b\.jpg$/);
-      if (flickrMatch) {
-        const photoId = flickrMatch[1];
-        window.open(`https://www.flickr.com/photos/slvgallo/${photoId}`, '_blank');
-      }
-    });
-    
-    fullContainer.appendChild(img);
-  },
+
 
   // 2カラム画像の処理
   image2column: (mediaItem, fullContainer, contentContainer) => {

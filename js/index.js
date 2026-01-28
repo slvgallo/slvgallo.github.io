@@ -183,24 +183,29 @@ function createWorkItem(work) {
       thumb.style.overflow = "hidden";
     } else {
       // フォールバック：通常のサムネイル
-      let thumbUrl = work.thumb;
-      if (thumbUrl.includes('cloudinary.com')) {
-        const optimizationParams = 'q_auto,f_auto,w_800,h_450,c_fill';
-        thumbUrl = thumbUrl.replace('/upload/', `/upload/${optimizationParams}/`);
-      }
-      thumb.style.backgroundImage = `url(${thumbUrl})`;
+      const thumbUrl = getOptimizedImageUrl(work.thumb, work.isYoutubeThumb);
+      
+      const img = document.createElement('img');
+      img.src = thumbUrl;
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.alt = work.title;
+      thumb.appendChild(img);
     }
   } else {
     // 通常の画像サムネイル
-    let thumbUrl = work.thumb;
-    if (thumbUrl.includes('cloudinary.com')) {
-      const optimizationParams = 'q_auto,f_auto,w_800,h_450,c_fill';
-      thumbUrl = thumbUrl.replace('/upload/', `/upload/${optimizationParams}/`);
-    }
-    thumb.style.backgroundImage = `url(${thumbUrl})`;
+    const thumbUrl = getOptimizedImageUrl(work.thumb, work.isYoutubeThumb);
+    
+    const img = document.createElement('img');
+    img.src = thumbUrl;
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.alt = work.title;
     
     // YouTubeサムネイルのみtransformを適用
-    thumb.style.transform = work.isYoutubeThumb ? "scale(1.02)" : "scale(1.0)";
+    img.style.transform = work.isYoutubeThumb ? "scale(1.02)" : "scale(1.0)";
+    
+    thumb.appendChild(img);
   }
 
   // タイトル要素を追加
@@ -410,3 +415,29 @@ window.addEventListener('resize', function() {
     });
   }
 })();
+
+/**
+ * Cloudinaryの画像URLを最適化するヘルパー関数
+ * @param {string} url - 元の画像URL
+ * @param {boolean} isYoutube - YouTubeサムネイルかどうか
+ * @returns {string} 最適化された画像URL
+ */
+function getOptimizedImageUrl(url, isYoutube) {
+  if (!url) return "";
+  
+  // Cloudinaryの画像のみ最適化
+  if (url.includes('cloudinary.com')) {
+    // 既存の変換パラメータがない場合のみ追加
+    if (url.includes('/upload/') && !url.includes('/upload/q_')) {
+      // w_600: 幅600pxにリサイズ
+      // h_338: 高さ338pxにリサイズ (16:9のアスペクト比維持)
+      // c_fill: 指定サイズに切り抜き
+      // q_auto: 画質自動最適化
+      // f_auto: フォーマット自動選択 (WebP/AVIFなど)
+      const optimizationParams = 'q_auto,f_auto,w_600,h_338,c_fill';
+      return url.replace('/upload/', `/upload/${optimizationParams}/`);
+    }
+  }
+  
+  return url;
+}
