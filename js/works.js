@@ -118,9 +118,9 @@ const mediaHandlers = {
       iframe.style.width = '100%';
       iframe.style.height = '100%';
       
-      // コンテナにアスペクト比を設定
+      // コンテナにアスペクト比を設定（固定16:9）
       videoWrap.style.position = 'relative';
-      videoWrap.style.paddingBottom = `${(1 / aspectRatio.ratio) * 100}%`;
+      videoWrap.style.paddingBottom = '56.25%';
       videoWrap.style.height = '0';
       videoWrap.style.overflow = 'hidden';
     } else {
