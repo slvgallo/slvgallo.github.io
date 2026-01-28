@@ -39,10 +39,22 @@
         </h1>
       </header>
     </div>
+    <button class="menu-toggle" aria-label="メニューを開く">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="menu-overlay"></div>
     <div class="header-box-nav">
       <nav class="nav" role="navigation" aria-label="Main navigation">
         <ul>
-          <li><a href="index.html">← Works</a></li>
+          <li><a href="#" data-filter="all" class="filter-link">all</a></li>
+          <li><a href="#" data-filter="sound" class="filter-link">sound</a></li>
+          <li><a href="#" data-filter="video" class="filter-link">video</a></li>
+          <li><a href="#" data-filter="2d" class="filter-link">2d</a></li>
+          <li><a href="#" data-filter="3d" class="filter-link">3d</a></li>
+          <li><a href="#" data-filter="object" class="filter-link">object</a></li>
+          <li><a href="#" data-filter="code" class="filter-link">code</a></li>
         </ul>
       </nav>
     </div>
@@ -79,6 +91,7 @@
 
 <script src="js/utils.js"></script>
 <script src="js/works.js"></script>
+<script src="js/navigation.js"></script>
 <script src="js/scroll-control.js"></script>
 <script src="js/favicon-control.js"></script>
 

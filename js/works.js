@@ -62,14 +62,36 @@ const mediaHandlers = {
         img.src = src;
         img.alt = 'Project image';
         img.loading = 'lazy';
-        fullContainer.appendChild(img);
+        
+        // リンクがある場合は画像をリンクで囲む
+        if (mediaItem.link) {
+          const link = document.createElement('a');
+          link.href = mediaItem.link;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.appendChild(img);
+          fullContainer.appendChild(link);
+        } else {
+          fullContainer.appendChild(img);
+        }
       });
     } else {
       const img = document.createElement('img');
       img.src = mediaItem.src;
       img.alt = 'Project image';
       img.loading = 'lazy';
-      fullContainer.appendChild(img);
+      
+      // リンクがある場合は画像をリンクで囲む
+      if (mediaItem.link) {
+        const link = document.createElement('a');
+        link.href = mediaItem.link;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.appendChild(img);
+        fullContainer.appendChild(link);
+      } else {
+        fullContainer.appendChild(img);
+      }
     }
   },
   
@@ -242,12 +264,28 @@ const mediaHandlers = {
     const image2columnWrap = document.createElement('div');
     image2columnWrap.className = 'image2column-wrap';
     
-    mediaItem.src.forEach(src => {
+    mediaItem.src.forEach((src, index) => {
       const img = document.createElement('img');
       img.src = src;
       img.alt = 'Project image';
       img.loading = 'lazy';
-      image2columnWrap.appendChild(img);
+      
+      // リンクがある場合は画像をリンクで囲む
+      // mediaItem.linkが配列の場合と文字列の場合に対応
+      if (mediaItem.link) {
+        const link = document.createElement('a');
+        if (Array.isArray(mediaItem.link)) {
+          link.href = mediaItem.link[index] || mediaItem.link[0];
+        } else {
+          link.href = mediaItem.link;
+        }
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.appendChild(img);
+        image2columnWrap.appendChild(link);
+      } else {
+        image2columnWrap.appendChild(img);
+      }
     });
     
     fullContainer.appendChild(image2columnWrap);

@@ -48,16 +48,99 @@ fetch("data/works.json")
     const initial = initialFilter && document.querySelector(`[data-filter="${initialFilter}"]`)
       ? initialFilter
       : "all";
-    applyFilter(initial);
+
+    // 復元処理または初期化
+    if (!restoreScrollState()) {
+      applyFilter(initial);
+    }
 
     // Intersection Observerの設定（スクロール検知用）
     setupInfiniteScroll();
+
+    // クリックイベントの委譲（状態保存用）
+    setupStateSaving();
 
     // モバイル用スクロールイベントリスナー
     if (window.innerWidth <= 768) {
       setupMobileScrollEvents();
     }
   });
+
+// スクロール状態を保存するセットアップ
+function setupStateSaving() {
+  const grid = document.getElementById("works-grid");
+  grid.addEventListener("click", (e) => {
+    // リンクまたは画像の親リンクを探す
+    const link = e.target.closest("a");
+    if (link && link.href && link.href.includes("works.html")) {
+      const state = {
+        scrollTop: window.scrollY,
+        filter: currentFilter,
+        displayedCount: displayedCount
+      };
+      sessionStorage.setItem("slvgallo_scroll_state", JSON.stringify(state));
+    }
+  });
+}
+
+// 状態を復元する関数
+function restoreScrollState() {
+  // ブラウザバックでの遷移かチェック
+  const navigationEntry = performance.getEntriesByType("navigation")[0];
+  const isBackNavigation = navigationEntry && navigationEntry.type === "back_forward";
+
+  if (!isBackNavigation) {
+    // 通常遷移の場合はストレージをクリア
+    sessionStorage.removeItem("slvgallo_scroll_state");
+    return false;
+  }
+
+  const savedStateJson = sessionStorage.getItem("slvgallo_scroll_state");
+  if (!savedStateJson) return false;
+
+  try {
+    const state = JSON.parse(savedStateJson);
+    
+    // フィルタを復元
+    currentFilter = state.filter;
+    const filterLinks = document.querySelectorAll(".filter-link");
+    filterLinks.forEach((l) => l.classList.remove("active"));
+    const activeLink = document.querySelector(`[data-filter="${currentFilter}"]`);
+    if (activeLink) activeLink.classList.add("active");
+
+    // リストをフィルタリング
+    if (currentFilter === "all") {
+      filteredWorks = [...allWorks];
+    } else {
+      filteredWorks = allWorks.filter(work => work.tags.includes(currentFilter));
+    }
+
+    // 保存されていた数だけアイテムを表示
+    const grid = document.getElementById("works-grid");
+    grid.innerHTML = "";
+    
+    // 表示数制限
+    const countToLoad = Math.min(state.displayedCount, filteredWorks.length);
+    
+    for (let i = 0; i < countToLoad; i++) {
+      const article = createWorkItem(filteredWorks[i]);
+      grid.appendChild(article);
+    }
+    
+    displayedCount = countToLoad;
+    updateLoadingIndicator();
+
+    // スクロール位置を復元（少し遅延させて描画完了を待つ）
+    requestAnimationFrame(() => {
+      window.scrollTo(0, state.scrollTop);
+    });
+    
+    return true;
+  } catch (e) {
+    console.error("Failed to restore state:", e);
+    return false;
+  }
+}
 
 // 作品アイテムを生成する関数
 function createWorkItem(work) {

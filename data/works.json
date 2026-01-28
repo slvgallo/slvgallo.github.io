@@ -4,7 +4,7 @@
     "title": "KHGL",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768661103/KHGL-3_bb0now.png",
     "tags": [
-      "2d"
+      "code"
     ],
     "media": [
       {
@@ -54,7 +54,7 @@
     "title": "◯◯◯",
     "thumb": "https://www.youtube.com/watch?v=BZdc3rEtxLw",
     "tags": [
-      "video"
+      "code","video"
     ],
     "media": [
       {
@@ -112,7 +112,7 @@
     "title": "HCTG",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768581178/HCTG_gg6xvr.png",
     "tags": [
-      "2d"
+      "code"
     ],
     "media": [
       {
@@ -142,7 +142,7 @@
     "title": "T-shirts",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768846189/Tshirts-1_landa0.png",
     "tags": [
-      "product"
+      "object"
     ],
     "media": [
       {
@@ -156,7 +156,7 @@
     "title": "VDSD",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768592441/VDSD_r2rnao.png",
     "tags": [
-      "2d","sound"
+      "sound","video","code"
     ],
     "media": [
       {
@@ -174,7 +174,7 @@
     "title": "TXSD",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768587429/TXSD_ivwj5d.png",
     "tags": [
-      "2d","sound"
+      "sound","video","code"
     ],
     "media": [
       {
@@ -200,7 +200,7 @@
     "title": "Daybed",
     "thumb": "",
     "tags": [
-      "product"
+      "object"
     ],
     "media": [
       {
@@ -219,8 +219,8 @@
     "title": "Hight Speed Clapping Music / Steve Reich",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768796339/HSCM-1_w00a0p.png",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video"
     ],
     "media": [
       {
@@ -234,7 +234,7 @@
     "title": "Steel Leg Furniture",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769235997/SteelLegFurniture-1_lkgw7z.png",
     "tags": [
-      "product"
+      "object"
     ],
     "desc": "Model: Table, Shelf<br>Materials: Black Steel, Laminated Wood",
     "media": [
@@ -262,8 +262,8 @@
     "title": "Clapping Music (1972) / Steve Reich",
     "thumb": "https://www.youtube.com/watch?v=YPU5XrmORCQ",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video"
     ],
     "media": [
       {
@@ -277,8 +277,8 @@
     "title": "SP-303 TAPE ECHO",
     "thumb": "https://www.youtube.com/watch?v=Qh1ELPFEOaM",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video"
     ],
     "media": [
       {
@@ -292,8 +292,8 @@
     "title": "Piano",
     "thumb": "https://www.youtube.com/watch?v=WW0gvwtz_40",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video"
     ],
     "media": [
       {
@@ -335,8 +335,8 @@
     "title": "JTM",
     "thumb": "https://www.youtube.com/watch?v=X3h-1oupwkM",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video","code"
     ],
     "media": [
       {
@@ -357,20 +357,44 @@
     ]
   },  
   {
+    "id": "1507-1",
+    "title": "Structural Study",
+    "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769407337/StructuralStudy-1_gnrvv0.png",
+    "tags": [
+      "3d"
+    ],
+    "media": [
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769407337/StructuralStudy-1_gnrvv0.png"
+      },
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769407633/StructuralStudy-2_lzkuqc.png"
+      },
+      {
+        "type": "sketchfab",
+        "src": "https://sketchfab.com/models/4ce3fa471bd14b93b9d7adb6e1e7fef9/embed"
+      }
+    ]
+  },
+  {
     "id": "1504-1",
     "title": "mijinko",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768963088/mijinko-1_p87lio.png",
     "tags": [
-      "photo"
+      "2d"
     ],
     "media": [
       {
-        "type": "imgur",
-        "src": "p1rbXUc"
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769396420/mijinko-2_chabz6.gif",
+        "link": "https://imgur.com/gallery/mijinko-p1rbXUc"
       },
       {
-        "type": "imgur",
-        "src": "yCsIQlz"
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769396420/mijinko-3_zaydoo.gif",
+        "link": "https://imgur.com/gallery/mijinko-yCsIQlz"
       }
     ]
   },
@@ -379,8 +403,8 @@
     "title": "Polar",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768797991/Polar-1_eyjitw.png",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video"
     ],
     "media": [
       {
@@ -401,27 +425,66 @@
       }
     ]
   },
-  {
-    "id": "1408-1",
-    "title": "MANGA SHOCK - DUM-DUM PARTY 2014",
-    "thumb": "https://www.youtube.com/watch?v=t2A-NoLmdEg",
+    {
+    "id": "1407-4",
+    "title": "FAT",
+    "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769403925/FAT-1_oplufv.png",
     "tags": [
-      "video"
+      "3d"
     ],
-    "desc": "[video/edit]<br><br>DUM-DUM PARTY 2014<br>Artist: MANGA SHOCK<br>Place: TSUTAYA O-nest<br>Date: June 14, 2014<br><br>MANGA SHOCK: <a href=\"https://x.com/MANGASHOCK_7\" target=\"_blank\">https://x.com/MANGASHOCK_7</a><br>DUM-DUM PARTY: <a href=\"https://party.dum-dum.tv/\" target=\"_blank\">https://party.dum-dum.tv/</a><br>Shibuya-O Group: <a href=\"https://shibuya-o.com/\" target=\"_blank\">https://shibuya-o.com/</a><br><br>Client: MANGA SHOCK",
     "media": [
       {
-        "type": "video",
-        "src": "https://www.youtube.com/watch?v=t2A-NoLmdEg"
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769403925/FAT-1_oplufv.png"
+      },
+      {
+        "type": "sketchfab",
+        "src": "https://sketchfab.com/models/e343d751287f46e9baac23783ed7bf14/embed"
+      }
+    ]
+  },
+      {
+    "id": "1407-3",
+    "title": "Tensegrity",
+    "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769411057/Tensegrity-1_u2apyt.png",
+    "tags": [
+      "3d"
+    ],
+    "media": [
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769411057/Tensegrity-1_u2apyt.png"
+      },
+      {
+        "type": "sketchfab",
+        "src": "https://sketchfab.com/models/ed9d4ddd143e4b68af6c1b01b2965c90/embed"
       }
     ]
   },
   {
+    "id": "1407-2",
+    "title": "Geodesic Dome",
+    "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769403915/GeodesicDome-1_tedsmz.png",
+    "tags": [
+      "3d"
+    ],
+    "media": [
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769403915/GeodesicDome-1_tedsmz.png"
+      },
+      {
+        "type": "sketchfab",
+        "src": "https://sketchfab.com/models/4ef52e564ee64ad18951ad4f82caed22/embed"
+      }
+    ]
+  },
+{
     "id": "1407-1",
     "title": "Polka Dot",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768580092/PolkaDot_jc8ojf.png",
     "tags": [
-      "2d"
+      "code"
     ],
     "media": [
       {
@@ -461,7 +524,7 @@
     "title": "Cat House",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769195356/cathouse-1_zh6j2w.png",
     "tags": [
-      "product"
+      "object"
     ],
     "desc": "Model: Cat House<br>Materials: Cardboard",
     "media": [
@@ -501,7 +564,6 @@
       {
         "type": "sketchfab",
         "src": "https://sketchfab.com/models/28dafda677cb4e689e04855c57536295/embed"
-        
       }
       
     ]
@@ -540,7 +602,7 @@
     "title": "TRGL",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1768576617/TRGL_jeiozl.png",
     "tags": [
-      "2d"
+      "code"
     ],
     "media": [
       {
@@ -554,8 +616,8 @@
     "title": "Hands",
     "thumb": "https://www.youtube.com/watch?v=PuqUP_ffECI",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video","3d"
     ],
     "media": [
       {
@@ -581,8 +643,8 @@
     "title": "Wave",
     "thumb": "https://www.youtube.com/watch?v=RRNXrklfYqM",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video"
     ],
     "media": [
       {
@@ -596,8 +658,8 @@
     "title": "Tridots",
     "thumb": "https://www.youtube.com/watch?v=aQrSBUc4nNo",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video","3d"
     ],
     "media": [
       {
@@ -627,8 +689,8 @@
     "title": "Underwater",
     "thumb": "https://www.youtube.com/watch?v=10o-b_h6daY",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video"
     ],
     "media": [
       {
@@ -674,7 +736,7 @@
     "title": "Arduino Synthesizer",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1769282488/ArduinoSynthesizer-1_zad4un.png",
     "tags": [
-      "product"
+      "object"
     ],
     "desc": "Model: 8-Step Sequencer- Arduino<br>Materials: Aluminum, Rosewood, Arduino Duemilanove 328<br><br>Model: Ribbon Synthesizer - Arduino<br>Materials: Aluminum, Rosewood, Arduino UNO<br><br>Model: 2ch Passive Mixer<br>Materials: Aluminum, Rosewood, 50 mm Speaker",
     "media": [
@@ -697,8 +759,8 @@
     "title": "Ribbon Synthesizer Ver. 1.0 – Arduino",
     "thumb": "https://www.youtube.com/watch?v=qyldvD9WPGI",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video"
     ],
     "desc": "Model: Ribbon Synthesizer - Arduino<br>Materials: Aluminum, Rosewood, Arduino UNO<br><br>Model: 2ch Passive Mixer<br>Materials: Aluminum, Rosewood, 50 mm Speaker",
     "media": [
@@ -713,8 +775,8 @@
     "title": "Tape Music",
     "thumb": "https://www.youtube.com/watch?v=d8RUtWsXaZo",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video"
     ],
     "media": [
       {
@@ -728,8 +790,8 @@
     "title": "Step Sequencer Ver. 2.3 – Arduino",
     "thumb": "https://www.youtube.com/watch?v=lGAkuM0IOZ8",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video"
     ],
     "desc": "Model: 8-Step Sequencer<br>Materials: Aluminum, Rosewood, Arduino Duemilanove 328<br><br>Model: 2ch Passive Mixer<br>Materials: Aluminum, Rosewood, 50mm speaker",
     "media": [
@@ -744,8 +806,8 @@
     "title": "devotion.",
     "thumb": "https://www.youtube.com/watch?v=H9PgumYHmps",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video","3d"
     ],
     "media": [
       {
@@ -772,8 +834,8 @@
     "title": "Kaleidoscope",
     "thumb": "https://www.youtube.com/watch?v=cQqQlKRTW6E",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video"
     ],
     "media": [
       {
@@ -1020,8 +1082,7 @@
     "title": "Falling Objects",
     "thumb": "https://www.youtube.com/watch?v=UJUFGfkpluY",
     "tags": [
-      "video",
-      "sound"
+      "video","3d"
     ],
     "media": [
       {
@@ -1035,8 +1096,8 @@
     "title": "Tape Music",
     "thumb": "https://www.youtube.com/watch?v=5n3f5rm1_XE",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video"
     ],
     "media": [
       {
@@ -1079,8 +1140,8 @@
     "title": "Tape Loop",
     "thumb": "https://www.youtube.com/watch?v=hICJCtOKd3Q",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video"
     ],
     "media": [
       {
@@ -1094,8 +1155,8 @@
     "title": "Cow",
     "thumb": "https://www.youtube.com/watch?v=p-FHRbeO-t8",
     "tags": [
-      "video",
-      "sound"
+      "sound",
+      "video"
     ],
     "media": [
       {

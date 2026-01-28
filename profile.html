@@ -39,10 +39,22 @@
         </h1>
       </header>
     </div>
+    <button class="menu-toggle" aria-label="メニューを開く">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="menu-overlay"></div>
     <div class="header-box-nav">
       <nav class="nav" role="navigation" aria-label="Main navigation">
         <ul>
-          <li><a href="index.html">← Works</a></li>
+          <li><a href="#" data-filter="all" class="filter-link">all</a></li>
+          <li><a href="#" data-filter="sound" class="filter-link">sound</a></li>
+          <li><a href="#" data-filter="video" class="filter-link">video</a></li>
+          <li><a href="#" data-filter="2d" class="filter-link">2d</a></li>
+          <li><a href="#" data-filter="3d" class="filter-link">3d</a></li>
+          <li><a href="#" data-filter="object" class="filter-link">object</a></li>
+          <li><a href="#" data-filter="code" class="filter-link">code</a></li>
         </ul>
       </nav>
     </div>
@@ -83,6 +95,10 @@
                 <a href="https://openprocessing.org/user/32434" target="_blank" class="social-link" title="OpenProcessing">
                   <img src="https://www.google.com/s2/favicons?domain=openprocessing.org&sz=32" alt="OpenProcessing" width="24" height="24">
                 </a>
+                <a href="https://imgur.com/user/slvgallo/" target="_blank" class="social-link" title="Imgur">
+                  <img src="https://www.google.com/s2/favicons?domain=imgur.com&sz=32" alt="Imgur" width="24" height="24">
+                </a>
+                
                 
               </div>
             </div>
@@ -164,6 +180,7 @@ OpenProcessingのスケッチは全部、未来から逆流してきた夢の断
   </main>
 </div>
 
+<script src="js/navigation.js"></script>
 <script src="js/scroll-control.js"></script>
 <script src="js/favicon-control.js"></script>
 <script src="js/lang-toggle.js"></script>
