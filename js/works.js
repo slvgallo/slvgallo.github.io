@@ -40,7 +40,7 @@ async function getYouTubeAspectRatio(videoId) {
       };
     }
   } catch (error) {
-    console.log('アスペクト比取得エラー:', error);
+    // アスペクト比取得エラーは無視してデフォルト値を使用
   }
   
   // デフォルトアスペクト比（16:9）
@@ -254,7 +254,12 @@ const mediaHandlers = {
 };
 
 fetch('data/works.json')
-  .then(res => res.json())
+  .then(res => {
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    return res.json();
+  })
   .then(async works => {
     const work = works.find(w => w.id===id);
     if(!work) return;
@@ -338,5 +343,13 @@ fetch('data/works.json')
           });
         }
       });
+    }
+  })
+  .catch((error) => {
+    // データ読み込みエラー処理
+    document.getElementById('project-title').textContent = '作品が見つかりません';
+    const descElement = document.getElementById('project-desc');
+    if (descElement) {
+      descElement.textContent = '指定された作品データの読み込みに失敗しました。URLを確認してください。';
     }
   });

@@ -1,5 +1,17 @@
 // extractYouTubeId関数はutils.jsで定義
 
+// グローバルエラーハンドラー
+window.addEventListener('error', (e) => {
+  // エラーを静かに処理
+  console.error('Global error:', e.error);
+});
+
+window.addEventListener('unhandledrejection', (e) => {
+  // Promiseの拒否を処理
+  console.error('Unhandled promise rejection:', e.reason);
+  e.preventDefault();
+});
+
 const params = new URLSearchParams(window.location.search);
 const initialFilter = params.get("filter");
 
@@ -12,7 +24,12 @@ let currentFilter = "all";
 let isLoading = false;
 
 fetch("data/works.json")
-  .then((res) => res.json())
+  .then((res) => {
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    return res.json();
+  })
   .then((works) => {
     allWorks = works;
     
@@ -63,6 +80,13 @@ fetch("data/works.json")
     // モバイル用スクロールイベントリスナー
     if (window.innerWidth <= 768) {
       setupMobileScrollEvents();
+    }
+  })
+  .catch((error) => {
+    // データ読み込みエラー処理
+    const grid = document.getElementById("works-grid");
+    if (grid) {
+      grid.innerHTML = '<p class="error-message">作品データの読み込みに失敗しました。後でもう一度お試しください。</p>';
     }
   });
 
@@ -137,7 +161,7 @@ function restoreScrollState() {
     
     return true;
   } catch (e) {
-    console.error("Failed to restore state:", e);
+    // 状態復元エラーは無視
     return false;
   }
 }

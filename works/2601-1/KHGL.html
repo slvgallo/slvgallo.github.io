@@ -45,6 +45,13 @@
     stroke-linejoin: miter;
     display: block;
   }
+  
+  /* モバイルデバイスで光彩フィルターを無効化 */
+  @media (max-width: 768px), (pointer: coarse) {
+    .no-glow {
+      filter: none !important;
+    }
+  }
 </style>
 </head>
 <body>
@@ -82,6 +89,7 @@
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const isAndroid = /Android/.test(navigator.userAgent);
   const isMobile = isTouchDevice && (window.innerWidth <= 768 || isIOS || isAndroid);
+  const useGlowFilter = !isMobile; // モバイル以外で光彩フィルターを使用
   
   // パフォーマンス設定（デバイスに応じて調整）
   const config = {
@@ -345,7 +353,9 @@
           pathEl.setAttribute("stroke", "#00ffff");
           pathEl.setAttribute("stroke-width", Math.max(0.1, 0.5 / scale)); // 線幅を細く調整
           pathEl.setAttribute("opacity", 0.5 + Math.abs(Math.sin(time*2 + subIdx))*0.5);
-          pathEl.setAttribute("filter", "url(#glow)");
+          if (useGlowFilter) {
+            pathEl.setAttribute("filter", "url(#glow)");
+          }
           viewport.appendChild(pathEl);
         });
       });
