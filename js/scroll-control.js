@@ -1,26 +1,31 @@
-// フロートボタンとヘッダースクロル制御
 document.addEventListener('DOMContentLoaded', function() {
   const profileFloat = document.querySelector('.profile-float');
   const siteFooter = document.querySelector('.site-footer');
   const header = document.querySelector('.header');
   
-  if (!profileFloat || !siteFooter || !header) return;
+  if (!header) return;
   
-  // ヘッダースクロル制御
   let lastScrollY = window.scrollY;
   let ticking = false;
+  let scrollTimer = null;
+  let isHeaderHidden = false;
+  let isHeaderHovered = false;
+  let scrollDirection = 'up';
+  let continuousDownScroll = 0;
   
-  // パラメータ設定
-  const IMG_MAX_HEIGHT = 3.0; // rem
-  const IMG_MIN_HEIGHT = 2.0; // rem
-  const HEADER_MAX_PADDING = 5.0; // em
-  const HEADER_MIN_PADDING = 1.0; // em
-  const SCROLL_RANGE = 200; // px
+  const IMG_MAX_HEIGHT = 3.0;
+  const IMG_MIN_HEIGHT = 2.0;
+  const HEADER_MAX_PADDING = 5.0;
+  const HEADER_MIN_PADDING = 1.0;
+  const SCROLL_RANGE = 200;
+  const HIDE_DELAY = 2000;
   
-  // ロゴ画像の要素
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   (window.innerWidth <= 768);
+  const shouldAutoHide = !isMobile;
+  
   const logoImg = document.querySelector('.header-blog-title img');
 
-  // 初期化関数
   function initHeader() {
     updateHeader();
   }
@@ -28,28 +33,57 @@ document.addEventListener('DOMContentLoaded', function() {
   function updateHeader() {
     const scrollY = window.scrollY;
     
-    // スクロール量に基づく進捗（0.0〜1.0）
+    if (scrollY > lastScrollY) {
+      scrollDirection = 'down';
+      continuousDownScroll++;
+    } else if (scrollY < lastScrollY) {
+      scrollDirection = 'up';
+      continuousDownScroll = 0;
+    }
+    
     let progress = scrollY / SCROLL_RANGE;
     if (progress < 0) progress = 0;
     if (progress > 1) progress = 1;
     
-    // パディングの計算
-    // progress 0 -> MAX, 1 -> MIN
     const currentPadding = HEADER_MAX_PADDING - (progress * (HEADER_MAX_PADDING - HEADER_MIN_PADDING));
     header.style.paddingTop = `${currentPadding}em`;
     header.style.paddingBottom = `${currentPadding}em`;
     
-    // ロゴ画像サイズの計算
     if (logoImg) {
       const currentHeight = IMG_MAX_HEIGHT - (progress * (IMG_MAX_HEIGHT - IMG_MIN_HEIGHT));
       logoImg.style.height = `${currentHeight}rem`;
     }
     
-    // 背景色などの切り替え（必要であればクラス付与だけ残す）
     if (scrollY > 100) {
       header.classList.add('scrolled');
+      
+      clearTimeout(scrollTimer);
+      
+      if (!isHeaderHovered && shouldAutoHide && (continuousDownScroll > 5 || scrollDirection === 'down')) {
+        header.classList.add('hidden');
+        isHeaderHidden = true;
+      } else if (!isHeaderHovered && shouldAutoHide) {
+        scrollTimer = setTimeout(() => {
+          header.classList.add('hidden');
+          isHeaderHidden = true;
+        }, HIDE_DELAY);
+      }
+      
+      if (isHeaderHidden && scrollDirection === 'up') {
+        header.classList.remove('hidden');
+        header.classList.add('showing');
+        isHeaderHidden = false;
+        
+        setTimeout(() => {
+          header.classList.remove('showing');
+        }, 500);
+      }
     } else {
       header.classList.remove('scrolled');
+      header.classList.remove('hidden');
+      isHeaderHidden = false;
+      continuousDownScroll = 0;
+      clearTimeout(scrollTimer);
     }
     
     lastScrollY = scrollY;
@@ -65,24 +99,63 @@ document.addEventListener('DOMContentLoaded', function() {
 
   window.addEventListener('scroll', requestTick);
   
-  // 初期化実行
-  initHeader();
-  
-  // Intersection Observerを使用してフッターの表示を検知
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        // フッターが表示されたらフロートボタンを非表示
-        profileFloat.classList.add('hidden');
-      } else {
-        // フッターが非表示になったらフロートボタンを表示
-        profileFloat.classList.remove('hidden');
-      }
-    });
-  }, {
-    threshold: 0.1 // フッターの10%が表示されたら発火
+  header.addEventListener('mouseenter', () => {
+    isHeaderHovered = true;
+    clearTimeout(scrollTimer);
+    if (isHeaderHidden) {
+      header.classList.remove('hidden');
+      header.classList.add('showing');
+      isHeaderHidden = false;
+      
+      setTimeout(() => {
+        header.classList.remove('showing');
+      }, 300);
+    }
   });
   
-  // フッターを監視
-  observer.observe(siteFooter);
+  header.addEventListener('mouseleave', () => {
+    isHeaderHovered = false;
+    if (shouldAutoHide && window.scrollY > 100 && !isHeaderHidden) {
+      scrollTimer = setTimeout(() => {
+        header.classList.add('hidden');
+        isHeaderHidden = true;
+      }, HIDE_DELAY);
+    }
+  });
+  
+  document.addEventListener('mousemove', (e) => {
+    if (shouldAutoHide && isHeaderHidden && e.clientY < 100 && !isHeaderHovered && scrollDirection === 'up') {
+      header.classList.remove('hidden');
+      header.classList.add('showing');
+      isHeaderHidden = false;
+      
+      setTimeout(() => {
+        header.classList.remove('showing');
+      }, 500);
+      
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        header.classList.add('hidden');
+        isHeaderHidden = true;
+      }, HIDE_DELAY);
+    }
+  });
+  
+  initHeader();
+  
+  if (profileFloat && siteFooter) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          profileFloat.classList.add('hidden');
+        } else {
+          profileFloat.classList.remove('hidden');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+    
+    observer.observe(siteFooter);
+  }
 });

@@ -76,11 +76,6 @@ fetch("data/works.json")
 
     // クリックイベントの委譲（状態保存用）
     setupStateSaving();
-
-    // モバイル用スクロールイベントリスナー
-    if (window.innerWidth <= 768) {
-      setupMobileScrollEvents();
-    }
   })
   .catch((error) => {
     // データ読み込みエラー処理
@@ -232,40 +227,7 @@ function createWorkItem(work) {
     thumb.appendChild(img);
   }
 
-  // タイトル要素を追加
-  const title = document.createElement("div");
-  title.className = "post-title";
-  title.textContent = work.title;
-
-  // 日付とタグ要素を追加
-  const tags = document.createElement("div");
-  tags.className = "post-tags";
-  
-  // 日付を生成
-  let dateText = "";
-  if (work.id.length >= 4) {
-    const yearMonth = work.id.substring(0, 4);
-    const year = yearMonth.substring(0, 2);
-    const month = yearMonth.substring(2, 4);
-    
-    const fullYear = `20${year}`;
-    
-    const monthNames = {
-      '01': 'JAN', '02': 'FEB', '03': 'MAR', '04': 'APR',
-      '05': 'MAY', '06': 'JUNE', '07': 'JULY', '08': 'AUG',
-      '09': 'SEPT', '10': 'OCT', '11': 'NOV', '12': 'DEC'
-    };
-    
-    const monthName = monthNames[month] || month;
-    dateText = `${monthName} ${fullYear} | `;
-  }
-  
-  const tagTexts = work.tags.map(tag => `#${tag}`).join(' ');
-  tags.textContent = dateText + tagTexts;
-
   link.appendChild(thumb);
-  link.appendChild(title);
-  link.appendChild(tags);
   postInner.appendChild(link);
   article.appendChild(postInner);
   
@@ -365,49 +327,6 @@ function updateLoadingIndicator() {
     }
   }
 }
-
-// モバイル用スクロールイベント
-function setupMobileScrollEvents() {
-  let scrollTimeout;
-  
-  document.addEventListener('scroll', function(e) {
-    // すべてのタイトルとタグを表示
-    document.querySelectorAll('.post-title').forEach(title => {
-      title.classList.add('show');
-    });
-    document.querySelectorAll('.post-tags').forEach(tags => {
-      tags.classList.add('show');
-    });
-    
-    // スクロール停止を検知して非表示
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-      document.querySelectorAll('.post-title').forEach(title => {
-        title.classList.remove('show');
-      });
-      document.querySelectorAll('.post-tags').forEach(tags => {
-        tags.classList.remove('show');
-      });
-    }, 1000);
-  });
-}
-
-// ウィンドウリサイズ時の処理
-window.addEventListener('resize', function() {
-  const isMobile = window.innerWidth <= 768;
-  const allTitles = document.querySelectorAll('.post-title');
-  const allTags = document.querySelectorAll('.post-tags');
-  
-  if (isMobile) {
-    // モバイル表示：すべて非表示
-    allTitles.forEach(title => title.classList.remove('show'));
-    allTags.forEach(tags => tags.classList.remove('show'));
-  } else {
-    // デスクトップ表示：すべてリセット
-    allTitles.forEach(title => title.classList.remove('show'));
-    allTags.forEach(tags => tags.classList.remove('show'));
-  }
-});
 
 // ハンバーガーメニューの制御
 (function () {

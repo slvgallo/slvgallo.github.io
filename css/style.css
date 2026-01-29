@@ -221,6 +221,18 @@ img {
   }
 }
 
+.header.hidden {
+  opacity: 0;
+  backdrop-filter: blur(0px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header.showing {
+  opacity: 1;
+  backdrop-filter: blur(10px);
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
 .header-wrapper {
   display: flex;
   align-items: left;
@@ -561,74 +573,10 @@ img {
   /* 常に操作不可 */
 }
 
-/* タイトルとタグのホバー表示 */
+/* タイトルとタグは非表示 */
 .post-title,
 .post-tags {
-  position: absolute;
-  color: #fff;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.post-title {
-  top: 10px;
-  left: 10px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 4px 8px;
-  max-width: calc(100% - 20px);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.post-tags {
-  bottom: 10px;
-  left: 10px;
-  font-size: 0.8rem;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 4px 8px;
-  max-width: calc(100% - 20px);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* デスクトップ：ホバーで表示 */
-@media (min-width: 769px) {
-
-  .post-content-anchor:hover .post-title,
-  .post-content-anchor:hover .post-tags {
-    opacity: 1;
-  }
-}
-
-/* モバイル・タブレット：タッチで表示 */
-@media (max-width: 768px) {
-
-  .post-title,
-  .post-tags {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .post-title.show,
-  .post-tags.show {
-    opacity: 1;
-  }
-
-  .post-title {
-    font-size: 0.8rem;
-    padding: 3px 6px;
-  }
-
-  .post-tags {
-    font-size: 0.7rem;
-    padding: 3px 6px;
-  }
+  display: none;
 }
 
 /* アクセシビリティ用 */
@@ -664,18 +612,25 @@ img {
   box-sizing: border-box;
 }
 
+/* ノートパソコン向け：ウィンドウの高さを考慮した最大幅 */
+@media (min-height: 600px) and (max-height: 900px) {
+  .l-container,
+  .l-container-mini {
+    max-width: min(1320px, calc(100vh * 1.2));
+  }
+}
+
 @media (min-width: 768px) {
   .l-container,
   .l-container-mini {
     width: calc(100% - 40px);
-    max-width: calc(1320px - 40px);
   }
 }
 
 @media (min-width: 1320px) {
   .l-container,
   .l-container-mini {
-    width: 1320px;
+    width: min(1320px, calc(100vh * 1.2));
   }
 }
 
@@ -700,6 +655,13 @@ img {
   padding-left: 20px;
   padding-right: 20px;
   box-sizing: border-box;
+}
+
+/* ノートパソコン向け：ウィンドウの高さを考慮した最大幅 */
+@media (min-height: 600px) and (max-height: 900px) {
+  .l-container.full-image {
+    max-width: min(1320px, calc(100vh * 1.2));
+  }
 }
 
 .l-container.full-image img {
@@ -739,10 +701,9 @@ img {
 @media (min-width: 768px) {
   .l-container.full-image {
     width: calc(100% - 40px);
-    max-width: calc(1320px - 0px);
+    max-width: min(calc(1320px - 0px), calc(100vh * 1.2));
     padding-left: 20px;
     padding-right: 20px;
-
     margin: 0 auto 3em auto;
   }
 
@@ -761,7 +722,7 @@ img {
 
 @media (min-width: 1320px) {
   .l-container.full-image {
-    width: 1320px;
+    width: min(1320px, calc(100vh * 1.2));
     padding-left: 20px;
     padding-right: 20px;
   }
