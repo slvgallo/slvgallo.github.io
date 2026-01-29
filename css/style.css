@@ -569,8 +569,37 @@ img {
 
 /* SoundCloudプレーヤー用スタイル */
 .post-photo-thumb iframe {
+  pointer-events: auto;
+}
+
+.post-photo-thumb iframe[src*="soundcloud.com"] {
   pointer-events: none;
-  /* 常に操作不可 */
+  /* indexページのSoundCloudはクリック不可に */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* SoundCloudサムネイルコンテナ */
+.post-photo-thumb.soundcloud-thumb {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 アスペクト比 */
+  height: 0;
+  overflow: hidden;
+}
+
+/* SoundCloudクリックオーバーレイ */
+.post-photo-thumb .soundcloud-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  cursor: pointer;
+  background: transparent;
 }
 
 /* タイトルとタグは非表示 */
@@ -1039,8 +1068,8 @@ img {
 /* SoundCloudラッパー */
 .soundcloud-wrap {
   position: relative;
-  padding-bottom: 75%;
-  /* 4:3 アスペクト比 */
+  padding-bottom: 56.25%;
+  /* 16:9 アスペクト比 */
   padding-top: 0;
   height: 0;
   overflow: hidden;

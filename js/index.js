@@ -184,22 +184,22 @@ function createWorkItem(work) {
     if (soundCloudMedia && soundCloudMedia.src) {
       const trackId = soundCloudMedia.src;
       const iframe = document.createElement('iframe');
-      iframe.src = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&color=%230b0b0b&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=true&visual=true&sharing=false`;
+      // 公式埋め込みタグのURL形式に合わせる
+      iframe.src = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A${trackId}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true`;
       iframe.width = "100%";
-      iframe.height = "100%";
+      iframe.height = "300";
       iframe.frameBorder = "no";
+      iframe.scrolling = "no";
       iframe.allow = "autoplay";
-      iframe.style.position = "absolute";
-      iframe.style.top = "0";
-      iframe.style.left = "0";
-      iframe.style.width = "100%";
-      iframe.style.height = "100%";
+      iframe.style.pointerEvents = "none"; // iframeはクリックできないように
       
       thumb.appendChild(iframe);
-      thumb.style.position = "relative";
-      thumb.style.paddingBottom = "56.25%"; // 16:9 アスペクト比
-      thumb.style.height = "0";
-      thumb.style.overflow = "hidden";
+      thumb.classList.add('soundcloud-thumb');
+      
+      // クリック用のオーバーレイを追加
+      const clickOverlay = document.createElement('div');
+      clickOverlay.className = 'soundcloud-overlay';
+      thumb.appendChild(clickOverlay);
     } else {
       // フォールバック：通常のサムネイル
       const thumbUrl = getOptimizedImageUrl(work.thumb, work.isYoutubeThumb);

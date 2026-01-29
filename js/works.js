@@ -199,20 +199,24 @@ const mediaHandlers = {
     if (/^https?:\/\//i.test(src)) {
       iframe.src = src;
     } else if (/^\d+$/.test(src)) {
-      const trackUrl = `https://api.soundcloud.com/tracks/${src}`;
-      iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(trackUrl)}&color=%230b0b0b&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true`;
+      // 公式埋め込みタグのURL形式に合わせる
+      const trackUrl = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A${src}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true`;
+      iframe.src = trackUrl;
     } else {
       iframe.src = src;
     }
+    iframe.width = "100%";
+    iframe.height = "300";
+    iframe.scrolling = "no";
     iframe.frameBorder = "no";
     iframe.allow = "autoplay";
     
     soundcloudWrap.appendChild(iframe);
     
-    // SoundCloudクレジットを追加
+    // SoundCloudクレジットを追加（公式形式に合わせる）
     const creditDiv = document.createElement('div');
     creditDiv.style.cssText = 'font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;';
-    creditDiv.innerHTML = '<a href="https://soundcloud.com/slvgallo" title="slvgallo" target="_blank" style="color: #cccccc; text-decoration: none;">slvgallo</a> · <a href="https://soundcloud.com/slvgallo/plr" title="PLR" target="_blank" style="color: #cccccc; text-decoration: none;">PLR</a>';
+    creditDiv.innerHTML = '<a href="https://soundcloud.com/slvgallo" title="slvgallo" target="_blank" style="color: #cccccc; text-decoration: none;">slvgallo</a> · <a href="https://soundcloud.com/slvgallo/otp" title="OTP" target="_blank" style="color: #cccccc; text-decoration: none;">OTP</a>';
     
     soundcloudWrap.appendChild(creditDiv);
     fullContainer.appendChild(soundcloudWrap);
