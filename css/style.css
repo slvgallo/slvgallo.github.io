@@ -126,6 +126,7 @@ img {
 .site-content {
   flex: 1 0 auto;
   padding-top: 220px;
+  padding-top: calc(220px + env(safe-area-inset-top));
 }
 
 /* フッター */
@@ -198,6 +199,8 @@ img {
   margin: 0;
   padding: 5em 0;
   /* transition: all 0.3s ease; -- JS制御のため削除 */
+  /* iPhone Safariセーフエリア対応 */
+  padding-top: calc(5em + env(safe-area-inset-top));
 }
 
 /* JSで制御するため.scrolledクラスによるスタイル変更は削除 */
@@ -211,20 +214,24 @@ img {
 @media (min-width: 768px) {
   .header {
     padding: 5em 0;
+    padding-top: calc(5em + env(safe-area-inset-top));
   }
 
   .header.scrolled {
     padding: 1em 0;
+    padding-top: calc(1em + env(safe-area-inset-top));
   }
 }
 
 @media (min-width: 1200px) {
   .header {
     padding: 5em 0;
+    padding-top: calc(5em + env(safe-area-inset-top));
   }
 
   .header.scrolled {
     padding: 1em 0;
+    padding-top: calc(1em + env(safe-area-inset-top));
   }
 }
 

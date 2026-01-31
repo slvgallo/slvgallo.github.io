@@ -41,6 +41,12 @@ document.addEventListener('DOMContentLoaded', function() {
       continuousDownScroll = 0;
     }
     
+    // モバイルではパフォーマンスのためCSSトランジションを一時的に無効化
+    if (isMobile) {
+      header.style.transition = 'none';
+      if (logoImg) logoImg.style.transition = 'none';
+    }
+    
     let progress = scrollY / SCROLL_RANGE;
     if (progress < 0) progress = 0;
     if (progress > 1) progress = 1;
@@ -85,6 +91,14 @@ document.addEventListener('DOMContentLoaded', function() {
       isHeaderHidden = false;
       continuousDownScroll = 0;
       clearTimeout(scrollTimer);
+    }
+    
+    // モバイルではトランジションを再設定
+    if (isMobile) {
+      requestAnimationFrame(() => {
+        header.style.transition = '';
+        if (logoImg) logoImg.style.transition = '';
+      });
     }
     
     lastScrollY = scrollY;
