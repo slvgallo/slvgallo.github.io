@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const HEADER_MAX_PADDING = 5.0;
   const HEADER_MIN_PADDING = 1.0;
   const SCROLL_RANGE = 200;
-  const HIDE_DELAY = 2000;
+  const HIDE_DELAY = 3000;
   
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
                    (window.innerWidth <= 768);

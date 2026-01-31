@@ -283,15 +283,12 @@ img {
   font-size: 1.5rem;
 }
 
-@media (min-width: 768px) {
-  .header-blog-title {
-    margin: 0;
-  }
-}
-
 .header-blog-title a {
   color: #36393d;
   text-decoration: none;
+  display: inline-block;
+  width: auto;
+  height: auto;
 }
 
 .header-blog-title a:hover {
