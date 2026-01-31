@@ -11,8 +11,6 @@ html {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   overflow-x: hidden;
-  /* iOS Safari: 100vhの問題を回避 */
-  height: 100%;
 }
 
 body {
@@ -25,12 +23,12 @@ body {
   word-wrap: break-word;
   display: flex;
   min-height: 100vh;
-  min-height: 100dvh; /* iOS Safari: ダイナミックビューポート対応 */
   flex-direction: column;
   overflow-x: hidden;
   width: 100%;
-  /* iOS Safari: safe-areaを考慮した上部余白 */
-  padding-top: env(safe-area-inset-top);
+  /* 安全エリア対応 */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 html.menu-open,
@@ -95,6 +93,9 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* 安全エリア対応 */
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  right: calc(20px + env(safe-area-inset-right));
 }
 
 .profile-float:hover {
@@ -130,8 +131,7 @@ img {
 /* サイトコンテンツ */
 .site-content {
   flex: 1 0 auto;
-  /* iOS Safari: ヘッダーの高さ + safe-areaを考慮 */
-  padding-top: calc(220px + env(safe-area-inset-top));
+  padding-top: 220px;
 }
 
 /* フッター */
@@ -194,8 +194,7 @@ img {
 
 .header {
   position: fixed;
-  /* iOS Safari: safe-areaを考慮した最上部配置 */
-  top: env(safe-area-inset-top);
+  top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
@@ -205,9 +204,10 @@ img {
   margin: 0;
   padding: 5em 0;
   /* transition: all 0.3s ease; -- JS制御のため削除 */
-  /* iOS Safari: ヘッダーがコンテンツに潜り込むのを防止 */
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
+  /* 安全エリア対応 */
+  padding-top: calc(5em + env(safe-area-inset-top));
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 /* JSで制御するため.scrolledクラスによるスタイル変更は削除 */
@@ -394,6 +394,9 @@ img {
   position: absolute;
   top: 0;
   right: 0;
+  /* 安全エリア対応 */
+  padding-top: env(safe-area-inset-top);
+  padding-right: calc(20px + env(safe-area-inset-right));
 }
 
 .menu-toggle span {
@@ -415,23 +418,26 @@ img {
     margin: 0;
     padding: 0 20px;
     justify-content: flex-start;
+    /* 安全エリア対応 */
+    padding-left: calc(20px + env(safe-area-inset-left));
+    padding-right: calc(20px + env(safe-area-inset-right));
+    padding-top: env(safe-area-inset-top);
   }
 
   .header-box-title {
     width: auto;
     position: relative;
     z-index: 1001;
+    /* 安全エリア対応 */
+    padding-top: env(safe-area-inset-top);
   }
 
   .header-box-nav {
     position: fixed;
-    /* iOS Safari: safe-areaを考慮 */
-    top: env(safe-area-inset-top);
+    top: 0;
     left: 0;
     width: 100%;
-    /* iOS Safari: 100vhの問題を回避 */
-    height: calc(100vh - env(safe-area-inset-top));
-    height: calc(100dvh - env(safe-area-inset-top));
+    height: 100vh;
     background-color: #fff;
     opacity: 0;
     visibility: hidden;
@@ -444,6 +450,8 @@ img {
     padding-top: 0;
     /* Avoid logo overlap */
     box-sizing: border-box;
+    /* 安全エリア対応 */
+    padding-top: env(safe-area-inset-top);
   }
 
   .header-box-nav.active {
@@ -456,6 +464,9 @@ img {
     padding: 0 20px;
     margin: 0;
     list-style: none;
+    /* 安全エリア対応 */
+    padding-left: calc(20px + env(safe-area-inset-left));
+    padding-right: calc(20px + env(safe-area-inset-right));
   }
 
   .nav li {
@@ -486,38 +497,18 @@ img {
   .menu-overlay {
     display: none;
     position: fixed;
-    /* iOS Safari: safe-areaを考慮 */
-    top: env(safe-area-inset-top);
+    top: 0;
     left: 0;
     width: 100%;
-    /* iOS Safari: 100vhの問題を回避 */
-    height: calc(100vh - env(safe-area-inset-top));
-    height: calc(100dvh - env(safe-area-inset-top));
+    height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
+    /* 安全エリア対応 */
+    padding-top: env(safe-area-inset-top);
   }
 
   .menu-overlay.active {
     display: block;
-  }
-}
-
-/* iOS Safari: ビューポートの高さ問題対応 */
-@supports (-webkit-touch-callout: none) {
-  /* iOSデバイスのみに適用 */
-  html {
-    height: -webkit-fill-available;
-  }
-  
-  body {
-    min-height: -webkit-fill-available;
-  }
-}
-
-/* iOS Safari: スクロールパフォーマンス向上 */
-@supports (-webkit-overflow-scrolling: touch) {
-  body {
-    -webkit-overflow-scrolling: touch;
   }
 }
 
