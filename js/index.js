@@ -50,16 +50,10 @@ fetch("data/works.json")
       }
     });
 
-    // フィルタ機能
-    const filterLinks = document.querySelectorAll(".filter-link");
-
-    filterLinks.forEach((link) => {
-      link.addEventListener("click", (e) => {
-        e.preventDefault();
-        const filter = link.dataset.filter;
-        applyFilter(filter);
-      });
-    });
+    // フィルタ機能の設定はnavigation.jsで行われるため、ここでは削除可能ですが、
+    // navigation.jsが読み込まれる前にクリックされた場合の予備として残すか検討します。
+    // 現状はnavigation.jsが一元管理するようにし、二重登録を防ぎます。
+    // (navigation.js 内で applyFilter を呼び出すようになっています)
 
     // 初期状態: URLパラメータ filter があればそれを適用
     const initial = initialFilter && document.querySelector(`[data-filter="${initialFilter}"]`)
@@ -239,19 +233,27 @@ function loadMoreItems() {
   if (isLoading || displayedCount >= filteredWorks.length) return;
   
   isLoading = true;
-  const grid = document.getElementById("works-grid");
-  const endIndex = Math.min(displayedCount + ITEMS_PER_LOAD, filteredWorks.length);
-  
-  for (let i = displayedCount; i < endIndex; i++) {
-    const article = createWorkItem(filteredWorks[i]);
-    grid.appendChild(article);
+  try {
+    const grid = document.getElementById("works-grid");
+    if (!grid) return;
+    
+    const endIndex = Math.min(displayedCount + ITEMS_PER_LOAD, filteredWorks.length);
+    
+    for (let i = displayedCount; i < endIndex; i++) {
+      const article = createWorkItem(filteredWorks[i]);
+      if (article) {
+        grid.appendChild(article);
+      }
+    }
+    
+    displayedCount = endIndex;
+  } catch (error) {
+    console.error("Error loading items:", error);
+  } finally {
+    isLoading = false;
+    // ローディングインジケーターの更新
+    updateLoadingIndicator();
   }
-  
-  displayedCount = endIndex;
-  isLoading = false;
-  
-  // ローディングインジケーターの更新
-  updateLoadingIndicator();
 }
 
 // フィルタを適用する関数
@@ -327,37 +329,6 @@ function updateLoadingIndicator() {
     }
   }
 }
-
-// ハンバーガーメニューの制御
-(function () {
-  const menuToggle = document.querySelector(".menu-toggle");
-  const nav = document.querySelector(".header-box-nav");
-  const overlay = document.querySelector(".menu-overlay");
-
-  if (menuToggle && nav && overlay) {
-    menuToggle.addEventListener("click", function () {
-      menuToggle.classList.toggle("active");
-      nav.classList.toggle("active");
-      overlay.classList.toggle("active");
-    });
-
-    overlay.addEventListener("click", function () {
-      menuToggle.classList.remove("active");
-      nav.classList.remove("active");
-      overlay.classList.remove("active");
-    });
-
-    // メニュー内のリンクをクリックしたらメニューを閉じる
-    const navLinks = nav.querySelectorAll("a");
-    navLinks.forEach((link) => {
-      link.addEventListener("click", function () {
-        menuToggle.classList.remove("active");
-        nav.classList.remove("active");
-        overlay.classList.remove("active");
-      });
-    });
-  }
-})();
 
 /**
  * Cloudinaryの画像URLを最適化するヘルパー関数

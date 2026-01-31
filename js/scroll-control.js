@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
       clearTimeout(scrollTimer);
       
-      if (!isHeaderHovered && shouldAutoHide && (continuousDownScroll > 5 || scrollDirection === 'down')) {
+      if (!isHeaderHovered && shouldAutoHide && (continuousDownScroll > 5 )) {
         header.classList.add('hidden');
         isHeaderHidden = true;
       } else if (!isHeaderHovered && shouldAutoHide) {
@@ -81,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       header.classList.remove('scrolled');
       header.classList.remove('hidden');
+      header.classList.remove('showing');
       isHeaderHidden = false;
       continuousDownScroll = 0;
       clearTimeout(scrollTimer);

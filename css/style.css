@@ -171,6 +171,8 @@ img {
 .header-blog-title img {
   height: 3.0rem;
   width: auto;
+  display: block;
+  /* インライン要素の余白を防止 */
   transition: transform 0.5s ease;
 }
 
@@ -185,7 +187,7 @@ img {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(245, 245, 245, 0.85);
+  background: linear-gradient(to bottom, rgba(245, 245, 245, 0.95) 0%, rgba(245, 245, 245, 0.7) 50%, rgba(245, 245, 245, 0.3) 100%);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   margin: 0;
@@ -224,13 +226,13 @@ img {
 .header.hidden {
   opacity: 0;
   backdrop-filter: blur(0px);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 0.5s;
 }
 
 .header.showing {
   opacity: 1;
   backdrop-filter: blur(10px);
-  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), backdrop-filter 0.5s;
 }
 
 .header-wrapper {
@@ -263,7 +265,7 @@ img {
 }
 
 .header-blog-title {
-  margin: 0 0 0.6em;
+  margin: 0;
   font-size: 1.5rem;
 }
 
@@ -585,7 +587,8 @@ img {
 /* SoundCloudサムネイルコンテナ */
 .post-photo-thumb.soundcloud-thumb {
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 アスペクト比 */
+  padding-bottom: 56.25%;
+  /* 16:9 アスペクト比 */
   height: 0;
   overflow: hidden;
 }
@@ -643,6 +646,7 @@ img {
 
 /* ノートパソコン向け：ウィンドウの高さを考慮した最大幅 */
 @media (min-height: 600px) and (max-height: 900px) {
+
   .l-container,
   .l-container-mini {
     max-width: min(1320px, calc(100vh * 1.2));
@@ -650,6 +654,7 @@ img {
 }
 
 @media (min-width: 768px) {
+
   .l-container,
   .l-container-mini {
     width: calc(100% - 40px);
@@ -657,6 +662,7 @@ img {
 }
 
 @media (min-width: 1320px) {
+
   .l-container,
   .l-container-mini {
     width: min(1320px, calc(100vh * 1.2));

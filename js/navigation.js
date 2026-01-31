@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // index.htmlの場合は既存のフィルター機能を呼び出し
         if (typeof applyFilter === 'function') {
           applyFilter(filter);
+        } else {
+          // index.jsの初期化待ちなどのケースに対応
+          window.location.href = `index.html?filter=${filter}`;
         }
       }
     });
