@@ -179,7 +179,11 @@ function createWorkItem(work) {
       const trackId = soundCloudMedia.src;
       const iframe = document.createElement('iframe');
       // 公式埋め込みタグのURL形式に合わせる
-      iframe.src = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A${trackId}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true`;
+      // スマホで「Play on SoundCloud」を非表示にするためshow_teaser=falseを追加
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                       (window.innerWidth <= 768);
+      const teaserParam = isMobile ? 'false' : 'true';
+      iframe.src = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A${trackId}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=${teaserParam}&visual=true`;
       iframe.width = "100%";
       iframe.height = "300";
       iframe.frameBorder = "no";
