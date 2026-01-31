@@ -44,6 +44,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // モバイルではパフォーマンスのためCSSトランジションを一時的に無効化
     if (isMobile) {
       header.style.transition = 'none';
+      header.style.background = 'transparent';
+      header.style.backdropFilter = 'none';
+      header.style.webkitBackdropFilter = 'none';
       if (logoImg) logoImg.style.transition = 'none';
     }
     
@@ -97,6 +100,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (isMobile) {
       requestAnimationFrame(() => {
         header.style.transition = '';
+        header.style.background = 'transparent';
+        header.style.backdropFilter = 'none';
+        header.style.webkitBackdropFilter = 'none';
         if (logoImg) logoImg.style.transition = '';
       });
     }

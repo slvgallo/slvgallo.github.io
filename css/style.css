@@ -194,11 +194,11 @@ img {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: linear-gradient(to bottom, rgba(245, 245, 245, 0.95) 0%, rgba(245, 245, 245, 0.7) 50%, rgba(245, 245, 245, 0.3) 100%);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   margin: 0;
-  padding-top: 5em;
+  padding: 5em 0;
   padding-top: calc(5em + env(safe-area-inset-top));
   padding-bottom: 5em;
   padding-left: 0;
@@ -239,14 +239,14 @@ img {
 
 .header.hidden {
   opacity: 0;
-  backdrop-filter: blur(0px);
-  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 0.5s;
+  backdrop-filter: none;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .header.showing {
   opacity: 1;
-  backdrop-filter: blur(10px);
-  transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), backdrop-filter 0.5s;
+  backdrop-filter: none;
+  transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .header-wrapper {
