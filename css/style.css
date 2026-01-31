@@ -26,9 +26,6 @@ body {
   flex-direction: column;
   overflow-x: hidden;
   width: 100%;
-  /* 安全エリア対応 */
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
 }
 
 html.menu-open,
@@ -82,7 +79,9 @@ img {
 .profile-float {
   position: fixed;
   bottom: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom));
   right: 20px;
+  right: calc(20px + env(safe-area-inset-right));
   z-index: 1000;
   opacity: 0.8;
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -93,9 +92,6 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* 安全エリア対応 */
-  bottom: calc(20px + env(safe-area-inset-bottom));
-  right: calc(20px + env(safe-area-inset-right));
 }
 
 .profile-float:hover {
@@ -202,12 +198,11 @@ img {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   margin: 0;
-  padding: 5em 0;
-  /* transition: all 0.3s ease; -- JS制御のため削除 */
-  /* 安全エリア対応 */
+  padding-top: 5em;
   padding-top: calc(5em + env(safe-area-inset-top));
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
+  padding-bottom: 5em;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 /* JSで制御するため.scrolledクラスによるスタイル変更は削除 */
@@ -224,7 +219,9 @@ img {
   }
 
   .header.scrolled {
-    padding: 1em 0;
+    padding-top: 1em;
+    padding-top: calc(1em + env(safe-area-inset-top));
+    padding-bottom: 1em;
   }
 }
 
@@ -234,7 +231,9 @@ img {
   }
 
   .header.scrolled {
-    padding: 1em 0;
+    padding-top: 1em;
+    padding-top: calc(1em + env(safe-area-inset-top));
+    padding-bottom: 1em;
   }
 }
 
@@ -394,9 +393,6 @@ img {
   position: absolute;
   top: 0;
   right: 0;
-  /* 安全エリア対応 */
-  padding-top: env(safe-area-inset-top);
-  padding-right: calc(20px + env(safe-area-inset-right));
 }
 
 .menu-toggle span {
@@ -418,18 +414,12 @@ img {
     margin: 0;
     padding: 0 20px;
     justify-content: flex-start;
-    /* 安全エリア対応 */
-    padding-left: calc(20px + env(safe-area-inset-left));
-    padding-right: calc(20px + env(safe-area-inset-right));
-    padding-top: env(safe-area-inset-top);
   }
 
   .header-box-title {
     width: auto;
     position: relative;
     z-index: 1001;
-    /* 安全エリア対応 */
-    padding-top: env(safe-area-inset-top);
   }
 
   .header-box-nav {
@@ -447,11 +437,9 @@ img {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-top: 0;
-    /* Avoid logo overlap */
-    box-sizing: border-box;
-    /* 安全エリア対応 */
     padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    box-sizing: border-box;
   }
 
   .header-box-nav.active {
@@ -464,9 +452,6 @@ img {
     padding: 0 20px;
     margin: 0;
     list-style: none;
-    /* 安全エリア対応 */
-    padding-left: calc(20px + env(safe-area-inset-left));
-    padding-right: calc(20px + env(safe-area-inset-right));
   }
 
   .nav li {
@@ -503,8 +488,6 @@ img {
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
-    /* 安全エリア対応 */
-    padding-top: env(safe-area-inset-top);
   }
 
   .menu-overlay.active {

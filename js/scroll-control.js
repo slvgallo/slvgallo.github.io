@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (progress > 1) progress = 1;
     
     const currentPadding = HEADER_MAX_PADDING - (progress * (HEADER_MAX_PADDING - HEADER_MIN_PADDING));
-    header.style.paddingTop = `${currentPadding}em`;
+    header.style.paddingTop = `calc(${currentPadding}em + env(safe-area-inset-top, 0px))`;
     header.style.paddingBottom = `${currentPadding}em`;
     
     if (logoImg) {
