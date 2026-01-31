@@ -9,12 +9,16 @@
       menuToggle.classList.toggle("active");
       nav.classList.toggle("active");
       overlay.classList.toggle("active");
+      document.body.classList.toggle("menu-open");
+      document.documentElement.classList.toggle("menu-open");
     });
 
     overlay.addEventListener("click", function () {
       menuToggle.classList.remove("active");
       nav.classList.remove("active");
       overlay.classList.remove("active");
+      document.body.classList.remove("menu-open");
+      document.documentElement.classList.remove("menu-open");
     });
 
     // メニュー内のリンクをクリックしたらメニューを閉じる
@@ -24,6 +28,8 @@
         menuToggle.classList.remove("active");
         nav.classList.remove("active");
         overlay.classList.remove("active");
+        document.body.classList.remove("menu-open");
+        document.documentElement.classList.remove("menu-open");
       });
     });
   }

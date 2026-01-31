@@ -75,7 +75,7 @@ fetch("data/works.json")
     // データ読み込みエラー処理
     const grid = document.getElementById("works-grid");
     if (grid) {
-      grid.innerHTML = '<p class="error-message">作品データの読み込みに失敗しました。後でもう一度お試しください。</p>';
+      grid.innerHTML = '<p class="error-message">error</p>';
     }
   });
 
