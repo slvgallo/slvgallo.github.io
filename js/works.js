@@ -139,10 +139,14 @@ const mediaHandlers = {
   processing: (mediaItem, fullContainer, contentContainer) => {
     // openprocessing.orgのURLを埋め込み用URLに変換
     let embedUrl = mediaItem.src;
+    let sketchUrl = mediaItem.src; // OpenProcessingの通常URL（リンク用）
+    let sketchId = '';
+    
     if (embedUrl.includes('openprocessing.org/sketch/')) {
-      // https://openprocessing.org/sketch/123456 → https://openprocessing.org/sketch/123456/embed/
+      sketchId = embedUrl.split('/sketch/')[1].split('/')[0];
+      sketchUrl = `https://openprocessing.org/sketch/${sketchId}`;
+      
       if (!embedUrl.endsWith('/embed/')) {
-        const sketchId = embedUrl.split('/sketch/')[1].split('/')[0];
         embedUrl = `https://openprocessing.org/sketch/${sketchId}/embed/`;
       }
     }
@@ -150,23 +154,50 @@ const mediaHandlers = {
     const processingWrap = document.createElement('div');
     processingWrap.className = 'processing-wrap';
     
-    const iframe = document.createElement('iframe');
-    iframe.src = embedUrl;
-    iframe.frameBorder = 0;
-    iframe.allowFullscreen = true;
-    iframe.allow = 'fullscreen; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    iframe.referrerPolicy = 'no-referrer-when-downgrade';
-    iframe.loading = 'lazy';
+    // iOS/タッチデバイス検出（p5.js video/audio APIがiframe内で動作しない問題への対応）
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     
-    // iPhone Safari用の追加設定
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.style.border = 'none';
-    iframe.style.position = 'absolute';
-    iframe.style.top = '0';
-    iframe.style.left = '0';
+    // iOS/タッチデバイスではフォールバック表示
+    if (isIOS || (isTouchDevice && window.innerWidth <= 768)) {
+      // フォールバックコンテナ
+      const fallbackContainer = document.createElement('div');
+      fallbackContainer.className = 'processing-fallback';
+      
+      // OpenProcessingへの直接リンクボタン
+      const linkButton = document.createElement('a');
+      linkButton.href = sketchUrl;
+      linkButton.target = '_blank';
+      linkButton.rel = 'noopener noreferrer';
+      linkButton.className = 'processing-fallback-link';
+      linkButton.innerHTML = `
+        <span class="processing-fallback-icon">▶</span>
+        <span class="processing-fallback-text">Open in OpenProcessing</span>
+      `;
+      
+      fallbackContainer.appendChild(linkButton);
+      processingWrap.appendChild(fallbackContainer);
+    } else {
+      // 通常のiframe埋め込み
+      const iframe = document.createElement('iframe');
+      iframe.src = embedUrl;
+      iframe.frameBorder = 0;
+      iframe.allowFullscreen = true;
+      iframe.allow = 'fullscreen; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      iframe.referrerPolicy = 'no-referrer-when-downgrade';
+      iframe.loading = 'lazy';
+      
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.border = 'none';
+      iframe.style.position = 'absolute';
+      iframe.style.top = '0';
+      iframe.style.left = '0';
+      
+      processingWrap.appendChild(iframe);
+    }
     
-    processingWrap.appendChild(iframe);
     fullContainer.appendChild(processingWrap);
   },
 
