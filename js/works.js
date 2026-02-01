@@ -152,9 +152,19 @@ const mediaHandlers = {
     
     const iframe = document.createElement('iframe');
     iframe.src = embedUrl;
-    
     iframe.frameBorder = 0;
     iframe.allowFullscreen = true;
+    iframe.allow = 'fullscreen; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.referrerPolicy = 'no-referrer-when-downgrade';
+    iframe.loading = 'lazy';
+    
+    // iPhone Safari用の追加設定
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = 'none';
+    iframe.style.position = 'absolute';
+    iframe.style.top = '0';
+    iframe.style.left = '0';
     
     processingWrap.appendChild(iframe);
     fullContainer.appendChild(processingWrap);
@@ -200,7 +210,7 @@ const mediaHandlers = {
       iframe.src = src;
     } else if (/^\d+$/.test(src)) {
       // 公式埋め込みタグのURL形式に合わせる
-      const trackUrl = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A${src}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true`;
+      const trackUrl = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A${src}&color=%230b0b0b&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true&sharing=false`;
       iframe.src = trackUrl;
     } else {
       iframe.src = src;
@@ -351,9 +361,9 @@ fetch('data/works.json')
   })
   .catch((error) => {
     // データ読み込みエラー処理
-    document.getElementById('project-title').textContent = '作品が見つかりません';
+    document.getElementById('project-title').textContent = 'error';
     const descElement = document.getElementById('project-desc');
     if (descElement) {
-      descElement.textContent = '指定された作品データの読み込みに失敗しました。URLを確認してください。';
+      descElement.textContent = 'eroor';
     }
   });

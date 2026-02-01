@@ -630,19 +630,6 @@ img {
   background: transparent;
 }
 
-/* スマホでSoundCloudの「Play on SoundCloud」文字を非表示 */
-@media (max-width: 767px) {
-  .post-photo-thumb iframe[src*="soundcloud.com"] {
-    height: 100% !important;
-    min-height: 100% !important;
-  }
-  
-  /* SoundCloudプレーヤーの下部テキストを非表示 */
-  .post-photo-thumb iframe[src*="soundcloud.com"]::after {
-    content: none !important;
-  }
-}
-
 /* タイトルとタグは非表示 */
 .post-title,
 .post-tags {
@@ -1193,7 +1180,8 @@ img {
   }
 
   .processing-wrap {
-    padding-bottom: 75%;
+    padding-bottom: 100%;
+    /* 1:1 正方形アスペクト比 */
     padding-top: 0;
     margin-bottom: 20px;
   }
