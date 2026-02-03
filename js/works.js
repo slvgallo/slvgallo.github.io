@@ -304,6 +304,18 @@ fetch('data/works.json')
     const autoDate = generateDateFromId(work.id);
     document.getElementById('project-date').textContent = autoDate;
     
+    // ページタイトルを作品名に変更（既存の処理を上書き）
+    document.title = `${work.title} - slvgallo`;
+    document.getElementById('page-title').textContent = document.title;
+    
+    // OGタイトルも更新（既存の変数を再利用）
+    if (ogTitle) {
+      ogTitle.content = document.title;
+    }
+    if (twitterTitle) {
+      twitterTitle.content = document.title;
+    }
+    
     const tagsContainer = document.getElementById('project-tags');
     tagsContainer.innerHTML = '';
     
