@@ -152,19 +152,9 @@ const mediaHandlers = {
     
     const iframe = document.createElement('iframe');
     iframe.src = embedUrl;
+    
     iframe.frameBorder = 0;
     iframe.allowFullscreen = true;
-    iframe.allow = 'fullscreen; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    iframe.referrerPolicy = 'no-referrer-when-downgrade';
-    iframe.loading = 'lazy';
-    
-    // iPhone Safari用の追加設定
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.style.border = 'none';
-    iframe.style.position = 'absolute';
-    iframe.style.top = '0';
-    iframe.style.left = '0';
     
     processingWrap.appendChild(iframe);
     fullContainer.appendChild(processingWrap);

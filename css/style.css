@@ -1180,8 +1180,7 @@ img {
   }
 
   .processing-wrap {
-    padding-bottom: 100%;
-    /* 1:1 正方形アスペクト比 */
+    padding-bottom: 75%;
     padding-top: 0;
     margin-bottom: 20px;
   }
