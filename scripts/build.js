@@ -149,7 +149,7 @@ function generateMediaHTML(mediaItem) {
       
       return `
         <iframe width="100%" 
-                height="300" 
+                height="166" 
                 scrolling="no" 
                 frameborder="no" 
                 allow="autoplay" 
