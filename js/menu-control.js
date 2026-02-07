@@ -1,5 +1,5 @@
 // ハンバーガーメニューの制御
-function initMenu() {
+(function () {
   const menuToggle = document.querySelector(".menu-toggle");
   const nav = document.querySelector(".header-box-nav");
   const overlay = document.querySelector(".menu-overlay");
@@ -33,4 +33,4 @@ function initMenu() {
       });
     });
   }
-}
+})();

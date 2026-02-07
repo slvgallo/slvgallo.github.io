@@ -1,5 +1,5 @@
 // グローバルなフィルター機能
-function initNav() {
+document.addEventListener('DOMContentLoaded', function() {
   // 現在のページを判定
   const currentPage = window.location.pathname.split('/').pop() || 'index.html';
   
@@ -35,4 +35,4 @@ function initNav() {
       }
     });
   });
-}
+});
