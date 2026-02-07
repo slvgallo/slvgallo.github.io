@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // index.htmlの場合は既存のフィルター機能を呼び出し
         if (typeof applyFilter === 'function') {
           applyFilter(filter);
+          // フィルター変更時はスクロール位置をリセット
+          window.scrollTo(0, 0);
         } else {
           // index.jsの初期化待ちなどのケースに対応
           window.location.href = `index.html?filter=${filter}`;
