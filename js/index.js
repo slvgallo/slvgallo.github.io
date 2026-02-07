@@ -165,7 +165,12 @@ function createWorkItem(work) {
   postInner.className = "post-inner";
 
   const link = document.createElement("a");
-  link.href = `works.html?id=${work.id}`;
+  // 静的環境（dist）なら works/ID.html、開発環境なら works.html?id=ID
+  if (window.slvEnv === 'static') {
+    link.href = `works/${work.id}.html`;
+  } else {
+    link.href = `works.html?id=${work.id}`;
+  }
   link.className = "post-content-anchor";
 
   const thumb = document.createElement("div");
