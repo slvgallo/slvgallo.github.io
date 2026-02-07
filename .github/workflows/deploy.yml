@@ -3,24 +3,8 @@ name: Build and Deploy Portfolio
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'data/works.json'
-      - 'templates/**'
-      - 'scripts/**'
-      - 'package.json'
-      - 'css/**'
-      - 'js/**'
-      - 'img/**'
   pull_request:
     branches: [ main ]
-    paths:
-      - 'data/works.json'
-      - 'templates/**'
-      - 'scripts/**'
-      - 'package.json'
-      - 'css/**'
-      - 'js/**'
-      - 'img/**'
   workflow_dispatch:
 
 permissions:
