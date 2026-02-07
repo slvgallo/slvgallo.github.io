@@ -48,11 +48,76 @@ function generateWorkPages(works) {
   fs.ensureDirSync(worksDir);
   
   works.forEach(work => {
-    const html = replaceTemplate(workTemplate, work);
+    let html = replaceTemplate(workTemplate, work);
+    
+    // メディアコンテンツを生成
+    let mediaContent = '';
+    if (work.media && Array.isArray(work.media)) {
+      work.media.forEach(mediaItem => {
+        mediaContent += generateMediaHTML(mediaItem);
+      });
+    }
+    
+    // メディアコンテンツをHTMLに挿入
+    html = html.replace('{{MEDIA_CONTENT}}', mediaContent);
+    
     const filename = `${work.id}.html`;
     fs.writeFileSync(path.join(worksDir, filename), html);
     console.log(`Generated: works/${filename}`);
   });
+}
+
+// メディアHTMLを生成する関数
+function generateMediaHTML(mediaItem) {
+  switch (mediaItem.type) {
+    case 'image':
+      if (Array.isArray(mediaItem.src)) {
+        return mediaItem.src.map(src => 
+          `<img src="${src}" alt="Project image" loading="lazy">`
+        ).join('');
+      } else {
+        return `<img src="${mediaItem.src}" alt="Project image" loading="lazy">`;
+      }
+    
+    case 'video':
+      const videoId = extractYouTubeId(mediaItem.src);
+      if (videoId) {
+        return `
+          <div class="video-wrap" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+            <iframe src="https://www.youtube.com/embed/${videoId}" 
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+                    frameborder="0" 
+                    allowfullscreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+          </div>
+        `;
+      }
+      break;
+    
+    case 'soundcloud':
+      return `
+        <iframe width="100%" 
+                height="300" 
+                scrolling="no" 
+                frameborder="no" 
+                allow="autoplay" 
+                src="${mediaItem.src}">
+        </iframe>
+      `;
+    
+    default:
+      return '';
+  }
+  
+  return '';
+}
+
+// YouTube IDを抽出する関数（utils.jsからコピー）
+function extractYouTubeId(url) {
+  const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[7].length === 11) ? match[7] : null;
 }
 
 // トップページを生成する関数
