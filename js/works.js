@@ -299,7 +299,7 @@ const mediaHandlers = {
   }
 };
 
-const dataPath = window.location.pathname.includes('/works/') ? '../data/works.json' : 'data/works.json';
+const dataPath = '../data/works.json';
 fetch(dataPath)
   .then(res => {
     if (!res.ok) {
@@ -314,61 +314,24 @@ fetch(dataPath)
       return;
     }
 
-    // 静的HTMLの場合はタイトルとメタ情報のみ更新
-    document.getElementById('project-title').textContent = work.title;
-    document.getElementById('page-title').textContent = `${work.title} - slvgallo`;
+    // 静的HTMLの場合は基本的に何もしない（コンテンツはすでに生成済み）
+    console.log('Work page loaded successfully for:', work.title);
+    
+    // メタ情報のみ更新（必要な場合のみ）
+    const pageTitleElement = document.getElementById('page-title');
+    if (pageTitleElement && pageTitleElement.textContent !== `${work.title} - slvgallo`) {
+      pageTitleElement.textContent = `${work.title} - slvgallo`;
+    }
     
     // Open GraphとTwitterのタイトルも更新
     const ogTitle = document.getElementById('og-title');
     const twitterTitle = document.getElementById('twitter-title');
     if (ogTitle) ogTitle.content = `${work.title} - slvgallo`;
     if (twitterTitle) twitterTitle.content = `${work.title} - slvgallo`;
-    
-    // 改行コードを<br>に変換して表示（静的コンテンツがない場合のみ）
-    const descElement = document.getElementById('project-desc');
-    if (work.desc && descElement && descElement.textContent === '') {
-      descElement.innerHTML = work.desc.replace(/\n/g, '<br>');
-    }
-    
-    // 日付とタグを表示（静的コンテンツがない場合のみ）
-    const autoDate = generateDateFromId(work.id);
-    const dateElement = document.getElementById('project-date');
-    if (dateElement && dateElement.textContent === '') {
-      dateElement.textContent = autoDate;
-    }
-    
-    // タグを表示（静的コンテンツがない場合のみ）
-    const tagsContainer = document.getElementById('project-tags');
-    if (tagsContainer && tagsContainer.innerHTML === '') {
-      tagsContainer.innerHTML = '';
-      
-      // セパレーターを追加
-      const separator = document.createElement('span');
-      separator.className = 'project-separator';
-      separator.textContent = ' | ';
-      tagsContainer.appendChild(separator);
-      
-      work.tags.forEach(tag => {
-        const tagElement = document.createElement('a');
-        tagElement.href = `../index.html?filter=${tag}`;
-        tagElement.className = 'project-tag';
-        tagElement.textContent = `#${tag}`;
-        tagsContainer.appendChild(tagElement);
-      });
-    }
-
-    // メディアコンテンツは静的HTMLで生成済みなので何もしない
-    console.log('Work page loaded successfully for:', work.title);
   })
   .catch((error) => {
     // データ読み込みエラー処理
     console.error('Error loading work data:', error);
-    const titleElement = document.getElementById('project-title');
-    if (titleElement) {
-      titleElement.textContent = 'Error loading work';
-    }
-    const descElement = document.getElementById('project-desc');
-    if (descElement) {
-      descElement.textContent = 'Failed to load work data. Please try again later.';
-    }
+    // 静的コンテンツは表示されたままにする
+    console.log('Static content should still be visible');
   });

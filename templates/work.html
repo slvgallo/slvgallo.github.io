@@ -85,26 +85,26 @@
   <main> 
     <article class="post permalink-post">
       <!-- フルサイズメディアコンテナ -->
-      <div id="project-media-full" class="l-container full-image"></div>
+      <div id="project-media-full" class="l-container full-image">{{FULL_MEDIA_CONTENT}}</div>
       
       <!-- コンテンツエリア -->
       <div class="l-container-mini section">
-        <header class="entry-header">
-          <h1 id="project-title" class="entry-title">{{TITLE}}</h1>
-          
-        </header>
-        
         <div class="entry-content">
-          <p id="project-desc">{{DESC}}</p>
           <div id="project-media">{{MEDIA_CONTENT}}</div>
         </div>
+        
         <div class="entry-footer">
           <div class="project-meta">
             <div id="project-date" class="project-date">{{DATE}}</div>
             <div id="project-tags" class="project-tags">{{TAGS}}</div>
           </div>
         </div>
-
+        
+        <header class="entry-header">
+          <h1 id="project-title" class="entry-title">{{TITLE}}</h1>
+          <p id="project-desc">{{DESC}}</p>
+        </header>
+      </div>
     </article>
   </main>
 </div>
