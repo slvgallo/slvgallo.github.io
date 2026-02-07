@@ -118,10 +118,12 @@ class FaviconController {
 }
 
 // 1回だけ初期化
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
+export function initFavicon() {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      new FaviconController();
+    }, { once: true });
+  } else {
     new FaviconController();
-  }, { once: true });
-} else {
-  new FaviconController();
+  }
 }

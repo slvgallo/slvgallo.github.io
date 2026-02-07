@@ -31,13 +31,19 @@ function generateDateFromId(id) {
 
 // テンプレートを置換する関数
 function replaceTemplate(template, work) {
+  const tagsText = work.tags ? work.tags.map(tag => `#${tag}`).join(' ') : '';
+  const tagsHtml = work.tags ? work.tags.map(tag => `<a href="../index.html?filter=${tag}" class="project-tag">#${tag}</a>`).join(' ') : '';
+
   return template
     .replace(/\{\{ID\}\}/g, work.id)
     .replace(/\{\{TITLE\}\}/g, work.title)
     .replace(/\{\{DESC\}\}/g, (work.desc || '').replace(/\n/g, '<br>'))
     .replace(/\{\{DATE\}\}/g, generateDateFromId(work.id))
     .replace(/\{\{THUMB\}\}/g, work.thumb || '')
-    .replace(/\{\{TAGS\}\}/g, work.tags ? work.tags.map(tag => `#${tag}`).join(' ') : '');
+    .replace(/\{\{TAGS_TEXT\}\}/g, tagsText)
+    .replace(/\{\{TAGS_HTML\}\}/g, tagsHtml)
+    // legacy placeholder (if any other template still uses it)
+    .replace(/\{\{TAGS\}\}/g, tagsText);
 }
 
 // 作品ページを生成する関数

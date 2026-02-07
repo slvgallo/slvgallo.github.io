@@ -17,7 +17,7 @@
   
   <title>{{TITLE}} - slvgallo</title>
   <meta name="description" content="{{TITLE}} - {{DESC}} - slvgallo">
-  <meta name="keywords" content="slvgallo, slv, {{TAGS}}">
+  <meta name="keywords" content="slvgallo, slv, {{TAGS_TEXT}}">
   <meta name="author" content="slvgallo">
   
   <!-- Open Graph / Facebook -->
@@ -101,7 +101,7 @@
         <div class="entry-footer">
           <div class="project-meta">
             <div id="project-date" class="project-date">{{DATE}}</div>
-            <div id="project-tags" class="project-tags">{{TAGS}}</div>
+            <div id="project-tags" class="project-tags">{{TAGS_HTML}}</div>
           </div>
         </div>
       </div>
@@ -109,12 +109,7 @@
   </main>
 </div>
 
-<script src="../js/utils.js" defer></script>
-<script src="../js/works.js" defer></script>
-<script src="../js/navigation.js" defer></script>
-<script src="../js/menu-control.js" defer></script>
-<script src="../js/scroll-control.js" defer></script>
-<script src="../js/favicon-control.js" defer></script>
+<script type="module" src="../js/init.js"></script>
 
 <!-- プロフィールフロートボタン -->
 <a href="../profile.html" class="profile-float">

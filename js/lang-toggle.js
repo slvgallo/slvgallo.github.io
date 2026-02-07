@@ -1,5 +1,5 @@
 // 言語切り替え機能
-document.addEventListener('DOMContentLoaded', function() {
+export function initLang() {
   const langEnBtn = document.getElementById('lang-en');
   const langJaBtn = document.getElementById('lang-ja');
   const langEnElements = document.querySelectorAll('.lang-en');
@@ -35,4 +35,4 @@ document.addEventListener('DOMContentLoaded', function() {
       langJaBtn.classList.add('active');
     }
   }
-});
+}

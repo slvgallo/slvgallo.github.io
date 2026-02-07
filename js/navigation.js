@@ -1,9 +1,9 @@
 // グローバルなフィルター機能
-document.addEventListener('DOMContentLoaded', function() {
+export function initNav() {
   // 現在のページを判定
   const currentPage = window.location.pathname.split('/').pop() || 'index.html';
   
-  // フィルターリンクのイベントを全ページで設定
+  // フィルターーリンクのイベントを全ページで設定
   const filterLinks = document.querySelectorAll(".filter-link");
   
   filterLinks.forEach((link) => {
@@ -13,7 +13,15 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // index.html以外のページならindex.htmlにリダイレクト
       if (currentPage !== 'index.html') {
-        window.location.href = `index.html?filter=${filter}`;
+        // worksページからの相対パスを考慮
+        const pathSegments = window.location.pathname.split('/');
+        if (pathSegments[pathSegments.length - 2] === 'works') {
+          // worksページの場合
+          window.location.href = `../index.html?filter=${filter}`;
+        } else {
+          // その他のページの場合
+          window.location.href = `index.html?filter=${filter}`;
+        }
       } else {
         // index.htmlの場合は既存のフィルター機能を呼び出し
         if (typeof applyFilter === 'function') {
@@ -27,4 +35,4 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-});
+}
