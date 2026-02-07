@@ -1,5 +1,5 @@
 // ハンバーガーメニューの制御
-export function initMenu() {
+function initMenu() {
   const menuToggle = document.querySelector(".menu-toggle");
   const nav = document.querySelector(".header-box-nav");
   const overlay = document.querySelector(".menu-overlay");

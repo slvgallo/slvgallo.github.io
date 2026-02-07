@@ -1,7 +1,7 @@
 // State management for scroll position and filter state
 // Extracted from index.js lines 87-161
 
-export class StateManager {
+class StateManager {
   constructor() {
     this.storageKey = "slvgallo_scroll_state";
     this.currentFilter = "all";

@@ -1,10 +1,8 @@
 // extractYouTubeId関数はutils.jsで定義
 
-import { generateWorkLink } from './env.js';
-
 // 作品アイテムを生成する関数
 // Extracted from index.js lines 164-245
-export function createWorkItem(work) {
+function createWorkItem(work) {
   const article = document.createElement("article");
   article.className = "post index-post";
   article.dataset.tags = work.tags.join(" ");
@@ -90,7 +88,7 @@ export function createWorkItem(work) {
  * @param {boolean} isYoutube - YouTubeサムネイルかどうか
  * @returns {string} 最適化された画像URL
  */
-export function getOptimizedImageUrl(url, isYoutube) {
+function getOptimizedImageUrl(url, isYoutube) {
   if (!url) return "";
   
   // Cloudinaryの画像のみ最適化
@@ -112,7 +110,7 @@ export function getOptimizedImageUrl(url, isYoutube) {
 
 // YouTubeサムネイルの事前処理
 // Extracted from index.js lines 36-51
-export function preprocessWorkThumbnails(works) {
+function preprocessWorkThumbnails(works) {
   works.forEach((work) => {
     const isYoutubeThumb =
       typeof work.thumb === "string" &&

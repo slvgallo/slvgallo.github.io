@@ -118,7 +118,7 @@ class FaviconController {
 }
 
 // 1回だけ初期化
-export function initFavicon() {
+function initFavicon() {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       new FaviconController();

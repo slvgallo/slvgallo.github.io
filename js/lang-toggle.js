@@ -1,5 +1,5 @@
 // 言語切り替え機能
-export function initLang() {
+function initLang() {
   const langEnBtn = document.getElementById('lang-en');
   const langJaBtn = document.getElementById('lang-ja');
   const langEnElements = document.querySelectorAll('.lang-en');

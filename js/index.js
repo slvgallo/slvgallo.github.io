@@ -76,7 +76,7 @@ function getInitialFilter() {
 }
 
 // Main initialization function
-export function initIndex() {
+function initIndex() {
   stateManager = new StateManager();
   infiniteScrollController = new InfiniteScrollController();
 

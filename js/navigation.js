@@ -1,5 +1,5 @@
 // グローバルなフィルター機能
-export function initNav() {
+function initNav() {
   // 現在のページを判定
   const currentPage = window.location.pathname.split('/').pop() || 'index.html';
   
