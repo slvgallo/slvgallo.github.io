@@ -22,7 +22,17 @@ document.addEventListener('DOMContentLoaded', function() {
   
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
                    (window.innerWidth <= 768);
-  const shouldAutoHide = !isMobile;
+  let shouldAutoHide = !isMobile;
+  
+  function checkMenuState() {
+    // CSSメディアクエリを直接チェック
+    const isHamburgerMenu = window.matchMedia('(max-width: 767px)').matches;
+    shouldAutoHide = !isMobile && !isHamburgerMenu;
+    return shouldAutoHide;
+  }
+  
+  // 初期状態をチェック
+  checkMenuState();
   
   const logoImg = document.querySelector('.header-blog-title img');
 
@@ -32,6 +42,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function updateHeader() {
     const scrollY = window.scrollY;
+    
+    // 毎回メニュー状態をチェック
+    checkMenuState();
     
     if (scrollY > lastScrollY) {
       scrollDirection = 'down';
@@ -119,6 +132,21 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   window.addEventListener('scroll', requestTick);
+  
+  // メディアクエリの変更を監視
+  const mediaQuery = window.matchMedia('(max-width: 767px)');
+  mediaQuery.addEventListener('change', () => {
+    const oldShouldAutoHide = shouldAutoHide;
+    checkMenuState();
+    
+    if (oldShouldAutoHide !== shouldAutoHide) {
+      // 状態が変わった場合はヘッダーをリセット
+      header.classList.remove('hidden');
+      header.classList.remove('showing');
+      isHeaderHidden = false;
+      clearTimeout(scrollTimer);
+    }
+  });
   
   header.addEventListener('mouseenter', () => {
     isHeaderHovered = true;

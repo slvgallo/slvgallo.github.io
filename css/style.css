@@ -1150,12 +1150,22 @@ img {
 
 @media (max-width: 767px) {
   .sketchfab-wrap {
-    padding-bottom: 56.25%;
+    padding-bottom: 100%;
     padding-top: 0;
     margin-bottom: 20px;
   }
 
   .sketchfab-wrap:last-child {
+    margin-bottom: 0;
+  }
+
+  .processing-wrap {
+    padding-bottom: 100%;
+    padding-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .processing-wrap:last-child {
     margin-bottom: 0;
   }
 
