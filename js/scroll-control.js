@@ -1,4 +1,6 @@
-class ScrollController {
+import { SCROLL, SCROLL_BEHAVIOR, MOBILE, TIMEOUTS } from './constants.js';
+
+export class ScrollController {
   constructor() {
     this.profileFloat = document.querySelector('.profile-float');
     this.siteFooter = document.querySelector('.site-footer');
@@ -238,7 +240,7 @@ class ScrollController {
 }
 
 // Initialize function for compatibility with existing structure
-function initScroll() {
+export function initScroll() {
   const scrollController = new ScrollController();
   scrollController.init();
   return scrollController;

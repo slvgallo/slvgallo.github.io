@@ -1,6 +1,9 @@
+import { INFINITE_SCROLL } from './constants.js';
+import { createWorkItem } from './renderWorks.js';
+
 // Infinite Scroll controller class
 // Extracted from index.js lines 247-347
-class InfiniteScrollController {
+export class InfiniteScrollController {
   constructor() {
     this.sentinel = null;
     this.observer = null;
