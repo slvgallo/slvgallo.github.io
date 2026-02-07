@@ -1,7 +1,18 @@
 // extractYouTubeId関数はutils.jsで定義
 
-const params = new URLSearchParams(window.location.search);
-const id = params.get('id');
+// 新しいURL構造からIDを取得
+let id;
+const pathname = window.location.pathname;
+const pathMatch = pathname.match(/\/works\/(.+)\.html$/);
+
+if (pathMatch) {
+  // 新しいURL構造: /works/2602-1.html
+  id = pathMatch[1];
+} else {
+  // 後方互換性: works.html?id=2602-1
+  const params = new URLSearchParams(window.location.search);
+  id = params.get('id');
+}
 
 // IDから日付を自動生成する関数
 function generateDateFromId(id) {
