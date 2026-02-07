@@ -90,6 +90,18 @@ function generateMediaHTML(mediaItem) {
       }
       break;
     
+    case 'image2column':
+      if (Array.isArray(mediaItem.src)) {
+        return `
+          <div class="image2column-wrap" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            ${mediaItem.src.map(src => 
+              `<img src="${src}" alt="Project image" loading="lazy" style="width: 100%; height: auto;">`
+            ).join('')}
+          </div>
+        `;
+      }
+      break;
+    
     case 'video':
       const videoId = extractYouTubeId(mediaItem.src);
       if (videoId) {
