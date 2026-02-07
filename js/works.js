@@ -308,106 +308,66 @@ fetch('data/works.json')
   })
   .then(async works => {
     const work = works.find(w => w.id===id);
-    if(!work) return;
+    if(!work) {
+      console.error('Work not found:', id);
+      return;
+    }
 
+    // 静的HTMLの場合はタイトルとメタ情報のみ更新
     document.getElementById('project-title').textContent = work.title;
-    document.getElementById('page-title').textContent = `${work.id} - slvgallo`;
+    document.getElementById('page-title').textContent = `${work.title} - slvgallo`;
     
     // Open GraphとTwitterのタイトルも更新
     const ogTitle = document.getElementById('og-title');
     const twitterTitle = document.getElementById('twitter-title');
-    if (ogTitle) ogTitle.content = `${work.id} - slvgallo`;
-    if (twitterTitle) twitterTitle.content = `${work.id} - slvgallo`;
+    if (ogTitle) ogTitle.content = `${work.title} - slvgallo`;
+    if (twitterTitle) twitterTitle.content = `${work.title} - slvgallo`;
     
-    // 改行コードを<br>に変換して表示
+    // 改行コードを<br>に変換して表示（静的コンテンツがない場合のみ）
     const descElement = document.getElementById('project-desc');
-    if (work.desc) {
+    if (work.desc && descElement && descElement.textContent === '') {
       descElement.innerHTML = work.desc.replace(/\n/g, '<br>');
-    } else {
-      descElement.textContent = '';
     }
     
-    // YouTube URLを処理
-    work.media.forEach(mediaItem => {
-      if (mediaItem.type === 'video' && (mediaItem.src.includes('youtube.com') || mediaItem.src.includes('youtu.be'))) {
-        const videoId = extractYouTubeId(mediaItem.src);
-        if (videoId) {
-          // サムネイルを自動生成
-          if (work.thumb && (work.thumb.includes('youtube.com') || work.thumb.includes('youtu.be'))) {
-            work.thumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-          }
-          // 埋め込みコードを自動生成
-          mediaItem.src = `https://www.youtube.com/embed/${videoId}`;
-        }
-      }
-    });
-    
-    // 日付とタグを表示
+    // 日付とタグを表示（静的コンテンツがない場合のみ）
     const autoDate = generateDateFromId(work.id);
-    document.getElementById('project-date').textContent = autoDate;
-    
-    // ページタイトルを作品名に変更（既存の処理を上書き）
-    document.title = `${work.title} - slvgallo`;
-    document.getElementById('page-title').textContent = document.title;
-    
-    // OGタイトルも更新（既存の変数を再利用）
-    if (ogTitle) {
-      ogTitle.content = document.title;
-    }
-    if (twitterTitle) {
-      twitterTitle.content = document.title;
+    const dateElement = document.getElementById('project-date');
+    if (dateElement && dateElement.textContent === '') {
+      dateElement.textContent = autoDate;
     }
     
+    // タグを表示（静的コンテンツがない場合のみ）
     const tagsContainer = document.getElementById('project-tags');
-    tagsContainer.innerHTML = '';
-    
-    // セパレーターを追加
-    const separator = document.createElement('span');
-    separator.className = 'project-separator';
-    separator.textContent = ' | ';
-    tagsContainer.appendChild(separator);
-    
-    work.tags.forEach(tag => {
-      const tagElement = document.createElement('a');
-      tagElement.href = `index.html?filter=${tag}`;
-      tagElement.className = 'project-tag';
-      tagElement.textContent = `#${tag}`;
-      tagsContainer.appendChild(tagElement);
-    });
-
-    const fullMediaContainer = document.getElementById('project-media-full');
-    const contentMediaContainer = document.getElementById('project-media');
-    
-    // 新しいメディア配列構造に対応
-    if (Array.isArray(work.media)) {
-      // 配列形式：交互表示
-      for (const mediaItem of work.media) {
-        const handler = mediaHandlers[mediaItem.type];
-        if (handler) {
-          await handler(mediaItem, fullMediaContainer, contentMediaContainer);
-        }
-      }
-    } else {
-      // 従来のオブジェクト形式（後方互換性）
-      Object.keys(work.media).forEach(key => {
-        const value = work.media[key];
-        if (key === 'images' && Array.isArray(value)) {
-          value.forEach(src => {
-            mediaHandlers.image({type: 'image', src: src}, fullMediaContainer, contentMediaContainer);
-          });
-        } else if (key === 'videos' && Array.isArray(value)) {
-          value.forEach(src => {
-            mediaHandlers.video({type: 'video', src: src}, fullMediaContainer, contentMediaContainer);
-          });
-        }
+    if (tagsContainer && tagsContainer.innerHTML === '') {
+      tagsContainer.innerHTML = '';
+      
+      // セパレーターを追加
+      const separator = document.createElement('span');
+      separator.className = 'project-separator';
+      separator.textContent = ' | ';
+      tagsContainer.appendChild(separator);
+      
+      work.tags.forEach(tag => {
+        const tagElement = document.createElement('a');
+        tagElement.href = `../index.html?filter=${tag}`;
+        tagElement.className = 'project-tag';
+        tagElement.textContent = `#${tag}`;
+        tagsContainer.appendChild(tagElement);
       });
     }
+
+    // メディアコンテンツは静的HTMLで生成済みなので何もしない
+    console.log('Work page loaded successfully for:', work.title);
   })
   .catch((error) => {
     // データ読み込みエラー処理
-    document.getElementById('project-title').textContent = 'error';
+    console.error('Error loading work data:', error);
+    const titleElement = document.getElementById('project-title');
+    if (titleElement) {
+      titleElement.textContent = 'Error loading work';
+    }
     const descElement = document.getElementById('project-desc');
     if (descElement) {
-      descElement.textContent = 'eroor';
+      descElement.textContent = 'Failed to load work data. Please try again later.';
     }
   });

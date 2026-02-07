@@ -78,6 +78,7 @@ function generateMediaHTML(mediaItem) {
       } else {
         return `<img src="${mediaItem.src}" alt="Project image" loading="lazy">`;
       }
+      break;
     
     case 'video':
       const videoId = extractYouTubeId(mediaItem.src);
