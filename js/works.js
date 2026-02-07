@@ -299,7 +299,7 @@ const mediaHandlers = {
   }
 };
 
-fetch('data/works.json')
+fetch('../data/works.json')
   .then(res => {
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);
