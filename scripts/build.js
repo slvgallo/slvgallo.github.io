@@ -179,9 +179,8 @@ function generateMediaHTML(mediaItem) {
       }
       
       return `
-        <div class="processing-wrap" style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden;">
+        <div class="processing-wrap">
           <iframe src="${processingSrc}" 
-                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
                   frameborder="0" 
                   allowfullscreen>
           </iframe>
@@ -190,13 +189,24 @@ function generateMediaHTML(mediaItem) {
       break;
     
     case 'sketchfab':
+      // Sketchfab埋め込みURLに自動サイズ調整パラメータを追加
+      let sketchfabSrc = mediaItem.src;
+      if (sketchfabSrc.includes('/embed')) {
+        if (!sketchfabSrc.includes('?')) {
+          sketchfabSrc += '?autospin=1&autostart=1&preload=1';
+        } else {
+          sketchfabSrc += '&autospin=1&autostart=1&preload=1';
+        }
+      }
       return `
-        <div class="sketchfab-wrap" style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden;">
-          <iframe src="${mediaItem.src}" 
-                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+        <div class="sketchfab-wrap">
+          <iframe src="${sketchfabSrc}" 
                   frameborder="0" 
                   allowfullscreen
-                  allow="autoplay; fullscreen; vr">
+                  mozallowfullscreen="true" 
+                  onmozallowfullscreen="true" 
+                  webkitallowfullscreen="true" 
+                  onwebkitallowfullscreen="true">
           </iframe>
         </div>
       `;
@@ -210,9 +220,8 @@ function generateMediaHTML(mediaItem) {
         htmlSrc = htmlSrc.replace('/works/', '../works/');
       }
       return `
-        <div class="html-wrap" style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden;">
+        <div class="html-wrap">
           <iframe src="${htmlSrc}" 
-                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
                   frameborder="0" 
                   allowfullscreen>
           </iframe>
