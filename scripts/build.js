@@ -102,6 +102,26 @@ function generateMediaHTML(mediaItem) {
       }
       break;
     
+    case 'photo':
+      // Flickr写真は基本的に画像として扱う
+      const img = `<img src="${mediaItem.src}" alt="Flickr photo" loading="lazy">`;
+      
+      // Flickrの元ページへのリンクを自動的に追加
+      if (mediaItem.src.includes('flickr.com')) {
+        const flickrMatch = mediaItem.src.match(/\/photos\/[^\/]+\/(\d+)/);
+        if (flickrMatch) {
+          return `<a href="https://www.flickr.com/photos/slvgallo/${flickrMatch[1]}/" target="_blank" rel="noopener noreferrer">${img}</a>`;
+        } else {
+          // staticflickr.comの場合は別の方法でURLを生成
+          const staticMatch = mediaItem.src.match(/\/(\d+)_[^_]+_b\.jpg$/);
+          if (staticMatch) {
+            return `<a href="https://www.flickr.com/photos/slvgallo/${staticMatch[1]}/" target="_blank" rel="noopener noreferrer">${img}</a>`;
+          }
+        }
+      }
+      return img;
+      break;
+    
     case 'video':
       const videoId = extractYouTubeId(mediaItem.src);
       if (videoId) {
@@ -130,15 +150,39 @@ function generateMediaHTML(mediaItem) {
       `;
     
     case 'processing':
+      // openprocessing.orgのURLを埋め込み用URLに変換
+      let processingSrc = mediaItem.src;
+      if (processingSrc.includes('openprocessing.org/sketch/')) {
+        // https://openprocessing.org/sketch/123456 → https://openprocessing.org/sketch/123456/embed/
+        if (!processingSrc.endsWith('/embed/')) {
+          const sketchId = processingSrc.split('/sketch/')[1].split('/')[0];
+          processingSrc = `https://openprocessing.org/sketch/${sketchId}/embed/`;
+        }
+      }
+      
       return `
         <div class="processing-wrap" style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden;">
-          <iframe src="${mediaItem.src}" 
+          <iframe src="${processingSrc}" 
                   style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
                   frameborder="0" 
                   allowfullscreen>
           </iframe>
         </div>
       `;
+      break;
+    
+    case 'sketchfab':
+      return `
+        <div class="sketchfab-wrap" style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden;">
+          <iframe src="${mediaItem.src}" 
+                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                  frameborder="0" 
+                  allowfullscreen
+                  allow="autoplay; fullscreen; vr">
+          </iframe>
+        </div>
+      `;
+      break;
     
     case 'html':
       // HTMLメディアのパスを修正
@@ -156,6 +200,7 @@ function generateMediaHTML(mediaItem) {
           </iframe>
         </div>
       `;
+      break;
     
     default:
       return '';
