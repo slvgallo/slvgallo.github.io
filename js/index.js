@@ -165,7 +165,7 @@ function createWorkItem(work) {
   postInner.className = "post-inner";
 
   const link = document.createElement("a");
-  link.href = `works/${work.id}.html`;
+  link.href = `works.html?id=${work.id}`;
   link.className = "post-content-anchor";
 
   const thumb = document.createElement("div");
