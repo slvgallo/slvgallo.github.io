@@ -445,7 +445,7 @@ img {
   }
 
   .nav ul {
-    text-align: left;
+    text-align: right;
     padding: 0 20px;
     margin: 0;
     list-style: none;
@@ -1394,6 +1394,23 @@ img {
   40% {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+/* Flickr写真のPC表示向け調整 */
+@media (min-width: 768px) {
+  /* Flickr写真（staticflickr.com）を含む画像の高さを制限 */
+  .l-container.full-image img[src*="staticflickr.com"],
+  .l-container.full-image a img[src*="staticflickr.com"],
+  #project-media img[src*="staticflickr.com"],
+  #project-media a img[src*="staticflickr.com"] {
+    max-height: 80vh;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
   }
 }
 
