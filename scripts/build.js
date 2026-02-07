@@ -148,13 +148,16 @@ function generateMediaHTML(mediaItem) {
       }
       
       return `
-        <iframe width="100%" 
-                height="300" 
-                scrolling="no" 
-                frameborder="no" 
-                allow="autoplay" 
-                src="${soundcloudSrc}">
-        </iframe>
+        <div style="position: relative; padding-bottom: 66.67%; height: 0; overflow: hidden;">
+          <iframe src="${soundcloudSrc}" 
+                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                  width="100%" 
+                  height="300" 
+                  scrolling="no" 
+                  frameborder="no" 
+                  allow="autoplay">
+          </iframe>
+        </div>
       `;
       break;
     
