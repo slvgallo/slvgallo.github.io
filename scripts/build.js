@@ -119,8 +119,9 @@ function generateMediaHTML(mediaItem) {
     
     case 'processing':
       return `
-        <div class="processing-wrap">
+        <div class="processing-wrap" style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden;">
           <iframe src="${mediaItem.src}" 
+                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
                   frameborder="0" 
                   allowfullscreen>
           </iframe>
@@ -128,9 +129,16 @@ function generateMediaHTML(mediaItem) {
       `;
     
     case 'html':
+      // HTMLメディアのパスを修正
+      let htmlSrc = mediaItem.src;
+      if (htmlSrc.startsWith('/works/')) {
+        // 絶対パスを相対パスに変換
+        htmlSrc = htmlSrc.replace('/works/', '../works/');
+      }
       return `
-        <div class="html-wrap">
-          <iframe src="${mediaItem.src}" 
+        <div class="html-wrap" style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden;">
+          <iframe src="${htmlSrc}" 
+                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
                   frameborder="0" 
                   allowfullscreen>
           </iframe>
@@ -201,6 +209,15 @@ function copyAssets() {
       console.log(`Copied: ${asset}/`);
     }
   });
+  
+  // worksディレクトリをコピー（HTMLメディア用）
+  const worksSrcPath = path.join(SRC_DIR, 'works');
+  const worksDestPath = path.join(DIST_DIR, 'works');
+  
+  if (fs.existsSync(worksSrcPath)) {
+    fs.copySync(worksSrcPath, worksDestPath);
+    console.log('Copied: works/');
+  }
   
   // works.jsonもコピー（API用）
   fs.copySync(
