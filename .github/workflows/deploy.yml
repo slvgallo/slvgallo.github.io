@@ -8,6 +8,9 @@ on:
       - 'templates/**'
       - 'scripts/**'
       - 'package.json'
+      - 'css/**'
+      - 'js/**'
+      - 'img/**'
   pull_request:
     branches: [ main ]
     paths:
@@ -15,6 +18,9 @@ on:
       - 'templates/**'
       - 'scripts/**'
       - 'package.json'
+      - 'css/**'
+      - 'js/**'
+      - 'img/**'
   workflow_dispatch:
 
 permissions:
