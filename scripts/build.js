@@ -72,12 +72,43 @@ function generateMediaHTML(mediaItem) {
   switch (mediaItem.type) {
     case 'image':
       if (Array.isArray(mediaItem.src)) {
-        return mediaItem.src.map(src => 
-          `<img src="${src}" alt="Project image" loading="lazy">`
-        ).join('');
+        return mediaItem.src.map((src, index) => {
+          let html = `<img src="${src}" alt="Project image" loading="lazy">`;
+          if (mediaItem.link) {
+            let link = mediaItem.link;
+            if (Array.isArray(link)) {
+               link = link[index] || link[0];
+            }
+            return `<a href="${link}" target="_blank" rel="noopener noreferrer">${html}</a>`;
+          }
+          return html;
+        }).join('');
       } else {
-        return `<img src="${mediaItem.src}" alt="Project image" loading="lazy">`;
+        let html = `<img src="${mediaItem.src}" alt="Project image" loading="lazy">`;
+        if (mediaItem.link) {
+           return `<a href="${mediaItem.link}" target="_blank" rel="noopener noreferrer">${html}</a>`;
+        }
+        return html;
       }
+      break;
+
+    case 'photo':
+      // Flickr logic port
+      const imgHtml = `<img src="${mediaItem.src}" alt="Flickr photo" loading="lazy">`;
+      if (mediaItem.src.includes('flickr.com')) {
+         let flickrLink = mediaItem.src;
+         const flickrMatch = mediaItem.src.match(/\/photos\/[^\/]+\/(\d+)/);
+         if (flickrMatch) {
+            flickrLink = `https://www.flickr.com/photos/slvgallo/${flickrMatch[1]}/`;
+         } else {
+            const staticMatch = mediaItem.src.match(/\/(\d+)_[^_]+_b\.jpg$/);
+            if (staticMatch) {
+               flickrLink = `https://www.flickr.com/photos/slvgallo/${staticMatch[1]}/`;
+            }
+         }
+         return `<a href="${flickrLink}" target="_blank" rel="noopener noreferrer">${imgHtml}</a>`;
+      }
+      return imgHtml;
       break;
     
     case 'video':
@@ -93,25 +124,110 @@ function generateMediaHTML(mediaItem) {
             </iframe>
           </div>
         `;
+      } else {
+        return `
+          <div class="video-wrap" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+            <iframe src="${mediaItem.src}" 
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+                    frameborder="0" 
+                    allowfullscreen>
+            </iframe>
+          </div>
+        `;
       }
       break;
     
     case 'soundcloud':
+      let scSrc = mediaItem.src;
+      if (/^\d+$/.test(scSrc)) {
+         scSrc = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${scSrc}&color=%230b0b0b&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true&sharing=false`;
+      }
+      // Add credit
+      const credit = `<div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/slvgallo" title="slvgallo" target="_blank" style="color: #cccccc; text-decoration: none;">slvgallo</a> · <a href="https://soundcloud.com/slvgallo/otp" title="OTP" target="_blank" style="color: #cccccc; text-decoration: none;">OTP</a></div>`;
+      
       return `
-        <iframe width="100%" 
-                height="300" 
-                scrolling="no" 
-                frameborder="no" 
-                allow="autoplay" 
-                src="${mediaItem.src}">
-        </iframe>
+        <div class="soundcloud-wrap">
+          <iframe width="100%" 
+                  height="300" 
+                  scrolling="no" 
+                  frameborder="no" 
+                  allow="autoplay" 
+                  src="${scSrc}">
+          </iframe>
+          ${credit}
+        </div>
       `;
-    
+      break;
+
+    case 'processing':
+      let embedUrl = mediaItem.src;
+      if (embedUrl.includes('openprocessing.org/sketch/')) {
+        // Ensure embed URL format
+        if (!embedUrl.endsWith('/embed/')) {
+           // check if already has /embed/ in middle? No, standard is /sketch/ID/embed/
+           const sketchIdMatch = embedUrl.match(/\/sketch\/(\d+)/);
+           if (sketchIdMatch) {
+             embedUrl = `https://openprocessing.org/sketch/${sketchIdMatch[1]}/embed/`;
+           }
+        }
+      }
+      return `
+        <div class="processing-wrap">
+          <iframe src="${embedUrl}" 
+                  style="width: 100%; height: 600px; border: 0;" 
+                  frameborder="0" 
+                  allowfullscreen>
+          </iframe>
+        </div>
+      `;
+      break;
+
+    case 'sketchfab':
+      return `
+        <div class="sketchfab-wrap">
+          <iframe src="${mediaItem.src}" 
+                  style="width: 100%; height: 600px; border: 0;" 
+                  frameborder="0" 
+                  allowfullscreen 
+                  allow="autoplay; fullscreen; vr">
+          </iframe>
+        </div>
+      `;
+      break;
+
+    case 'html':
+      return `
+        <div class="html-wrap">
+          <iframe src="${mediaItem.src}" 
+                  style="width: 100%; height: 600px; border: 0;" 
+                  frameborder="0" 
+                  allowfullscreen>
+          </iframe>
+        </div>
+      `;
+      break;
+
+    case 'image2column':
+      if (Array.isArray(mediaItem.src)) {
+        const imagesHtml = mediaItem.src.map((src, index) => {
+          let imgHtml = `<img src="${src}" alt="Project image" loading="lazy" style="width: 100%; height: auto;">`;
+          if (mediaItem.link) {
+            let link = mediaItem.link;
+            if (Array.isArray(link)) {
+               link = link[index] || link[0];
+            }
+            return `<a href="${link}" target="_blank" rel="noopener noreferrer">${imgHtml}</a>`;
+          }
+          return imgHtml;
+        }).join('');
+        return `<div class="image2column-wrap" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">${imagesHtml}</div>`;
+      }
+      return '';
+      break;
+
     default:
       return '';
   }
-  
-  return '';
 }
 
 // YouTube IDを抽出する関数（utils.jsからコピー）
