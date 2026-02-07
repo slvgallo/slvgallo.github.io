@@ -218,7 +218,13 @@ function createWorkItem(work) {
     // YouTubeサムネイルのみtransformを適用
     img.style.transform = work.isYoutubeThumb ? "scale(1.02)" : "scale(1.0)";
     
-    thumb.appendChild(img);
+    // Flickr写真の場合はworks.htmlに遷移（indexページ）
+    if (work.thumb && work.thumb.includes('flickr.com')) {
+      // 画像を直接追加（Flickrリンクは作成しない）
+      thumb.appendChild(img);
+    } else {
+      thumb.appendChild(img);
+    }
   }
 
   link.appendChild(thumb);

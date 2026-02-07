@@ -94,6 +94,37 @@ const mediaHandlers = {
       }
     }
   },
+
+  // Flickr写真の処理（imageハンドラーのエイリアス）
+  photo: (mediaItem, fullContainer, contentContainer) => {
+    // Flickr写真は基本的に画像として扱う
+    const img = document.createElement('img');
+    img.src = mediaItem.src;
+    img.alt = 'Flickr photo';
+    img.loading = 'lazy';
+    
+    // Flickrの元ページへのリンクを自動的に追加
+    if (mediaItem.src.includes('flickr.com')) {
+      const link = document.createElement('a');
+      // Flickr URLから写真IDを抽出して元ページURLを生成
+      const flickrMatch = mediaItem.src.match(/\/photos\/[^\/]+\/(\d+)/);
+      if (flickrMatch) {
+        link.href = `https://www.flickr.com/photos/slvgallo/${flickrMatch[1]}/`;
+      } else {
+        // staticflickr.comの場合は別の方法でURLを生成
+        const staticMatch = mediaItem.src.match(/\/(\d+)_[^_]+_b\.jpg$/);
+        if (staticMatch) {
+          link.href = `https://www.flickr.com/photos/slvgallo/${staticMatch[1]}/`;
+        }
+      }
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.appendChild(img);
+      fullContainer.appendChild(link);
+    } else {
+      fullContainer.appendChild(img);
+    }
+  },
   
   // 動画の処理
   video: async (mediaItem, fullContainer, contentContainer) => {

@@ -10,7 +10,7 @@
 .profile-header {
   display: flex;
   align-items: flex-start;
-  gap: 2em;
+  gap: 2.5em;
   margin-bottom: 5em;
   padding-bottom: 5em;
   border-bottom: 1px solid #e0e0e0;
@@ -39,9 +39,10 @@
 }
 
 .profile-name {
-  font-size: 2.5em;
+  font-size: 2.6em;
   font-weight: 400;
-  margin: 0 0 0.5em 0;
+  line-height: 1em;
+  margin:0.5em 0 0.2em 0;
   color: #36393d;
 }
 
@@ -58,7 +59,7 @@
 }
 
 .profile-account {
-  margin-top: 1.5em;
+  margin-top: 0;
 }
 
 .social-links {
