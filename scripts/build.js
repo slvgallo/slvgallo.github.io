@@ -139,15 +139,24 @@ function generateMediaHTML(mediaItem) {
       break;
     
     case 'soundcloud':
+      // SoundCloudトラックIDから埋め込みURLを生成
+      let soundcloudSrc = mediaItem.src;
+      
+      // 数字のみの場合は埋め込みURLを生成
+      if (/^\d+$/.test(soundcloudSrc)) {
+        soundcloudSrc = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${soundcloudSrc}&color=%230b0b0b&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true&sharing=false`;
+      }
+      
       return `
         <iframe width="100%" 
                 height="300" 
                 scrolling="no" 
                 frameborder="no" 
                 allow="autoplay" 
-                src="${mediaItem.src}">
+                src="${soundcloudSrc}">
         </iframe>
       `;
+      break;
     
     case 'processing':
       // openprocessing.orgのURLを埋め込み用URLに変換
