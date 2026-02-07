@@ -50,16 +50,26 @@ function generateWorkPages(works) {
   works.forEach(work => {
     let html = replaceTemplate(workTemplate, work);
     
-    // メディアコンテンツを生成
-    let mediaContent = '';
+    // メディアコンテンツを生成（フルサイズとコンテンツエリアに分割）
+    let fullMediaContent = '';
+    let contentMediaContent = '';
+    
     if (work.media && Array.isArray(work.media)) {
-      work.media.forEach(mediaItem => {
-        mediaContent += generateMediaHTML(mediaItem);
+      work.media.forEach((mediaItem, index) => {
+        const mediaHTML = generateMediaHTML(mediaItem);
+        if (index === 0) {
+          // 最初のメディアはフルサイズ
+          fullMediaContent = mediaHTML;
+        } else {
+          // 残りはコンテンツエリア
+          contentMediaContent += mediaHTML;
+        }
       });
     }
     
     // メディアコンテンツをHTMLに挿入
-    html = html.replace('{{MEDIA_CONTENT}}', mediaContent);
+    html = html.replace('{{FULL_MEDIA_CONTENT}}', fullMediaContent);
+    html = html.replace('{{MEDIA_CONTENT}}', contentMediaContent);
     
     const filename = `${work.id}.html`;
     fs.writeFileSync(path.join(worksDir, filename), html);
@@ -105,6 +115,26 @@ function generateMediaHTML(mediaItem) {
                 allow="autoplay" 
                 src="${mediaItem.src}">
         </iframe>
+      `;
+    
+    case 'processing':
+      return `
+        <div class="processing-wrap">
+          <iframe src="${mediaItem.src}" 
+                  frameborder="0" 
+                  allowfullscreen>
+          </iframe>
+        </div>
+      `;
+    
+    case 'html':
+      return `
+        <div class="html-wrap">
+          <iframe src="${mediaItem.src}" 
+                  frameborder="0" 
+                  allowfullscreen>
+          </iframe>
+        </div>
       `;
     
     default:
