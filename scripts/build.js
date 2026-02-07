@@ -170,9 +170,8 @@ function generateMediaHTML(mediaItem) {
       }
       
       return `
-        <div class="processing-wrap" style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden;">
+        <div class="processing-wrap">
           <iframe src="${processingSrc}" 
-                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
                   frameborder="0" 
                   allowfullscreen>
           </iframe>
@@ -182,9 +181,8 @@ function generateMediaHTML(mediaItem) {
     
     case 'sketchfab':
       return `
-        <div class="sketchfab-wrap" style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden;">
+        <div class="sketchfab-wrap">
           <iframe src="${mediaItem.src}" 
-                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
                   frameborder="0" 
                   allowfullscreen
                   allow="autoplay; fullscreen; vr">
@@ -201,9 +199,8 @@ function generateMediaHTML(mediaItem) {
         htmlSrc = htmlSrc.replace('/works/', '../works/');
       }
       return `
-        <div class="html-wrap" style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden;">
+        <div class="html-wrap">
           <iframe src="${htmlSrc}" 
-                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
                   frameborder="0" 
                   allowfullscreen>
           </iframe>
