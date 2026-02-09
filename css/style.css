@@ -189,7 +189,7 @@ a img {
 .header-blog-title img {
   height: 3.0rem;
   width: auto;
-  transform-origin: left center;
+  transform-origin: center center;
   will-change: transform;
   transition: transform 0.5s ease;
 }
@@ -663,7 +663,7 @@ a img {
 }
 
 .post-content-anchor:hover .post-photo-thumb img {
-  opacity: 0.85;
+  opacity: 0.75;
 }
 
 /* SoundCloudプレーヤー用スタイル */
@@ -700,6 +700,10 @@ a img {
   z-index: 10;
   cursor: pointer;
   background: transparent;
+}
+.post-content-anchor:hover .soundcloud-thumb iframe,
+.post-content-anchor:hover .soundcloud-thumb img {
+  opacity: 0.75;
 }
 
 /* タイトルとタグは非表示 */
@@ -911,7 +915,7 @@ a img {
 
 .entry-content img,
 .entry-content video {
-  max-width: 100%;
+  width: 100%;
   height: auto;
 }
 
