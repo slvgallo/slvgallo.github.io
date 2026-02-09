@@ -4,7 +4,7 @@ import { createWorkItem } from './renderer.js';
 
 
 
-export function applyFilter(filter) {
+export function applyFilter(filter, isInitialLoad = false) {
 
 state.data.currentFilter = filter;
 
@@ -39,6 +39,13 @@ state.data.filteredWorks = state.data.allWorks.filter(work => work.tags.includes
 
 }
 
+
+// 初期ロードで既にコンテンツがある場合はクリアをスキップ
+if (isInitialLoad && filter === "all" && grid.children.length > 0) {
+  // 既存のDOMから状態を初期化
+  state.data.displayedCount = grid.children.length;
+  return;
+}
 
 // グリッドをクリアして最初からロード
 

@@ -280,6 +280,40 @@ function getProcessedThumb(thumbUrl) {
   return { url: thumbUrl, isYoutube: false };
 }
 
+// サムネイルコンテンツを生成する関数
+function generateThumbContent(work, thumbInfo, isPriority, index) {
+  // YouTubeの場合の黒帯対策
+  const imgStyle = thumbInfo.isYoutube ? 'style="transform: scale(1.02);"' : '';
+  
+  const loadingAttr = isPriority ? '' : 'loading="lazy"';
+  const fetchPriority = isPriority ? 'fetchpriority="high"' : '';
+  const decodingAttr = 'decoding="async"';
+  
+  // SoundCloudの場合の処理（既存ロジックを維持）
+  if (work.thumb && work.thumb.includes('soundcloud.com')) {
+    const soundCloudMedia = work.media && work.media.find(m => m.type === 'soundcloud');
+    if (soundCloudMedia && soundCloudMedia.src) {
+      const trackId = soundCloudMedia.src;
+      return `
+        <iframe src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A${trackId}&color=%23000000&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true&sharing=false"
+                width="100%" height="300" frameborder="no" scrolling="no" allow="autoplay"
+                style="pointer-events: none;"></iframe>
+        <div class="soundcloud-overlay"></div>
+      `;
+    }
+  }
+  
+  // 通常の画像サムネイル
+  return `
+    <img src="${thumbInfo.url}" 
+         ${imgStyle} 
+         alt="${work.title}" 
+         ${loadingAttr} 
+         ${fetchPriority} 
+         ${decodingAttr}>
+  `;
+}
+
 // --- トップページを生成する関数（最適化版） ---
 
 function generateIndexPage(works) {
@@ -288,38 +322,26 @@ function generateIndexPage(works) {
   let worksGrid = '';
   works.forEach((work, index) => {
     const thumbInfo = getProcessedThumb(work.thumb);
-    
-    // YouTubeの場合の黒帯対策
-    const imgStyle = thumbInfo.isYoutube ? 'style="transform: scale(1.02);"' : '';
 
     /**
      * 🚀 Lighthouse LCP最適化ロジック
      * 最初の4枚（1列分程度）は即時読み込み対象とする
      */
     const isPriority = index < 4; 
-    const loadingAttr = isPriority ? '' : 'loading="lazy"';
-    const fetchPriority = isPriority ? 'fetchpriority="high"' : '';
-    // decoding="async" はすべての画像に付与してメインスレッドを解放
-    const decodingAttr = 'decoding="async"';
 
     const workItem = `
-      <div class="post" data-tags="${work.tags ? work.tags.join(' ') : ''}">
+      <article class="post index-post" data-tags="${work.tags ? work.tags.join(' ') : ''}">
         <div class="post-inner">
           <a href="works/${work.id}.html" class="post-content-anchor">
-            <div class="post-thumb">
-              <img src="${thumbInfo.url}" 
-                   ${imgStyle} 
-                   alt="${work.title}" 
-                   ${loadingAttr} 
-                   ${fetchPriority} 
-                   ${decodingAttr}>
+            <div class="post-photo-thumb">
+              ${generateThumbContent(work, thumbInfo, isPriority, index)}
             </div>
             <div class="post-content">
               <h2 class="post-title">${work.title}</h2>
             </div>
           </a>
         </div>
-      </div>
+      </article>
     `;
     worksGrid += workItem;
   });

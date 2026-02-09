@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   if (!restoreScrollState()) {
-    applyFilter(initial);
+    applyFilter(initial, true);
   }
 
   initNavigation();
