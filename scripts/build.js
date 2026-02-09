@@ -40,12 +40,16 @@ function replaceTemplate(template, work) {
   const tagsText = work.tags ? work.tags.map(tag => `#${tag}`).join(' ') : '';
   const tagsHtml = work.tags ? work.tags.map(tag => `<a href="../index.html?filter=${tag}" class="project-tag">#${tag}</a>`).join(' ') : '';
 
+  // OGP画像を最適化
+  const thumbInfo = getProcessedThumb(work.thumb);
+  const optimizedThumb = thumbInfo.url || work.thumb || '';
+
   return template
     .replace(/\{\{ID\}\}/g, work.id)
     .replace(/\{\{TITLE\}\}/g, work.title)
     .replace(/\{\{DESC\}\}/g, (work.desc || '').replace(/\n/g, '<br>'))
     .replace(/\{\{DATE\}\}/g, generateDateFromId(work.id))
-    .replace(/\{\{THUMB\}\}/g, work.thumb || '')
+    .replace(/\{\{THUMB\}\}/g, optimizedThumb)
     .replace(/\{\{TAGS_TEXT\}\}/g, tagsText)
     .replace(/\{\{TAGS_HTML\}\}/g, tagsHtml)
     // legacy placeholder (if any other template still uses it)
@@ -105,7 +109,7 @@ function generateMediaHTML(mediaItem) {
     case 'image2column':
       if (Array.isArray(mediaItem.src)) {
         return `
-          <div class="image2column-wrap" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="image2column-wrap" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             ${mediaItem.src.map(src => 
               `<img src="${src}" alt="Project image" loading="lazy" style="width: 100%; height: auto;">`
             ).join('')}
