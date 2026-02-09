@@ -1,7 +1,7 @@
 // 共通ユーティリティ関数
 
 // YouTube IDを抽出する関数
-function extractYouTubeId(url) {
+export function extractYouTubeId(url) {
   const patterns = [
     // 通常のYouTube動画
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,

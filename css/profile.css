@@ -177,6 +177,12 @@
   border-color: #36393d;
 }
 
+.lang-en { display: none; }
+.lang-ja { display: none; }
+
+html.lang-en-active .lang-en { display: inline; }
+html.lang-ja-active .lang-ja { display: inline; }
+
 
 
 
