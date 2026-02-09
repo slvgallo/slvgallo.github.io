@@ -1,7 +1,6 @@
 import { state } from './state.js';
 
 export function initScroll() {
-  // 🔴 初期化フラグのチェック（state.init を使用）
   if (state.init.scrollInitialized) return;
   state.init.scrollInitialized = true;
 

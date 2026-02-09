@@ -1,6 +1,12 @@
 const fs = require('fs-extra');
 const path = require('path');
 
+// ES Modulesを動的にインポートするための設定
+async function loadWorks() {
+  const { loadWorks } = await import(path.join(__dirname, '..', 'js', 'data.js'));
+  return await loadWorks();
+}
+
 // ディレクトリ設定
 const SRC_DIR = path.join(__dirname, '..');
 const DIST_DIR = path.join(SRC_DIR, 'dist');

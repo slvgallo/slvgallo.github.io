@@ -1,5 +1,4 @@
 import { extractYouTubeId } from './utils.js';
-
 export async function loadWorks() {
   const res = await fetch("data/works.json");
   if (!res.ok) {
@@ -8,21 +7,16 @@ export async function loadWorks() {
   const works = await res.json();
   
   // YouTubeサムネイルの事前処理
-  works.forEach((work) => {
-    const isYoutubeThumb =
-      typeof work.thumb === "string" &&
-      (work.thumb.includes("youtube.com") || work.thumb.includes("youtu.be"));
+works.forEach((work) => {
+  const videoId = extractYouTubeId(work.thumb);
 
-    if (isYoutubeThumb) {
-      const videoId = extractYouTubeId(work.thumb);
-      if (videoId) {
-        work.thumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-      }
-      work.isYoutubeThumb = true;
-    } else {
-      work.isYoutubeThumb = false;
-    }
-  });
+  if (videoId) {
+    work.thumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    work.isYoutubeThumb = true;
+  } else {
+    work.isYoutubeThumb = false;
+  }
+});
   
   return works;
 }

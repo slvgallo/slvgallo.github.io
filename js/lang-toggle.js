@@ -1,7 +1,6 @@
 import { state } from './state.js';
 
 export function initLangToggle() {
-  // 🔴 state.init 階層を使用して二重初期化を防止
   if (state.init.langInitialized) return;
   state.init.langInitialized = true;
 
