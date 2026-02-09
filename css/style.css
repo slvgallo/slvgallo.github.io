@@ -78,8 +78,13 @@ h6 a:hover {
 img {
   border-style: none;
   max-width: 100%;
+  display: block;
+  vertical-align: top;
 }
 
+a img {
+  display: block;
+}
 /* プロフィールフロートボタン */
 .profile-float {
   position: fixed;
