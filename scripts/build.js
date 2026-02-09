@@ -256,19 +256,59 @@ function extractYouTubeId(url) {
   return (match && match[7].length === 11) ? match[7] : null;
 }
 
-// トップページを生成する関数
+// --- 補助関数：YouTube変換とLCP最適化用 ---
+
+function getProcessedThumb(thumbUrl) {
+  if (!thumbUrl) return { url: '', isYoutube: false };
+
+  const isYoutube = typeof thumbUrl === "string" &&
+    (thumbUrl.includes("youtube.com") || thumbUrl.includes("youtu.be"));
+
+  if (isYoutube) {
+    const videoId = extractYouTubeId(thumbUrl);
+    // YouTubeサムネイルはhqdefaultを使用
+    return {
+      url: videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : thumbUrl,
+      isYoutube: true
+    };
+  }
+  
+  return { url: thumbUrl, isYoutube: false };
+}
+
+// --- トップページを生成する関数（最適化版） ---
+
 function generateIndexPage(works) {
   const indexTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'index.html'), 'utf8');
   
-  // 作品グリッドを生成
   let worksGrid = '';
-  works.forEach(work => {
+  works.forEach((work, index) => {
+    const thumbInfo = getProcessedThumb(work.thumb);
+    
+    // YouTubeの場合の黒帯対策
+    const imgStyle = thumbInfo.isYoutube ? 'style="transform: scale(1.02);"' : '';
+
+    /**
+     * 🚀 Lighthouse LCP最適化ロジック
+     * 最初の4枚（1列分程度）は即時読み込み対象とする
+     */
+    const isPriority = index < 4; 
+    const loadingAttr = isPriority ? '' : 'loading="lazy"';
+    const fetchPriority = isPriority ? 'fetchpriority="high"' : '';
+    // decoding="async" はすべての画像に付与してメインスレッドを解放
+    const decodingAttr = 'decoding="async"';
+
     const workItem = `
       <div class="post" data-tags="${work.tags ? work.tags.join(' ') : ''}">
         <div class="post-inner">
           <a href="works/${work.id}.html" class="post-content-anchor">
             <div class="post-thumb">
-              <img src="${work.thumb || ''}" alt="${work.title}" loading="lazy">
+              <img src="${thumbInfo.url}" 
+                   ${imgStyle} 
+                   alt="${work.title}" 
+                   ${loadingAttr} 
+                   ${fetchPriority} 
+                   ${decodingAttr}>
             </div>
             <div class="post-content">
               <h2 class="post-title">${work.title}</h2>
@@ -282,7 +322,7 @@ function generateIndexPage(works) {
   
   const html = indexTemplate.replace('{{WORKS_GRID}}', worksGrid);
   fs.writeFileSync(path.join(DIST_DIR, 'index.html'), html);
-  console.log('Generated: index.html');
+  console.log('Generated: index.html with LCP optimizations');
 }
 
 // プロフィールページを生成する関数

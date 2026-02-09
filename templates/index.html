@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="lang-en-active">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f5f5f5">
   
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-FQKWDTGQB2"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -20,14 +19,12 @@
   <meta name="keywords" content="slvgallo, slv">
   <meta name="author" content="slvgallo">
   
-  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://slvgallo.github.io/">
   <meta property="og:title" content="slvgallo">
   <meta property="og:description" content="Online Portfolio by slvgallo">
   <meta property="og:image" content="https://slvgallo.github.io/img/common/slv.svg">
   
-  <!-- X -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://slvgallo.github.io/">
   <meta name="twitter:title" content="slvgallo">
@@ -36,16 +33,24 @@
   
   <link rel="preconnect" href="https://res.cloudinary.com">
   <link rel="preconnect" href="https://img.youtube.com">
-  <link rel="preconnect" href="https://w.soundcloud.com">
-  <link rel="preconnect" href="https://api.soundcloud.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.1.1/dist/css/yakuhanjp.css">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" as="style">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
+  
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.1.1/dist/css/yakuhanjp.css" as="style">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.1.1/dist/css/yakuhanjp.css" media="print" onload="this.media='all'">
+
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.1.1/dist/css/yakuhanjp.css">
+  </noscript>
   
   <link rel="icon" href="img/common/slv.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/style.css">
-  
+
   <script type="module" src="js/app.js"></script>
 </head>
 <body class="page-index">
@@ -95,12 +100,10 @@
 </div>
 
 
-<!-- プロフィールフロートボタン -->
 <a href="profile.html" class="profile-float">
   <img src="img/common/slv.svg" alt="Profile">
 </a>
 
-<!-- フッター -->
 <footer class="site-footer">
   <div class="l-container">
     <div style="text-align: center;">
