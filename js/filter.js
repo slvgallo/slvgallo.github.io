@@ -95,9 +95,7 @@ grid.appendChild(article);
 state.data.displayedCount = endIndex;
 
 } catch (error) {
-
-console.error("Error loading items:", error);
-
+  // エラー処理のみ（コンソール出力なし）
 } finally {
 
 state.data.isLoading = false;
