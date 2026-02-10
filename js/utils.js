@@ -1,7 +1,10 @@
 // 共通ユーティリティ関数
 
-// YouTube IDを抽出する関数
+/**
+ * YouTube IDを抽出する関数
+ */
 export function extractYouTubeId(url) {
+  if (!url) return null;
   const patterns = [
     // 通常のYouTube動画
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
@@ -17,4 +20,23 @@ export function extractYouTubeId(url) {
     }
   }
   return null;
+}
+
+/**
+ * Cloudinaryの画像URLを最適化する
+ */
+export function getOptimizedImageUrl(url, isYoutube) {
+  if (!url || isYoutube) return url;
+  
+  if (url.includes('cloudinary.com')) {
+    // すでに変換パラメータがある場合は二重に付けないようにチェック
+    if (url.includes('/upload/') && !url.includes('f_auto')) {
+      // f_auto: WebP化, q_auto: 画質最適化, w_800: 幅リサイズ, c_fill: 指定サイズで埋める
+      // 16:9比率を保ちたい場合は ar_16:9,c_fill を追加
+      const params = 'f_auto,q_auto,w_800,c_fill,ar_16:9';
+      return url.replace('/upload/', `/upload/${params}/`);
+    }
+  }
+  
+  return url;
 }

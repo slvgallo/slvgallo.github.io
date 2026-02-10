@@ -86,6 +86,7 @@ img {
 a img {
   display: block;
 }
+
 /* プロフィールフロートボタン */
 .profile-float {
   position: fixed;
@@ -221,24 +222,6 @@ a img {
 @media (min-width: 768px) {
   .header {
     padding: 5em 0;
-  }
-
-  .header.scrolled {
-    padding-top: 1em;
-    padding-top: calc(1em + env(safe-area-inset-top));
-    padding-bottom: 1em;
-  }
-}
-
-@media (min-width: 1200px) {
-  .header {
-    padding: 5em 0;
-  }
-
-  .header.scrolled {
-    padding-top: 1em;
-    padding-top: calc(1em + env(safe-area-inset-top));
-    padding-bottom: 1em;
   }
 }
 
@@ -475,7 +458,7 @@ a img {
     transform: rotate(45deg) translate(-5px, -6px);
   }
 
-  
+
   .l-container.full-image {
     margin: 0 auto 20px auto;
     padding: 0 20px 0 20px;
@@ -554,7 +537,7 @@ a img {
     margin-bottom: 0;
   }
 
-  
+
   .l-container.full-image .video-wrap {
     margin-bottom: 20px;
   }
@@ -701,6 +684,7 @@ a img {
   cursor: pointer;
   background: transparent;
 }
+
 .post-content-anchor:hover .soundcloud-thumb iframe,
 .post-content-anchor:hover .soundcloud-thumb img {
   opacity: 0.75;
@@ -830,20 +814,14 @@ a img {
 @media (min-width: 768px) {
   .l-container.full-image {
     width: calc(100% - 40px);
-    max-width: min(calc(1320px - 0px), calc(100vh * 1.2));
+    max-width: min(1320px, calc(100vh * 1.2));
     padding-left: 20px;
     padding-right: 20px;
     margin: 0 auto;
   }
 
-  .l-container.full-image img {
-    max-width: 100%;
-  }
-
-  .l-container.full-image iframe {
-    max-width: 100%;
-  }
-
+  .l-container.full-image img,
+  .l-container.full-image iframe,
   .l-container.full-image .video-wrap {
     max-width: 100%;
   }
@@ -852,8 +830,6 @@ a img {
 @media (min-width: 1320px) {
   .l-container.full-image {
     width: min(1320px, calc(100vh * 1.2));
-    padding-left: 20px;
-    padding-right: 20px;
   }
 }
 
@@ -1090,12 +1066,12 @@ a img {
 }
 
 /* image2column の直後に別コンテンツがある場合のみ余白を付与 */
-.page-permalink #project-media .image2column-wrap + * {
+.page-permalink #project-media .image2column-wrap+* {
   margin-top: 20px;
 }
 
 @media (max-width: 767px) {
-  .page-permalink #project-media .image2column-wrap + * {
+  .page-permalink #project-media .image2column-wrap+* {
     margin-top: 20px;
   }
 }
@@ -1153,15 +1129,10 @@ a img {
 }
 
 @media (min-width: 768px) {
+
   #project-media img,
-  #project-media a img {
-    margin-bottom: 20px;
-  }
-  
-  #project-media iframe {
-    margin-bottom: 20px;
-  }
-  
+  #project-media a img,
+  #project-media iframe,
   #project-media p {
     margin-bottom: 20px;
   }
@@ -1230,6 +1201,7 @@ a img {
 
 /* Flickr写真のPC表示向け調整 */
 @media (min-width: 768px) {
+
   /* Flickr写真（staticflickr.com）を含む画像の高さを制限 */
   .l-container.full-image img[src*="staticflickr.com"],
   .l-container.full-image a img[src*="staticflickr.com"],

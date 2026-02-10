@@ -1,28 +1,43 @@
-import { getOptimizedImageUrl } from './data.js';
+import { getOptimizedImageUrl } from './utils.js';
 
-// --- 変更点: インデックス（何番目の要素か）を引数に追加 ---
+/**
+ * 作品アイテム（記事）のHTML要素を作成する
+ * @param {Object} work - 作品データ
+ * @param {number} index - インデックス（LCP最適化のため）
+ */
 export function createWorkItem(work, index = 100) { 
   const article = document.createElement("article");
   article.className = "post index-post";
-  article.dataset.tags = work.tags.join(" ");
+  article.dataset.tags = work.tags ? work.tags.join(" ") : "";
 
   const postInner = document.createElement("div");
   postInner.className = "post-inner";
 
   const link = document.createElement("a");
-  if (window.slvEnv === 'static') {
-    link.href = `works/${work.id}.html`;
-  } else {
-    link.href = `works.html?id=${work.id}`;
-  }
+  // 静的サイト構成のため /works/ フォルダへのリンク
+  link.href = `works/${work.id}.html`;
   link.className = "post-content-anchor";
 
-  const thumb = document.createElement("div");
-  thumb.className = "post-photo-thumb";
+  const thumbContainer = document.createElement("div");
+  thumbContainer.className = "post-photo-thumb";
   
-  // SoundCloudの場合...
+  // SoundCloudサムネイルの特殊処理（既存互換）
   if (work.thumb && work.thumb.includes('soundcloud.com')) {
-    // ...（中略）...
+    const iframe = document.createElement('iframe');
+    const scId = work.media && work.media.find(m => m.type === 'soundcloud')?.src;
+    iframe.src = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${scId}&color=%23000000&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true&sharing=false`;
+    iframe.width = "100%";
+    iframe.height = "300";
+    iframe.frameBorder = "no";
+    iframe.scrolling = "no";
+    iframe.allow = "autoplay";
+    iframe.style.pointerEvents = "none";
+    
+    const overlay = document.createElement('div');
+    overlay.className = "soundcloud-overlay";
+    
+    thumbContainer.appendChild(iframe);
+    thumbContainer.appendChild(overlay);
   } else {
     // 通常の画像サムネイル
     const thumbUrl = getOptimizedImageUrl(work.thumb, work.isYoutubeThumb);
@@ -31,25 +46,34 @@ export function createWorkItem(work, index = 100) {
     img.src = thumbUrl;
     img.alt = work.title;
     
-    // --- 🚀 修正ポイント: LCP最適化 ---
-    // 最初の4枚（index 0,1,2,3）は lazy を外して fetchpriority="high" を設定
+    // LCP最適化
     if (index < 4) {
-      img.loading = "eager"; // 明示的に即時読み込み
-      img.fetchPriority = "high"; // ダウンロード優先度を最高に
-      img.decoding = "sync"; // デコードを同期的に（画像表示を優先）
+      img.loading = "eager";
+      img.fetchPriority = "high";
+      img.decoding = "sync";
     } else {
-      img.loading = "lazy"; // それ以外は遅延読み込み
+      img.loading = "lazy";
       img.decoding = "async";
     }
-    // ---------------------------------
     
-    // YouTubeサムネイルのみtransformを適用
-    img.style.transform = work.isYoutubeThumb ? "scale(1.02)" : "scale(1.0)";
+    if (work.isYoutubeThumb) {
+      img.style.transform = "scale(1.02)";
+    }
     
-    thumb.appendChild(img);
+    thumbContainer.appendChild(img);
   }
 
-  link.appendChild(thumb);
+  const contentContainer = document.createElement("div");
+  contentContainer.className = "post-content";
+  
+  const title = document.createElement("h2");
+  title.className = "post-title";
+  title.textContent = work.title;
+  
+  contentContainer.appendChild(title);
+  
+  link.appendChild(thumbContainer);
+  link.appendChild(contentContainer);
   postInner.appendChild(link);
   article.appendChild(postInner);
   
