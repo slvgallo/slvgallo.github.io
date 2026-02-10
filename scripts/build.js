@@ -1,260 +1,460 @@
 const fs = require('fs-extra');
 const path = require('path');
+const {
+  extractYouTubeId,
+  optimizeCloudinaryUrl,
+  optimizeCloudinaryIndexUrl
+} = require('./shared-utils');
 
-// --- 追加: Cloudinary URLの最適化関数 ---
-function optimizeCloudinaryUrl(url) {
-  if (typeof url === 'string' && url.includes('cloudinary.com')) {
-    // すでにf_autoが含まれている場合は重複しないようにチェック
-    if (url.includes('/upload/') && !url.includes('f_auto')) {
-      // /upload/ の直後に最適化パラメータ f_auto(WebP化), q_auto(画質自動調整) を挿入
-      return url.replace('/upload/', '/upload/f_auto,q_auto/');
-    }
-  }
-  return url;
-}
-
-// --- 追加: インデックス用Cloudinary URLの最適化関数 ---
-function optimizeCloudinaryIndexUrl(url) {
-  if (typeof url === 'string' && url.includes('cloudinary.com')) {
-    // すでにf_webpが含まれている場合は重複しないようにチェック
-    if (url.includes('/upload/') && !url.includes('f_webp')) {
-      // w_600: 幅600pxに制限, c_limit: 元の比率を維持, f_webp: WebP形式, q_auto: 画質自動調整
-      return url.replace('/upload/', '/upload/w_600,c_limit,f_webp,q_auto/');
-    }
-  }
-  
-  // Flickr画像の最適化（インデックス用：_b.jpg → _z.jpg）
-  if (typeof url === 'string' && url.includes('staticflickr.com')) {
-    return url.replace(/_b\.jpg$/, '_z.jpg');
-  }
-  
-  return url;
-}
-
-// ES Modulesを動的にインポートするための設定
-async function loadWorks() {
-  const { loadWorks } = await import(path.join(__dirname, '..', 'js', 'data.js'));
-  return await loadWorks();
-}
-
-const SRC_DIR = path.join(__dirname, '..');
-const DIST_DIR = path.join(SRC_DIR, 'dist');
-const DATA_DIR = path.join(SRC_DIR, 'data');
-const TEMPLATES_DIR = path.join(SRC_DIR, 'templates');
-
-function generateDateFromId(id) {
-  if (id.length >= 4) {
-    const yearMonth = id.substring(0, 4);
-    const year = yearMonth.substring(0, 2);
-    const month = yearMonth.substring(2, 4);
-    const fullYear = `20${year}`;
-    const monthNames = {
-      '01': 'JAN', '02': 'FEB', '03': 'MAR', '04': 'APR',
-      '05': 'MAY', '06': 'JUNE', '07': 'JULY', '08': 'AUG',
-      '09': 'SEPT', '10': 'OCT', '11': 'NOV', '12': 'DEC'
+class SiteBuilder {
+  constructor() {
+    this.config = {
+      srcDir: path.join(__dirname, '..'),
+      distDir: path.join(__dirname, '..', 'dist'),
+      dataDir: path.join(__dirname, '..', 'data'),
+      templatesDir: path.join(__dirname, '..', 'templates')
     };
-    return `${monthNames[month] || month} ${fullYear}`;
-  }
-  return id;
-}
-
-function replaceTemplate(template, work) {
-  const tagsText = work.tags ? work.tags.map(tag => `#${tag}`).join(' ') : '';
-  const tagsHtml = work.tags ? work.tags.map(tag => `<a href="../index.html?filter=${tag}" class="project-tag">#${tag}</a>`).join(' ') : '';
-  const thumbInfo = getProcessedThumb(work.thumb);
-  const optimizedThumb = optimizeCloudinaryUrl(thumbInfo.url || work.thumb || '');
-
-  return template
-    .replace(/\{\{ID\}\}/g, work.id)
-    .replace(/\{\{TITLE\}\}/g, work.title)
-    .replace(/\{\{DESC\}\}/g, (work.desc || '').replace(/\n/g, '<br>'))
-    .replace(/\{\{DATE\}\}/g, generateDateFromId(work.id))
-    .replace(/\{\{THUMB\}\}/g, optimizedThumb)
-    .replace(/\{\{TAGS_TEXT\}\}/g, tagsText)
-    .replace(/\{\{TAGS_HTML\}\}/g, tagsHtml);
-}
-
-// 作品個別ページの生成（1枚目のメディアをLCP最適化）
-function generateWorkPages(works) {
-  const workTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'work.html'), 'utf8');
-  const worksDir = path.join(DIST_DIR, 'works');
-  fs.ensureDirSync(worksDir);
-  
-  works.forEach(work => {
-    let html = replaceTemplate(workTemplate, work);
-    let fullMediaContent = '';
-    let contentMediaContent = '';
     
-    if (work.media && Array.isArray(work.media)) {
-      work.media.forEach((mediaItem, index) => {
-        // 最初のメディア(index 0)は優先読み込み対象
-        const mediaHTML = generateMediaHTML(mediaItem, index === 0);
-        if (index === 0) {
-          fullMediaContent = mediaHTML;
-        } else {
-          contentMediaContent += mediaHTML;
-        }
-      });
+    this.stats = {
+      pages: 0,
+      images: 0,
+      errors: []
+    };
+  }
+
+  /**
+   * 日付生成
+   */
+  generateDateFromId(id) {
+    if (id.length >= 4) {
+      const year = id.substring(0, 2);
+      const month = id.substring(2, 4);
+      const fullYear = `20${year}`;
+      
+      const monthNames = {
+        '01': 'JAN', '02': 'FEB', '03': 'MAR', '04': 'APR',
+        '05': 'MAY', '06': 'JUNE', '07': 'JULY', '08': 'AUG',
+        '09': 'SEPT', '10': 'OCT', '11': 'NOV', '12': 'DEC'
+      };
+      
+      return `${monthNames[month] || month} ${fullYear}`;
     }
-    html = html.replace('{{FULL_MEDIA_CONTENT}}', fullMediaContent);
-    html = html.replace('{{MEDIA_CONTENT}}', contentMediaContent);
-    fs.writeFileSync(path.join(worksDir, `${work.id}.html`), html);
-  });
-}
+    return id;
+  }
 
-// メディアHTML生成（WebP化 + LCP対応）
-function generateMediaHTML(mediaItem, isPriority = false) {
-  const loading = isPriority ? '' : 'loading="lazy"';
-  const priority = isPriority ? 'fetchpriority="high"' : '';
-  const decoding = isPriority ? 'decoding="sync"' : 'decoding="async"';
+  /**
+   * サムネイル情報取得
+   */
+  getProcessedThumb(thumbUrl) {
+    if (!thumbUrl) return { url: '', isYoutube: false };
+    
+    const isYoutube = typeof thumbUrl === "string" && 
+      (thumbUrl.includes("youtube.com") || thumbUrl.includes("youtu.be"));
+    
+    if (isYoutube) {
+      const videoId = extractYouTubeId(thumbUrl);
+      return {
+        url: videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : thumbUrl,
+        isYoutube: true
+      };
+    }
+    
+    return {
+      url: optimizeCloudinaryIndexUrl(thumbUrl),
+      isYoutube: false
+    };
+  }
 
-  switch (mediaItem.type) {
-    case 'image':
-      if (Array.isArray(mediaItem.src)) {
-        return mediaItem.src.map(src => 
-          `<img src="${optimizeCloudinaryUrl(src)}" alt="Project image" ${loading} ${priority} ${decoding}>`
+  /**
+   * メディアHTML生成
+   */
+  generateMediaHTML(mediaItem, isPriority = false) {
+    const loading = isPriority ? '' : 'loading="lazy"';
+    const priority = isPriority ? 'fetchpriority="high"' : '';
+    const decoding = isPriority ? 'decoding="sync"' : 'decoding="async"';
+
+    switch (mediaItem.type) {
+      case 'image':
+        const src = Array.isArray(mediaItem.src) ? mediaItem.src : [mediaItem.src];
+        return src.map(s => 
+          `<img src="${optimizeCloudinaryUrl(s)}" alt="Project image" ${loading} ${priority} ${decoding}>`
         ).join('');
-      }
-      return `<img src="${optimizeCloudinaryUrl(mediaItem.src)}" alt="Project image" ${loading} ${priority} ${decoding}>`;
-    
-    case 'image2column':
-      if (Array.isArray(mediaItem.src)) {
-        return `<div class="image2column-wrap" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-          ${mediaItem.src.map(src => `<img src="${optimizeCloudinaryUrl(src)}" alt="Project image" loading="lazy" style="width: 100%; height: auto;">`).join('')}
+      
+      case 'image2column':
+        if (Array.isArray(mediaItem.src)) {
+          return `<div class="image2column-wrap" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            ${mediaItem.src.map(s => 
+              `<img src="${optimizeCloudinaryUrl(s)}" alt="Project image" loading="lazy" style="width: 100%; height: auto;">`
+            ).join('')}
+          </div>`;
+        }
+        return '';
+      
+      case 'photo':
+        const optimizedSrc = optimizeCloudinaryUrl(mediaItem.src);
+        const img = `<img src="${optimizedSrc}" alt="Photo" ${loading}>`;
+        
+        if (mediaItem.src.includes('flickr.com')) {
+          const flickrMatch = mediaItem.src.match(/\/photos\/[^\/]+\/(\d+)/) || 
+                            mediaItem.src.match(/\/(\d+)_[^_]+_b\.jpg$/);
+          if (flickrMatch) {
+            return `<a href="https://www.flickr.com/photos/slvgallo/${flickrMatch[1]}/" target="_blank" rel="noopener noreferrer">${img}</a>`;
+          }
+        }
+        return img;
+      
+      case 'video':
+        const videoId = extractYouTubeId(mediaItem.src);
+        if (!videoId) return '';
+        
+        return `<div class="video-wrap" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+          <iframe 
+            src="https://www.youtube.com/embed/${videoId}" 
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+            frameborder="0" 
+            allowfullscreen 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            ${loading}>
+          </iframe>
         </div>`;
-      }
-      break;
-    
-    case 'photo':
-      const optimizedSrc = optimizeCloudinaryUrl(mediaItem.src);
-      const img = `<img src="${optimizedSrc}" alt="Flickr photo" ${loading}>`;
-      // Flickrリンク処理は維持
-      if (mediaItem.src.includes('flickr.com')) {
-        const flickrMatch = mediaItem.src.match(/\/photos\/[^\/]+\/(\d+)/) || mediaItem.src.match(/\/(\d+)_[^_]+_b\.jpg$/);
-        if (flickrMatch) return `<a href="https://www.flickr.com/photos/slvgallo/${flickrMatch[1]}/" target="_blank" rel="noopener noreferrer">${img}</a>`;
-      }
-      return img;
-    
-    case 'video':
-      const videoId = extractYouTubeId(mediaItem.src);
-      return videoId ? `<div class="video-wrap" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;"><iframe src="https://www.youtube.com/embed/${videoId}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div>` : '';
 
-    // ... その他のケース(soundcloud, processing等)は元のロジックを維持 ...
-    case 'soundcloud':
-      let scSrc = mediaItem.src;
-      if (/^\d+$/.test(scSrc)) scSrc = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${scSrc}&color=%230b0b0b&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true&sharing=false`;
-      return `<div style="position: relative; padding-bottom: 66.67%; height: 0; overflow: hidden;"><iframe src="${scSrc}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"></iframe></div>`;
-    
-    case 'processing':
-      let prSrc = mediaItem.src;
-      if (prSrc.includes('openprocessing.org/sketch/') && !prSrc.endsWith('/embed/')) {
-        const skId = prSrc.split('/sketch/')[1].split('/')[0];
-        prSrc = `https://openprocessing.org/sketch/${skId}/embed/`;
-      }
-      return `<div class="processing-wrap"><iframe src="${prSrc}" frameborder="0" allowfullscreen></iframe></div>`;
+      case 'soundcloud':
+        let scSrc = mediaItem.src;
+        if (/^\d+$/.test(scSrc)) {
+          scSrc = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${scSrc}&color=%230b0b0b&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true&sharing=false`;
+        }
+        return `<div style="position: relative; padding-bottom: 66.67%; height: 0; overflow: hidden;">
+          <iframe src="${scSrc}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"></iframe>
+        </div>`;
+      
+      case 'processing':
+        let prSrc = mediaItem.src;
+        if (prSrc.includes('openprocessing.org/sketch/') && !prSrc.endsWith('/embed/')) {
+          const skId = prSrc.split('/sketch/')[1].split('/')[0];
+          prSrc = `https://openprocessing.org/sketch/${skId}/embed/`;
+        }
+        return `<div class="processing-wrap">
+          <iframe src="${prSrc}" frameborder="0" allowfullscreen></iframe>
+        </div>`;
 
-    case 'sketchfab':
-      let sfSrc = mediaItem.src;
-      if (sfSrc.includes('/embed')) sfSrc += (sfSrc.includes('?') ? '&' : '?') + 'autospin=1&autostart=1&preload=1';
-      return `<div class="sketchfab-wrap"><iframe src="${sfSrc}" frameborder="0" allowfullscreen mozallowfullscreen="true" onmozallowfullscreen="true" webkitallowfullscreen="true" onwebkitallowfullscreen="true"></iframe></div>`;
+      case 'sketchfab':
+        let sfSrc = mediaItem.src;
+        if (sfSrc.includes('/embed')) {
+          sfSrc += (sfSrc.includes('?') ? '&' : '?') + 'autospin=1&autostart=1&preload=1';
+        }
+        return `<div class="sketchfab-wrap">
+          <iframe src="${sfSrc}" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+        </div>`;
 
-    case 'html':
-      let hSrc = mediaItem.src.startsWith('/works/') ? mediaItem.src.replace('/works/', '../works/') : mediaItem.src;
-      return `<div class="html-wrap"><iframe src="${hSrc}" frameborder="0" allowfullscreen></iframe></div>`;
-    
-    default: return '';
+      case 'html':
+        const hSrc = mediaItem.src.startsWith('/works/') 
+          ? mediaItem.src.replace('/works/', '../works/') 
+          : mediaItem.src;
+        return `<div class="html-wrap">
+          <iframe src="${hSrc}" frameborder="0" allowfullscreen></iframe>
+        </div>`;
+      
+      default:
+        console.warn(`Unknown media type: ${mediaItem.type}`);
+        return '';
+    }
   }
-}
 
-function extractYouTubeId(url) {
-  const shortsMatch = url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/);
-  if (shortsMatch) return shortsMatch[1];
-  const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-  const match = url.match(regExp);
-  return (match && match[7].length === 11) ? match[7] : null;
-}
+  /**
+   * サムネイルコンテンツ生成
+   */
+  generateThumbContent(work, thumbInfo, isPriority) {
+    const imgStyle = thumbInfo.isYoutube ? 'style="transform: scale(1.02);"' : '';
+    const loading = isPriority ? '' : 'loading="lazy"';
+    const priority = isPriority ? 'fetchpriority="high"' : '';
+    const decoding = isPriority ? 'decoding="sync"' : 'decoding="async"';
 
-function getProcessedThumb(thumbUrl) {
-  if (!thumbUrl) return { url: '', isYoutube: false };
-  const isYoutube = typeof thumbUrl === "string" && (thumbUrl.includes("youtube.com") || thumbUrl.includes("youtu.be"));
-  if (isYoutube) {
-    const videoId = extractYouTubeId(thumbUrl);
-    return { url: videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : thumbUrl, isYoutube: true };
+    // SoundCloud特殊処理
+    if (work.thumb && work.thumb.includes('soundcloud.com')) {
+      const sc = work.media && work.media.find(m => m.type === 'soundcloud');
+      if (sc) {
+        return `<iframe 
+          src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${sc.src}&color=%23000000&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true&sharing=false" 
+          width="100%" 
+          height="300" 
+          frameborder="no" 
+          scrolling="no" 
+          allow="autoplay" 
+          style="pointer-events: none;">
+        </iframe>
+        <div class="soundcloud-overlay"></div>`;
+      }
+    }
+    
+    return `<img src="${optimizeCloudinaryIndexUrl(thumbInfo.url)}" ${imgStyle} alt="${work.title}" ${loading} ${priority} ${decoding}>`;
   }
-  return { url: optimizeCloudinaryIndexUrl(thumbUrl), isYoutube: false };
-}
 
-function generateThumbContent(work, thumbInfo, isPriority) {
-  const imgStyle = thumbInfo.isYoutube ? 'style="transform: scale(1.02);"' : '';
-  const loading = isPriority ? '' : 'loading="lazy"';
-  const priority = isPriority ? 'fetchpriority="high"' : '';
-  const decoding = isPriority ? 'decoding="sync"' : 'decoding="async"';
+  /**
+   * テンプレート置換
+   */
+  replaceTemplate(template, work) {
+    const tagsText = work.tags ? work.tags.map(tag => `#${tag}`).join(' ') : '';
+    const tagsHtml = work.tags 
+      ? work.tags.map(tag => `<a href="../index.html?filter=${tag}" class="project-tag">#${tag}</a>`).join(' ') 
+      : '';
+    
+    const thumbInfo = this.getProcessedThumb(work.thumb);
+    const optimizedThumb = optimizeCloudinaryUrl(thumbInfo.url || work.thumb || '');
 
-  if (work.thumb && work.thumb.includes('soundcloud.com')) {
-    const sc = work.media && work.media.find(m => m.type === 'soundcloud');
-    if (sc) return `<iframe src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A${sc.src}&color=%23000000&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true&sharing=false" width="100%" height="300" frameborder="no" scrolling="no" allow="autoplay" style="pointer-events: none;"></iframe><div class="soundcloud-overlay"></div>`;
+    return template
+      .replace(/\{\{ID\}\}/g, work.id)
+      .replace(/\{\{TITLE\}\}/g, work.title)
+      .replace(/\{\{DESC\}\}/g, (work.desc || '').replace(/\n/g, '<br>'))
+      .replace(/\{\{DATE\}\}/g, this.generateDateFromId(work.id))
+      .replace(/\{\{THUMB\}\}/g, optimizedThumb)
+      .replace(/\{\{TAGS_TEXT\}\}/g, tagsText)
+      .replace(/\{\{TAGS_HTML\}\}/g, tagsHtml);
   }
-  
-  return `<img src="${optimizeCloudinaryIndexUrl(thumbInfo.url)}" ${imgStyle} alt="${work.title}" ${loading} ${priority} ${decoding}>`;
-}
 
-function generateIndexPage(works) {
-  const indexTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'index.html'), 'utf8');
-  let worksGrid = '';
-  works.forEach((work, index) => {
-    const thumbInfo = getProcessedThumb(work.thumb);
-    const isPriority = index < 4; // 最初の4枚をLCP最適化
+  /**
+   * 作品ページ生成
+   */
+  generateWorkPages(works) {
+    console.log('📄 Generating work pages...');
+    
+    const workTemplate = fs.readFileSync(
+      path.join(this.config.templatesDir, 'work.html'), 
+      'utf8'
+    );
+    
+    const worksDir = path.join(this.config.distDir, 'works');
+    fs.ensureDirSync(worksDir);
+    
+    works.forEach(work => {
+      try {
+        let html = this.replaceTemplate(workTemplate, work);
+        let fullMediaContent = '';
+        let contentMediaContent = '';
+        
+        if (work.media && Array.isArray(work.media)) {
+          work.media.forEach((mediaItem, index) => {
+            const mediaHTML = this.generateMediaHTML(mediaItem, index === 0);
+            if (index === 0) {
+              fullMediaContent = mediaHTML;
+            } else {
+              contentMediaContent += mediaHTML;
+            }
+          });
+        }
+        
+        html = html.replace('{{FULL_MEDIA_CONTENT}}', fullMediaContent);
+        html = html.replace('{{MEDIA_CONTENT}}', contentMediaContent);
+        
+        fs.writeFileSync(
+          path.join(worksDir, `${work.id}.html`),
+          html
+        );
+        
+        this.stats.pages++;
+      } catch (error) {
+        console.error(`Error generating page for ${work.id}:`, error.message);
+        this.stats.errors.push({ work: work.id, error: error.message });
+      }
+    });
+    
+    console.log(`   ✓ Generated ${this.stats.pages} work pages`);
+  }
 
-    worksGrid += `
+  /**
+   * インデックスページ生成
+   */
+  generateIndexPage(works) {
+    console.log('📄 Generating index page...');
+    
+    const indexTemplate = fs.readFileSync(
+      path.join(this.config.templatesDir, 'index.html'), 
+      'utf8'
+    );
+    
+    let worksGrid = '';
+    works.forEach((work, index) => {
+      const thumbInfo = this.getProcessedThumb(work.thumb);
+      const isPriority = index < 4;
+
+      worksGrid += `
       <article class="post index-post" data-tags="${work.tags ? work.tags.join(' ') : ''}">
         <div class="post-inner">
           <a href="works/${work.id}.html" class="post-content-anchor">
-            <div class="post-photo-thumb">${generateThumbContent(work, thumbInfo, isPriority)}</div>
+            <div class="post-photo-thumb">${this.generateThumbContent(work, thumbInfo, isPriority)}</div>
             <div class="post-content"><h2 class="post-title">${work.title}</h2></div>
           </a>
         </div>
       </article>`;
-  });
-  fs.writeFileSync(path.join(DIST_DIR, 'index.html'), indexTemplate.replace('{{WORKS_GRID}}', worksGrid));
-  console.log('Generated: index.html with Cloudinary WebP & LCP optimizations');
-}
+    });
+    
+    fs.writeFileSync(
+      path.join(this.config.distDir, 'index.html'),
+      indexTemplate.replace('{{WORKS_GRID}}', worksGrid)
+    );
+    
+    console.log('   ✓ Generated index.html');
+  }
 
-// ... 以降、generateProfilePage, copyAssets, build 関数などは元のままでOK ...
-// (紙面の都合上、主要な変更部分のみ記載しています)
-function generateProfilePage() {
-  const profileTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'profile.html'), 'utf8');
-  fs.writeFileSync(path.join(DIST_DIR, 'profile.html'), profileTemplate);
-}
+  /**
+   * プロフィールページ生成
+   */
+  generateProfilePage() {
+    console.log('📄 Generating profile page...');
+    
+    const profileTemplate = fs.readFileSync(
+      path.join(this.config.templatesDir, 'profile.html'), 
+      'utf8'
+    );
+    
+    fs.writeFileSync(
+      path.join(this.config.distDir, 'profile.html'),
+      profileTemplate
+    );
+    
+    console.log('   ✓ Generated profile.html');
+  }
 
-function copyAssets() {
-  ['css', 'js', 'img'].forEach(asset => {
-    const src = path.join(SRC_DIR, asset);
-    if (fs.existsSync(src)) fs.copySync(src, path.join(DIST_DIR, asset));
-  });
-  if (fs.existsSync(path.join(SRC_DIR, 'works'))) fs.copySync(path.join(SRC_DIR, 'works'), path.join(DIST_DIR, 'works'));
-  fs.copySync(path.join(DATA_DIR, 'works.json'), path.join(DIST_DIR, 'data', 'works.json'));
-  if (fs.existsSync(path.join(SRC_DIR, 'sitemap.xml'))) fs.copySync(path.join(SRC_DIR, 'sitemap.xml'), path.join(DIST_DIR, 'sitemap.xml'));
-}
+  /**
+   * アセットコピー
+   */
+  copyAssets() {
+    console.log('📦 Copying assets...');
+    
+    const assets = ['css', 'js', 'img', 'data'];
+    assets.forEach(asset => {
+      const src = path.join(this.config.srcDir, asset);
+      const dest = path.join(this.config.distDir, asset);
+      
+      if (fs.existsSync(src)) {
+        fs.copySync(src, dest);
+        console.log(`   ✓ Copied ${asset}/`);
+      }
+    });
+    
+    // worksディレクトリ内の静的ファイル（HTMLファイル以外）をコピー
+    const worksSrc = path.join(this.config.srcDir, 'works');
+    if (fs.existsSync(worksSrc)) {
+      const files = fs.readdirSync(worksSrc);
+      files.forEach(file => {
+        if (!file.endsWith('.html')) {
+          fs.copySync(
+            path.join(worksSrc, file),
+            path.join(this.config.distDir, 'works', file)
+          );
+        }
+      });
+    }
+    
+    // sitemap.xml
+    const sitemapSrc = path.join(this.config.srcDir, 'sitemap.xml');
+    if (fs.existsSync(sitemapSrc)) {
+      fs.copySync(sitemapSrc, path.join(this.config.distDir, 'sitemap.xml'));
+      console.log('   ✓ Copied sitemap.xml');
+    }
+  }
 
-const { generateSitemap } = require('./generate-sitemap');
+  /**
+   * サイトマップ生成
+   */
+  generateSitemap(works) {
+    console.log('🗺️  Generating sitemap...');
+    
+    const now = new Date().toISOString();
+    
+    let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://slvgallo.github.io/</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>https://slvgallo.github.io/profile.html</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+`;
+    
+    works.forEach(work => {
+      sitemap += `  <url>
+    <loc>https://slvgallo.github.io/works/${work.id}.html</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+`;
+    });
+    
+    sitemap += `</urlset>`;
+    
+    fs.writeFileSync(
+      path.join(this.config.distDir, 'sitemap.xml'),
+      sitemap
+    );
+    
+    console.log(`   ✓ Generated sitemap with ${2 + works.length} URLs`);
+  }
 
-async function build() {
-  try {
-    console.log('🚀 Starting build process...');
-    fs.emptyDirSync(DIST_DIR);
-    const works = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'works.json'), 'utf8'));
-    generateWorkPages(works);
-    generateIndexPage(works);
-    generateProfilePage();
-    generateSitemap();
-    copyAssets();
-    console.log('✅ Build completed successfully!');
-  } catch (error) {
-    console.error('❌ Build failed:', error);
-    process.exit(1);
+  /**
+   * ビルド統計表示
+   */
+  printStats(duration) {
+    console.log('\n📊 Build Statistics:');
+    console.log(`   Duration: ${duration}ms`);
+    console.log(`   Pages: ${this.stats.pages}`);
+    
+    if (this.stats.errors.length > 0) {
+      console.log('\n⚠️  Errors:');
+      this.stats.errors.forEach(err => {
+        console.log(`   - ${err.work}: ${err.error}`);
+      });
+    }
+  }
+
+  /**
+   * ビルド実行
+   */
+  async build() {
+    const startTime = Date.now();
+    
+    try {
+      console.log('\n🚀 Starting build process...\n');
+      
+      // distディレクトリをクリア
+      fs.emptyDirSync(this.config.distDir);
+      
+      // データ読み込み
+      const works = JSON.parse(
+        fs.readFileSync(path.join(this.config.dataDir, 'works.json'), 'utf8')
+      );
+      
+      // 生成
+      this.generateWorkPages(works);
+      this.generateIndexPage(works);
+      this.generateProfilePage();
+      this.generateSitemap(works);
+      this.copyAssets();
+      
+      const duration = Date.now() - startTime;
+      this.printStats(duration);
+      
+      console.log('\n✅ Build completed successfully!\n');
+      
+    } catch (error) {
+      console.error('\n❌ Build failed:', error);
+      process.exit(1);
+    }
   }
 }
 
-if (require.main === module) build();
+// CLI実行
+if (require.main === module) {
+  const builder = new SiteBuilder();
+  builder.build();
+}
 
-module.exports = { build };
+module.exports = { SiteBuilder };

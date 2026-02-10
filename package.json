@@ -1,21 +1,27 @@
 {
   "name": "slvgallo-portfolio",
-  "version": "1.0.0",
-  "description": "slvgallo portfolio site with automated build",
-  "main": "scripts/build.js",
+  "version": "2.0.0",
+  "description": "Personal portfolio website by slvgallo",
+  "private": true,
+  "type": "commonjs",
   "scripts": {
+    "dev": "node scripts/dev.js",
     "build": "node scripts/build.js",
     "serve": "node scripts/serve.js",
-    "dev": "npm run build && npm run serve"
+    "clean": "node scripts/clean.js",
+    "validate": "node scripts/validate.js",
+    "preview": "npm run build && npm run serve"
   },
   "dependencies": {
     "express": "^4.18.2",
     "fs-extra": "^11.1.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "chokidar": "^3.5.3"
   },
-  "keywords": ["portfolio", "static-site", "github-pages"],
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "author": "slvgallo",
   "license": "MIT"
 }
