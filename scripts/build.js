@@ -22,6 +22,12 @@ function optimizeCloudinaryIndexUrl(url) {
       return url.replace('/upload/', '/upload/w_600,c_limit,f_webp,q_auto/');
     }
   }
+  
+  // Flickr画像の最適化（インデックス用：_b.jpg → _z.jpg）
+  if (typeof url === 'string' && url.includes('staticflickr.com')) {
+    return url.replace(/_b\.jpg$/, '_z.jpg');
+  }
+  
   return url;
 }
 

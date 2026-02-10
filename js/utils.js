@@ -56,5 +56,10 @@ export function getOptimizedIndexImageUrl(url, isYoutube) {
     }
   }
   
+  // Flickr画像の最適化（インデックス用：_b.jpg → _z.jpg）
+  if (url.includes('staticflickr.com')) {
+    return url.replace(/_b\.jpg$/, '_z.jpg');
+  }
+  
   return url;
 }
