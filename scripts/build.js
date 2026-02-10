@@ -16,10 +16,10 @@ function optimizeCloudinaryUrl(url) {
 // --- 追加: インデックス用Cloudinary URLの最適化関数 ---
 function optimizeCloudinaryIndexUrl(url) {
   if (typeof url === 'string' && url.includes('cloudinary.com')) {
-    // すでにf_autoが含まれている場合は重複しないようにチェック
-    if (url.includes('/upload/') && !url.includes('f_auto')) {
-      // w_600: 幅600pxに制限, c_limit: 元の比率を維持, f_auto: WebP化, q_auto: 画質自動調整
-      return url.replace('/upload/', '/upload/w_600,c_limit,f_auto,q_auto/');
+    // すでにf_webpが含まれている場合は重複しないようにチェック
+    if (url.includes('/upload/') && !url.includes('f_webp')) {
+      // w_600: 幅600pxに制限, c_limit: 元の比率を維持, f_webp: WebP形式, q_auto: 画質自動調整
+      return url.replace('/upload/', '/upload/w_600,c_limit,f_webp,q_auto/');
     }
   }
   return url;
@@ -175,7 +175,7 @@ function getProcessedThumb(thumbUrl) {
     const videoId = extractYouTubeId(thumbUrl);
     return { url: videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : thumbUrl, isYoutube: true };
   }
-  return { url: optimizeCloudinaryUrl(thumbUrl), isYoutube: false };
+  return { url: optimizeCloudinaryIndexUrl(thumbUrl), isYoutube: false };
 }
 
 function generateThumbContent(work, thumbInfo, isPriority) {
