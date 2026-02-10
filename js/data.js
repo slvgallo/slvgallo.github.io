@@ -1,4 +1,5 @@
 import { extractYouTubeId } from './utils.js';
+
 export async function loadWorks() {
   const res = await fetch("data/works.json");
   if (!res.ok) {
@@ -7,39 +8,43 @@ export async function loadWorks() {
   const works = await res.json();
   
   // YouTubeサムネイルの事前処理
-works.forEach((work) => {
-  const videoId = extractYouTubeId(work.thumb);
+  works.forEach((work) => {
+    const videoId = extractYouTubeId(work.thumb);
 
-  if (videoId) {
-    work.thumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-    work.isYoutubeThumb = true;
-  } else {
-    work.isYoutubeThumb = false;
-  }
-});
+    if (videoId) {
+      // YouTubeサムネイルもCloudinary等のプロキシを通さない場合はそのまま
+      work.thumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+      work.isYoutubeThumb = true;
+    } else {
+      // Cloudinaryなどの画像URLをここで事前に最適化しておくことも可能
+      work.thumb = getOptimizedImageUrl(work.thumb, false);
+      work.isYoutubeThumb = false;
+    }
+  });
   
   return works;
 }
 
 /**
  * Cloudinaryの画像URLを最適化するヘルパー関数
- * @param {string} url - 元の画像URL
- * @param {boolean} isYoutube - YouTubeサムネイルかどうか
- * @returns {string} 最適化された画像URL
  */
 export function getOptimizedImageUrl(url, isYoutube) {
   if (!url) return "";
   
+  // YouTubeの画像はCloudinaryではないのでスキップ
+  if (isYoutube) return url;
+
   // Cloudinaryの画像のみ最適化
   if (url.includes('cloudinary.com')) {
-    // 既存の変換パラメータがない場合のみ追加
-    if (url.includes('/upload/') && !url.includes('/upload/q_')) {
-      // w_600: 幅600pxにリサイズ
-      // h_338: 高さ338pxにリサイズ (16:9のアスペクト比維持)
-      // c_fill: 指定サイズに切り抜き
-      // q_auto: 画質自動最適化
-      // f_auto: フォーマット自動選択 (WebP/AVIFなど)
-      const optimizationParams = 'q_auto,f_auto,w_600,h_338,c_fill';
+    // すでにパラメータが含まれているかチェック
+    if (url.includes('/upload/') && !url.includes('f_auto')) {
+      /**
+       * 🚀 最適化のポイント:
+       * f_auto: ブラウザが対応していれば自動で WebP や AVIF に変換
+       * q_auto: 見た目を維持しつつ限界までファイルサイズを削減
+       * w_800: 表示領域に合わせてリサイズ（600だとRetinaディスプレイで少しボケるため800位が推奨）
+       */
+      const optimizationParams = 'f_auto,q_auto,w_800,c_fill,ar_16:9';
       return url.replace('/upload/', `/upload/${optimizationParams}/`);
     }
   }
