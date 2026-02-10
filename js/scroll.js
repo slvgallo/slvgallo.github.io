@@ -24,7 +24,7 @@ export function initScroll() {
 
   function updateHeader() {
     const header = document.querySelector('.header');
-    const logoImg = document.querySelector('.header-blog-title img');
+    const logoImg = document.querySelector('.header-title img');
     if (!header) return;
 
     const scrollY = window.scrollY;

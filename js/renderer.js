@@ -30,12 +30,11 @@ export function createWorkItem(work) {
       // 公式埋め込みタグのURL形式に合わせる
       iframe.src = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A${trackId}&color=%23000000&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true&sharing=false`;
       iframe.width = "100%";
-      iframe.height = "300";
       iframe.frameBorder = "no";
       iframe.scrolling = "no";
       iframe.allow = "autoplay";
       iframe.style.pointerEvents = "none"; // iframeはクリックできないように
-      
+      iframe.title = "soundcloud";
       thumb.appendChild(iframe);
       thumb.classList.add('soundcloud-thumb');
       

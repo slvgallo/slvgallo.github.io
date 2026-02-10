@@ -186,15 +186,15 @@ a img {
 }
 
 /* ロゴスタイル */
-.header-blog-title img {
+.header-title img {
   height: 3.0rem;
   width: auto;
-  transform-origin: center center;
+  transform-origin: left top;
   will-change: transform;
   transition: transform 0.5s ease;
 }
 
-.header-blog-title img:hover {
+.header-title img:hover {
   transform: scale(1.05);
 }
 
@@ -283,12 +283,12 @@ a img {
   }
 }
 
-.header-blog-title {
+.header-title {
   margin: 0;
   font-size: 1.5rem;
 }
 
-.header-blog-title a {
+.header-title a {
   color: var(--color-primary);
   text-decoration: none;
   display: inline-block;
@@ -296,7 +296,7 @@ a img {
   height: auto;
 }
 
-.header-blog-title a:hover {
+.header-title a:hover {
   color: var(--color-primary);
 }
 
