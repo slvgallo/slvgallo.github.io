@@ -1,4 +1,4 @@
-import { getOptimizedImageUrl } from './utils.js';
+import { getOptimizedImageUrl, getOptimizedIndexImageUrl } from './utils.js';
 
 /**
  * 作品アイテム（記事）のHTML要素を作成する
@@ -40,7 +40,7 @@ export function createWorkItem(work, index = 100) {
     thumbContainer.appendChild(overlay);
   } else {
     // 通常の画像サムネイル
-    const thumbUrl = getOptimizedImageUrl(work.thumb, work.isYoutubeThumb);
+    const thumbUrl = getOptimizedIndexImageUrl(work.thumb, work.isYoutubeThumb);
     
     const img = document.createElement('img');
     img.src = thumbUrl;

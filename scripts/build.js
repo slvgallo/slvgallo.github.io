@@ -13,6 +13,18 @@ function optimizeCloudinaryUrl(url) {
   return url;
 }
 
+// --- 追加: インデックス用Cloudinary URLの最適化関数 ---
+function optimizeCloudinaryIndexUrl(url) {
+  if (typeof url === 'string' && url.includes('cloudinary.com')) {
+    // すでにf_autoが含まれている場合は重複しないようにチェック
+    if (url.includes('/upload/') && !url.includes('f_auto')) {
+      // w_600: 幅600pxに制限, c_limit: 元の比率を維持, f_auto: WebP化, q_auto: 画質自動調整
+      return url.replace('/upload/', '/upload/w_600,c_limit,f_auto,q_auto/');
+    }
+  }
+  return url;
+}
+
 // ES Modulesを動的にインポートするための設定
 async function loadWorks() {
   const { loadWorks } = await import(path.join(__dirname, '..', 'js', 'data.js'));
@@ -177,7 +189,7 @@ function generateThumbContent(work, thumbInfo, isPriority) {
     if (sc) return `<iframe src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A${sc.src}&color=%23000000&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true&sharing=false" width="100%" height="300" frameborder="no" scrolling="no" allow="autoplay" style="pointer-events: none;"></iframe><div class="soundcloud-overlay"></div>`;
   }
   
-  return `<img src="${optimizeCloudinaryUrl(thumbInfo.url)}" ${imgStyle} alt="${work.title}" ${loading} ${priority} ${decoding}>`;
+  return `<img src="${optimizeCloudinaryIndexUrl(thumbInfo.url)}" ${imgStyle} alt="${work.title}" ${loading} ${priority} ${decoding}>`;
 }
 
 function generateIndexPage(works) {

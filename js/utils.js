@@ -40,3 +40,21 @@ export function getOptimizedImageUrl(url, isYoutube) {
   
   return url;
 }
+
+/**
+ * インデックスページ用のCloudinary画像URLを最適化する
+ */
+export function getOptimizedIndexImageUrl(url, isYoutube) {
+  if (!url || isYoutube) return url;
+  
+  if (url.includes('cloudinary.com')) {
+    // すでに変換パラメータがある場合は二重に付けないようにチェック
+    if (url.includes('/upload/') && !url.includes('f_auto')) {
+      // w_600: 幅600pxに制限, c_limit: 元の比率を維持, f_auto: WebP化, q_auto: 画質最適化
+      const params = 'w_600,c_limit,f_auto,q_auto';
+      return url.replace('/upload/', `/upload/${params}/`);
+    }
+  }
+  
+  return url;
+}
