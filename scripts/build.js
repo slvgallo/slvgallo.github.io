@@ -4,8 +4,11 @@ const path = require('path');
 // --- 追加: Cloudinary URLの最適化関数 ---
 function optimizeCloudinaryUrl(url) {
   if (typeof url === 'string' && url.includes('cloudinary.com')) {
-    // /upload/ の直後に最適化パラメータ f_auto(WebP化), q_auto(画質自動調整) を挿入
-    return url.replace('/upload/', '/upload/f_auto,q_auto/');
+    // すでにf_autoが含まれている場合は重複しないようにチェック
+    if (url.includes('/upload/') && !url.includes('f_auto')) {
+      // /upload/ の直後に最適化パラメータ f_auto(WebP化), q_auto(画質自動調整) を挿入
+      return url.replace('/upload/', '/upload/f_auto,q_auto/');
+    }
   }
   return url;
 }
