@@ -382,12 +382,7 @@ const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_
       });
     }
     
-    // sitemap.xml
-    const sitemapSrc = path.join(this.config.srcDir, 'sitemap.xml');
-    if (fs.existsSync(sitemapSrc)) {
-      fs.copySync(sitemapSrc, path.join(this.config.distDir, 'sitemap.xml'));
-      console.log('   ✓ Copied sitemap.xml');
-    }
+    // sitemap.xml is generated directly, don't copy from src
   }
 
   /**
