@@ -211,6 +211,14 @@ html.lang-ja-active .lang-ja { display: inline; }
   .profile-section p {
     font-size: 1em;
   }
+  
+  /* 英語テキストのみハイフネーションを有効化 */
+  .lang-en {
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+  }
 }
 
 @media (max-width: 480px) {
