@@ -3,7 +3,9 @@ const path = require('path');
 const {
   extractYouTubeId,
   optimizeCloudinaryUrl,
-  optimizeCloudinaryIndexUrl
+  optimizeCloudinaryIndexUrl,
+  generateOGPImageUrl,
+  generateYouTubeOGPImageUrl
 } = require('./shared-utils');
 
 class SiteBuilder {
@@ -186,7 +188,7 @@ class SiteBuilder {
       }
     }
     
-    return `<img src="${optimizeCloudinaryIndexUrl(thumbInfo.url)}" ${imgStyle} alt="${work.title}" ${loading} ${priority} ${decoding}>`;
+    return `<img src="${thumbInfo.url}" ${imgStyle} alt="${work.title}" ${loading} ${priority} ${decoding}>`;
   }
 
   /**
@@ -231,6 +233,25 @@ class SiteBuilder {
         let fullMediaContent = '';
         let contentMediaContent = '';
         
+        // OGP画像の生成
+        let ogpImageUrl = null;
+        
+        if (work.thumb) {
+          // SoundCloudの場合は指定されたOGP画像を使用
+          if (work.thumb.includes('soundcloud.com')) {
+            ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_1200,h_630,b_white/l_slvgallo_txf9dz,w_820/fl_layer_apply,g_center/f_auto,q_auto/v1770820480/ogp_blank_ghjrxq.png';
+          } else {
+            const generatedOgp = generateOGPImageUrl(work.thumb);
+            if (generatedOgp) {
+              ogpImageUrl = generatedOgp;
+            }
+          }
+        }
+        
+        if (!ogpImageUrl) {
+          ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/v1770820480/ogp_blank_ghjrxq.png';
+        }
+        
         if (work.media && Array.isArray(work.media)) {
           work.media.forEach((mediaItem, index) => {
             const mediaHTML = this.generateMediaHTML(mediaItem, index === 0);
@@ -244,6 +265,9 @@ class SiteBuilder {
         
         html = html.replace('{{FULL_MEDIA_CONTENT}}', fullMediaContent);
         html = html.replace('{{MEDIA_CONTENT}}', contentMediaContent);
+        
+        // OGPメタデータを置換
+        html = html.replace('{{OGP_IMAGE_URL}}', ogpImageUrl);
         
         fs.writeFileSync(
           path.join(worksDir, `${work.id}.html`),
@@ -271,6 +295,9 @@ class SiteBuilder {
       'utf8'
     );
     
+    // OGP画像の生成
+const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_1200,h_630,b_white/l_slvgallo_txf9dz,w_820/fl_layer_apply,g_center/f_auto,q_auto/v1770820480/ogp_blank_ghjrxq.png';
+
     let worksGrid = '';
     works.forEach((work, index) => {
       const thumbInfo = this.getProcessedThumb(work.thumb);
@@ -287,9 +314,14 @@ class SiteBuilder {
       </article>`;
     });
     
+    let html = indexTemplate.replace('{{WORKS_GRID}}', worksGrid);
+    
+    // OGPメタデータを置換
+    html = html.replace('{{OGP_IMAGE_URL}}', ogpImageUrl);
+    
     fs.writeFileSync(
       path.join(this.config.distDir, 'index.html'),
-      indexTemplate.replace('{{WORKS_GRID}}', worksGrid)
+      html
     );
     
     console.log('   ✓ Generated index.html');
@@ -306,9 +338,14 @@ class SiteBuilder {
       'utf8'
     );
     
+    // OGP画像の生成
+    const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_1200,h_630,b_white/l_slvgallo_txf9dz,w_820/fl_layer_apply,g_center/f_auto,q_auto/v1770820480/ogp_blank_ghjrxq.png';
+    
+    let html = profileTemplate.replace('{{OGP_IMAGE_URL}}', ogpImageUrl);
+    
     fs.writeFileSync(
       path.join(this.config.distDir, 'profile.html'),
-      profileTemplate
+      html
     );
     
     console.log('   ✓ Generated profile.html');
