@@ -20,13 +20,26 @@ export function applyFilter(filter, isInitialLoad = false) {
     state.data.filteredWorks = state.data.allWorks.filter(work => work.tags.includes(filter));
   }
 
-  // 初期ロードで既にビルド済みのコンテンツ（{{WORKS_GRID}}）がある場合はクリアをスキップ
-  if (isInitialLoad && filter === "all" && grid.children.length > 0) {
-    state.data.displayedCount = grid.children.length;
-    return;
+  // 🔑 初期ロード時の最適化処理
+  if (isInitialLoad && filter === "all") {
+    const existingItems = grid.querySelectorAll('.index-post');
+    
+    if (existingItems.length > 0) {
+      // ビルド時に生成された全作品がDOMに存在する場合
+      // 最初の16個だけ表示、残りは非表示にする
+      existingItems.forEach((item, index) => {
+        if (index >= 16) {
+          item.style.display = 'none';
+          item.dataset.hidden = 'true';
+        }
+      });
+      
+      state.data.displayedCount = Math.min(16, existingItems.length);
+      return;
+    }
   }
 
-  // グリッドをクリアして最初からロード
+  // フィルター変更時は通常通りクリア＆再構築
   grid.innerHTML = "";
   state.data.displayedCount = 0;
 
@@ -46,17 +59,32 @@ export function loadMoreItems() {
     const startIndex = state.data.displayedCount;
     const endIndex = Math.min(startIndex + 16, state.data.filteredWorks.length);
 
-    for (let i = startIndex; i < endIndex; i++) {
-      // 🚀 修正ポイント: インデックス i を渡すことで最初の4枚をLCP最適化
-      const article = createWorkItem(state.data.filteredWorks[i], i);
-      if (article) {
-        grid.appendChild(article);
+    // 🔑 既存の非表示要素がある場合（初期ロードの続き）
+    const existingHidden = grid.querySelectorAll('.index-post[data-hidden="true"]');
+    
+    if (existingHidden.length > 0 && state.data.currentFilter === 'all') {
+      // 既存の非表示要素を順次表示
+      const itemsToShow = Math.min(16, existingHidden.length);
+      
+      for (let i = 0; i < itemsToShow; i++) {
+        existingHidden[i].style.display = '';
+        existingHidden[i].removeAttribute('data-hidden');
       }
+      
+      state.data.displayedCount += itemsToShow;
+    } else {
+      // 通常の動的生成（フィルター適用時など）
+      for (let i = startIndex; i < endIndex; i++) {
+        const article = createWorkItem(state.data.filteredWorks[i], i);
+        if (article) {
+          grid.appendChild(article);
+        }
+      }
+      
+      state.data.displayedCount = endIndex;
     }
-
-    state.data.displayedCount = endIndex;
   } catch (error) {
-    // エラー処理
+    console.error('Error loading items:', error);
   } finally {
     state.data.isLoading = false;
     updateLoadingIndicator();
@@ -78,7 +106,7 @@ export function setupInfiniteScroll() {
       }
     });
   }, {
-    rootMargin: "400px" // スムーズな体験のため少し長めに設定
+    rootMargin: "400px"
   });
 
   state.init.infiniteObserver.observe(sentinel);
@@ -151,29 +179,49 @@ export function restoreScrollState() {
     }
 
     const grid = document.getElementById("works-grid");
-    grid.innerHTML = "";
+    const existingItems = grid.querySelectorAll('.index-post');
+    
+    if (existingItems.length > 0 && state.data.currentFilter === 'all') {
+      // 既存のDOM要素を使って復元
+      const countToShow = Math.min(savedState.displayedCount, existingItems.length);
+      
+      existingItems.forEach((item, index) => {
+        if (index < countToShow) {
+          item.style.display = '';
+          item.removeAttribute('data-hidden');
+        } else {
+          item.style.display = 'none';
+          item.dataset.hidden = 'true';
+        }
+      });
+      
+      state.data.displayedCount = countToShow;
+    } else {
+      // フィルター適用時は動的生成
+      grid.innerHTML = "";
+      const countToLoad = Math.min(savedState.displayedCount, state.data.filteredWorks.length);
 
-    const countToLoad = Math.min(savedState.displayedCount, state.data.filteredWorks.length);
+      for (let i = 0; i < countToLoad; i++) {
+        const article = createWorkItem(state.data.filteredWorks[i], i);
+        grid.appendChild(article);
+      }
 
-    for (let i = 0; i < countToLoad; i++) {
-      // 🚀 ここでもインデックス i を渡す
-      const article = createWorkItem(state.data.filteredWorks[i], i);
-      grid.appendChild(article);
+      state.data.displayedCount = countToLoad;
     }
 
-    state.data.displayedCount = countToLoad;
     updateLoadingIndicator();
 
-    // 描画完了を待ってからスクロール位置を復元
+    // スクロール位置を復元
     setTimeout(() => {
       window.scrollTo({
         top: savedState.scrollTop,
-        behavior: 'instant' // 瞬時に移動させるのが最も安定する
+        behavior: 'instant'
       });
     }, 50);
 
     return true;
   } catch (e) {
+    console.error('Failed to restore scroll state:', e);
     return false;
   }
 }

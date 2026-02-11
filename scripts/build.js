@@ -296,7 +296,7 @@ class SiteBuilder {
     );
     
     // OGP画像の生成
-const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_1200,h_630,b_white/l_slvgallo_txf9dz,w_820/fl_layer_apply,g_center/f_auto,q_auto/v1770820480/ogp_blank_ghjrxq.png';
+const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_1200,h_630,b_white/l_slvgallo_txf9dz,w_600/fl_layer_apply,g_center/f_auto,q_auto/v1770820480/ogp_blank_ghjrxq.png';
 
     let worksGrid = '';
     works.forEach((work, index) => {
@@ -339,7 +339,7 @@ const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_
     );
     
     // OGP画像の生成
-    const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_1200,h_630,b_white/l_slvgallo_txf9dz,w_820/fl_layer_apply,g_center/f_auto,q_auto/v1770820480/ogp_blank_ghjrxq.png';
+    const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_1200,h_630,b_white/l_slvgallo_txf9dz,w_600/fl_layer_apply,g_center/f_auto,q_auto/v1770820480/ogp_blank_ghjrxq.png';
     
     let html = profileTemplate.replace('{{OGP_IMAGE_URL}}', ogpImageUrl);
     
