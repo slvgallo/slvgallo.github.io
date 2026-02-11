@@ -70,7 +70,7 @@ class SiteBuilder {
   /**
    * メディアHTML生成
    */
-  generateMediaHTML(mediaItem, isPriority = false) {
+  generateMediaHTML(mediaItem, isPriority = false, workTitle = '') {
     const loading = isPriority ? '' : 'loading="lazy"';
     const priority = isPriority ? 'fetchpriority="high"' : '';
     const decoding = isPriority ? 'decoding="sync"' : 'decoding="async"';
@@ -94,13 +94,14 @@ class SiteBuilder {
       
       case 'photo':
         const optimizedSrc = optimizeCloudinaryUrl(mediaItem.src);
-        const img = `<img src="${optimizedSrc}" alt="Photo" ${loading}>`;
+        const altText = workTitle ? `${workTitle} - View on Flickr` : 'Photo';
+        const img = `<img src="${optimizedSrc}" alt="${altText}" ${loading}>`;
         
         if (mediaItem.src.includes('flickr.com')) {
           const flickrMatch = mediaItem.src.match(/\/photos\/[^\/]+\/(\d+)/) || 
                             mediaItem.src.match(/\/(\d+)_[^_]+_b\.jpg$/);
           if (flickrMatch) {
-            return `<a href="https://www.flickr.com/photos/slvgallo/${flickrMatch[1]}/" target="_blank" rel="noopener noreferrer">${img}</a>`;
+            return `<a href="https://www.flickr.com/photos/slvgallo/${flickrMatch[1]}/" target="_blank" rel="noopener noreferrer" aria-label="${altText}">${img}</a>`;
           }
         }
         return img;
@@ -254,7 +255,7 @@ class SiteBuilder {
         
         if (work.media && Array.isArray(work.media)) {
           work.media.forEach((mediaItem, index) => {
-            const mediaHTML = this.generateMediaHTML(mediaItem, index === 0);
+            const mediaHTML = this.generateMediaHTML(mediaItem, index === 0, work.title);
             if (index === 0) {
               fullMediaContent = mediaHTML;
             } else {
