@@ -219,12 +219,6 @@ a img {
 
 /* JSで制御するため.scrolledクラスによるスタイル変更は削除 */
 
-@media (min-width: 768px) {
-  .header {
-    padding: 5em 0;
-  }
-}
-
 .header.hidden {
   opacity: 0;
   backdrop-filter: none;
@@ -250,13 +244,15 @@ a img {
 }
 
 @media (min-width: 768px) {
+  .header {
+    padding: 5em 0;
+  }
+  
   .header-wrapper {
     flex-direction: row;
     padding: 0 2%;
   }
-}
-
-@media (min-width: 768px) {
+  
   .header-box-nav {
     width: 80%;
   }
@@ -334,18 +330,15 @@ a img {
   text-align: center;
 }
 
-@media (min-width: 768px) {
-  .nav ul {
-    text-align: right;
-  }
-}
-
 .nav li {
   margin: 0.4em 0.8em;
   display: inline-block;
 }
 
 @media (min-width: 768px) {
+  .nav ul {
+    text-align: right;
+  }
   .nav li {
     margin: 0 0 0.4em 1em;
   }
@@ -1055,7 +1048,7 @@ a img {
 
 .image2column-wrap a img,
 #project-media-full a img {
-  max-width: 100%;
+  width: 100%;
   height: auto;
   margin-bottom: 0;
 }

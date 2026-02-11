@@ -3,6 +3,7 @@
 
 /**
  * YouTube ID抽出
+ * Note: Identical to scripts/shared-utils.js for consistency
  */
 export function extractYouTubeId(url) {
   if (!url) return null;
@@ -11,10 +12,9 @@ export function extractYouTubeId(url) {
     /(?:youtube\.com\/vi\/)([^&\n?#]+)/,
     /(?:youtube\.com\/shorts\/)([^&\n?#]+)/,
   ];
-
-  for (const pattern of patterns) {
-    const match = url.match(pattern);
-    if (match) return match[1];
+  for (const p of patterns) {
+    const m = url.match(p);
+    if (m) return m[1];
   }
   return null;
 }
