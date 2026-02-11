@@ -27,10 +27,12 @@ export function applyFilter(filter, isInitialLoad = false) {
     if (existingItems.length > 0) {
       // ビルド時に生成された全作品がDOMに存在する場合
       // 最初の16個だけ表示、残りは非表示にする
+      let hiddenCount = 0;
       existingItems.forEach((item, index) => {
         if (index >= 16) {
-          item.style.display = 'none';
+          item.style.cssText = 'display: none !important; visibility: hidden !important; position: absolute !important; left: -9999px !important; top: -9999px !important;';
           item.dataset.hidden = 'true';
+          hiddenCount++;
         }
       });
       
@@ -67,7 +69,7 @@ export function loadMoreItems() {
       const itemsToShow = Math.min(16, existingHidden.length);
       
       for (let i = 0; i < itemsToShow; i++) {
-        existingHidden[i].style.display = '';
+        existingHidden[i].style.cssText = '';
         existingHidden[i].removeAttribute('data-hidden');
       }
       
@@ -94,10 +96,12 @@ export function loadMoreItems() {
 export function setupInfiniteScroll() {
   if (state.init.infiniteObserver) return;
 
+  const container = document.querySelector(".top-post-container");
+  
   const sentinel = document.createElement("div");
   sentinel.id = "scroll-sentinel";
   sentinel.style.height = "1px";
-  document.querySelector(".top-post-container").appendChild(sentinel);
+  container.appendChild(sentinel);
 
   state.init.infiniteObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {

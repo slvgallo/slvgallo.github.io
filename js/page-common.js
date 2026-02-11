@@ -1,3 +1,5 @@
+console.log('🚀 page-common.js loaded');
+
 import { state } from './state.js';
 import { loadWorks } from './data.js';
 import { applyFilter, restoreScrollState, setupInfiniteScroll, setupStateSaving } from './filter.js';

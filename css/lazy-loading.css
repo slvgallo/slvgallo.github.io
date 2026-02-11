@@ -1,10 +1,19 @@
 /* Lazy Loading Optimization CSS */
 
-/* Hidden elements for performance optimization */
-.index-post[data-hidden="true"] {
+/* Hidden elements for performance optimization - higher specificity */
+.index-post-wrapper .index-post[data-hidden="true"] {
   display: none !important;
+  visibility: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
   /* content-visibility for additional optimization */
   content-visibility: hidden;
+}
+
+/* Debug: make sure hidden elements are really hidden */
+.index-post-wrapper .index-post[data-hidden="true"] * {
+  display: none !important;
 }
 
 /* Loading indicator */
@@ -45,7 +54,7 @@
   }
 }
 
-/* Scroll sentinel (invisible) */
+/* Scroll sentinel */
 #scroll-sentinel {
   height: 1px;
   width: 100%;
