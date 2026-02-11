@@ -393,6 +393,16 @@ const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_
     
     const now = new Date().toISOString();
     
+    // XML escape function for safe XML generation
+    function escapeXml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+    }
+    
     let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -413,7 +423,7 @@ const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_
     
     works.forEach(work => {
       sitemap += `  <url>
-    <loc>https://slvgallo.github.io/works/${work.id}.html</loc>
+    <loc>https://slvgallo.github.io/works/${escapeXml(work.id)}.html</loc>
     <lastmod>${now}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
