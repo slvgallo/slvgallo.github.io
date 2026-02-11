@@ -1,6 +1,18 @@
 import { extractYouTubeId, getOptimizedImageUrl } from './utils.js';
 
 export async function loadWorks() {
+  // Check for embedded data first
+  const embeddedDataScript = document.getElementById('works-data');
+  if (embeddedDataScript) {
+    try {
+      const works = JSON.parse(embeddedDataScript.textContent);
+      return works;
+    } catch (error) {
+      console.error('Failed to parse embedded works data:', error);
+    }
+  }
+  
+  // Fallback: fetch from JSON (dev mode / legacy)
   const res = await fetch("data/works.json");
   if (!res.ok) {
     throw new Error(`HTTP error! status: ${res.status}`);

@@ -295,6 +295,33 @@ class SiteBuilder {
       'utf8'
     );
     
+    // Process works data for embedding (minimal fields only)
+    const processedWorks = works.map(work => {
+      const processedWork = {
+        id: work.id,
+        title: work.title,
+        thumb: work.thumb,
+        tags: work.tags || []
+      };
+      
+      // Apply same processing as client-side
+      const videoId = extractYouTubeId(work.thumb);
+      if (videoId) {
+        processedWork.thumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        processedWork.isYoutubeThumb = true;
+      } else {
+        processedWork.thumb = optimizeCloudinaryUrl(work.thumb);
+        processedWork.isYoutubeThumb = false;
+      }
+      
+      return processedWork;
+    });
+    
+    // Create embedded data script
+    const worksDataScript = `<script id="works-data" type="application/json">
+${JSON.stringify(processedWorks, null, 2)}
+</script>`;
+    
     // OGP画像の生成
 const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_1200,h_630,b_white/l_slvgallo_txf9dz,w_600/fl_layer_apply,g_center/f_auto,q_auto/v1770820480/ogp_blank_ghjrxq.png';
 
@@ -318,6 +345,9 @@ const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_
     
     // OGPメタデータを置換
     html = html.replace('{{OGP_IMAGE_URL}}', ogpImageUrl);
+    
+    // 埋め込みデータを置換
+    html = html.replace('{{WORKS_DATA}}', worksDataScript);
     
     fs.writeFileSync(
       path.join(this.config.distDir, 'index.html'),
