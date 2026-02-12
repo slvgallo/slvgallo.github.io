@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { createWorkItem } from './renderer.js';
+import { createWorkItem } from './bundle.js';
 
 export function applyFilter(filter, isInitialLoad = false) {
   state.data.currentFilter = filter;
