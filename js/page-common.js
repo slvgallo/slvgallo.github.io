@@ -1,5 +1,27 @@
 console.log('🚀 page-common.js loaded');
 
+// SoundCloudウィジェットのエラーを抑制
+window.addEventListener('error', (event) => {
+  // SoundCloud関連のエラーを抑制
+  if (event.filename && event.filename.includes('soundcloud') || 
+      event.message && event.message.includes('widget-') ||
+      event.message && event.message.includes('getImageData') && event.message.includes('width is 0')) {
+    event.preventDefault();
+    console.warn('SoundCloud widget error suppressed:', event.message);
+    return true;
+  }
+}, true);
+
+// Unhandled promise rejectionsも抑制
+window.addEventListener('unhandledrejection', (event) => {
+  if (event.reason && typeof event.reason === 'string' && 
+      (event.reason.includes('soundcloud') || event.reason.includes('widget-'))) {
+    event.preventDefault();
+    console.warn('SoundCloud promise rejection suppressed:', event.reason);
+    return true;
+  }
+});
+
 import { state } from './state.js';
 import { loadWorks } from './data.js';
 import { applyFilter, restoreScrollState, setupInfiniteScroll, setupStateSaving } from './filter.js';
