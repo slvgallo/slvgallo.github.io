@@ -116,7 +116,7 @@ class SiteBuilder {
             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
             frameborder="0" 
             allowfullscreen 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="autoplay; encrypted-media; picture-in-picture"
             ${loading}>
           </iframe>
         </div>`;
@@ -137,7 +137,7 @@ class SiteBuilder {
           prSrc = `https://openprocessing.org/sketch/${skId}/embed/`;
         }
         return `<div class="processing-wrap">
-          <iframe src="${prSrc}" frameborder="0" allowfullscreen></iframe>
+          <iframe src="${prSrc}" frameborder="0" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture; accelerometer; gyroscope; xr-spatial-tracking"></iframe>
         </div>`;
 
       case 'sketchfab':
@@ -146,7 +146,7 @@ class SiteBuilder {
           sfSrc += (sfSrc.includes('?') ? '&' : '?') + 'autospin=1&autostart=1&preload=1';
         }
         return `<div class="sketchfab-wrap">
-          <iframe src="${sfSrc}" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+          <iframe src="${sfSrc}" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; encrypted-media; picture-in-picture; accelerometer; gyroscope; xr-spatial-tracking"></iframe>
         </div>`;
 
       case 'html':
