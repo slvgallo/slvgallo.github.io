@@ -30,7 +30,7 @@ export function createWorkItem(work, index = 100) {
     iframe.height = "300";
     iframe.frameBorder = "no";
     iframe.scrolling = "no";
-    iframe.allow = "autoplay";
+    iframe.allow = "autoplay encrypted-media";
     iframe.style.pointerEvents = "none";
     
     const overlay = document.createElement('div');

@@ -127,7 +127,7 @@ class SiteBuilder {
           scSrc = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${scSrc}&color=%230b0b0b&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true&sharing=false`;
         }
         return `<div style="position: relative; padding-bottom: 66.67%; height: 0; overflow: hidden;">
-          <iframe src="${scSrc}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"></iframe>
+          <iframe src="${scSrc}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay encrypted-media"></iframe>
         </div>`;
       
       case 'processing':
@@ -182,7 +182,7 @@ class SiteBuilder {
           height="300" 
           frameborder="no" 
           scrolling="no" 
-          allow="autoplay" 
+          allow="autoplay encrypted-media" 
           style="pointer-events: none;">
         </iframe>
         <div class="soundcloud-overlay"></div>`;
