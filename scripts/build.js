@@ -127,7 +127,7 @@ class SiteBuilder {
           scSrc = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${scSrc}&color=%230b0b0b&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true&sharing=false`;
         }
         return `<div style="position: relative; padding-bottom: 66.67%; height: 0; overflow: hidden;">
-          <iframe src="${scSrc}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay encrypted-media"></iframe>
+          <iframe src="${scSrc}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" loading="lazy"></iframe>
         </div>`;
       
       case 'processing':
@@ -174,19 +174,14 @@ class SiteBuilder {
 
     // SoundCloud特殊処理
     if (work.thumb && work.thumb.includes('soundcloud.com')) {
-      const sc = work.media && work.media.find(m => m.type === 'soundcloud');
-      if (sc) {
-        return `<iframe 
-          src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${sc.src}&color=%23000000&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true&sharing=false" 
-          width="100%" 
-          height="300" 
-          frameborder="no" 
-          scrolling="no" 
-          allow="autoplay encrypted-media" 
-          style="pointer-events: none;">
-        </iframe>
+      const playIcon = `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 10px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M10 8L16 12L10 16V8Z" fill="currentColor"/></svg>`;
+      
+      return `<img src="https://res.cloudinary.com/ddwxt9vnm/image/upload/v1770820480/ogp_blank_ghjrxq.png" alt="${work.title}" ${loading} ${priority} ${decoding}>
+        <div class="soundcloud-info" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #000; z-index: 2; pointer-events: none; padding: 20px; text-align: center;">
+          ${playIcon}
+          <div style="font-size: 0.9rem; font-weight: 500; letter-spacing: 0.05em; opacity: 0.8;">${work.title}</div>
+        </div>
         <div class="soundcloud-overlay"></div>`;
-      }
     }
     
     return `<img src="${thumbInfo.url}" ${imgStyle} alt="${work.title}" ${loading} ${priority} ${decoding}>`;

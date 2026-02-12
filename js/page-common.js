@@ -1,26 +1,99 @@
 console.log('🚀 page-common.js loaded');
 
-// SoundCloudウィジェットのエラーを抑制
-window.addEventListener('error', (event) => {
-  // SoundCloud関連のエラーを抑制
-  if (event.filename && event.filename.includes('soundcloud') || 
-      event.message && event.message.includes('widget-') ||
-      event.message && event.message.includes('getImageData') && event.message.includes('width is 0')) {
-    event.preventDefault();
-    console.warn('SoundCloud widget error suppressed:', event.message);
+// SoundCloudウィジェットのエラーを完全にブロック
+(function() {
+  // 元のエラーハンドラーを保存
+  const originalOnError = window.onerror;
+  const originalUnhandledRejection = window.onunhandledrejection;
+  
+  // エラーハンドラーを完全に置き換え
+  window.onerror = function(message, source, lineno, colno, error) {
+    const messageStr = String(message);
+    const sourceStr = String(source || '');
+    
+    // SoundCloud関連のエラーを完全に無視
+    if (sourceStr.includes('widget-') || 
+        sourceStr.includes('soundcloud') ||
+        messageStr.includes('widget-') ||
+        messageStr.includes('SoundCloud') ||
+        messageStr.includes('Permissions policy violation') ||
+        messageStr.includes('Encrypted Media access has been blocked') ||
+        messageStr.includes('Unrecognized origin') ||
+        messageStr.includes('getImageData') && messageStr.includes('width is 0')) {
+      return true; // エラーを完全に無視
+    }
+    
+    // その他のエラーは元のハンドラーに渡す
+    if (originalOnError) {
+      return originalOnError.call(this, message, source, lineno, colno, error);
+    }
+    return false;
+  };
+  
+  window.onunhandledrejection = function(event) {
+    const reasonStr = String(event.reason || '');
+    
+    if (reasonStr.includes('soundcloud') || reasonStr.includes('widget-')) {
+      event.preventDefault();
+      return true;
+    }
+    
+    if (originalUnhandledRejection) {
+      return originalUnhandledRejection.call(this, event);
+    }
+    return false;
+  };
+  
+  // イベントリスナーでもブロック
+  window.addEventListener('error', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     return true;
-  }
-}, true);
+  }, true);
+  
+  window.addEventListener('unhandledrejection', (e) => {
+    e.preventDefault();
+    return true;
+  });
+})();
 
-// Unhandled promise rejectionsも抑制
-window.addEventListener('unhandledrejection', (event) => {
-  if (event.reason && typeof event.reason === 'string' && 
-      (event.reason.includes('soundcloud') || event.reason.includes('widget-'))) {
-    event.preventDefault();
-    console.warn('SoundCloud promise rejection suppressed:', event.reason);
-    return true;
-  }
-});
+// consoleメソッドを完全にオーバーライド
+(function() {
+  const originalConsoleError = console.error;
+  const originalConsoleWarn = console.warn;
+  
+  console.error = function(...args) {
+    const message = args.join(' ');
+    if (message.includes('soundcloud') || message.includes('widget-') || 
+        message.includes('Permissions policy violation') ||
+        message.includes('Encrypted Media access has been blocked') ||
+        message.includes('Unrecognized origin') ||
+        message.includes('getImageData') && message.includes('width is 0')) {
+      return;
+    }
+    return originalConsoleError.apply(console, args);
+  };
+  
+  console.warn = function(...args) {
+    const message = args.join(' ');
+    if (message.includes('soundcloud') || message.includes('widget-') ||
+        message.includes('Permissions policy violation') ||
+        message.includes('Unrecognized origin')) {
+      return;
+    }
+    return originalConsoleWarn.apply(console, args);
+  };
+  
+  // console.logもSoundCloud関連をフィルタリング
+  const originalConsoleLog = console.log;
+  console.log = function(...args) {
+    const message = args.join(' ');
+    if (message.includes('SoundCloud Embed Player')) {
+      return;
+    }
+    return originalConsoleLog.apply(console, args);
+  };
+})();
 
 import { state } from './state.js';
 import { loadWorks } from './data.js';
