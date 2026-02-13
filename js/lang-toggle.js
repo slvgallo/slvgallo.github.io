@@ -1,8 +1,20 @@
 import { state } from './state.js';
+import { createFocusTrap } from './focus-trap.js';
 
 export function initLangToggle() {
   if (state.init.langInitialized) return;
   state.init.langInitialized = true;
+
+  const langButtons = document.querySelector('.lang-buttons');
+  const langEnBtn = document.getElementById('lang-en');
+  const langJaBtn = document.getElementById('lang-ja');
+
+  if (!langButtons || !langEnBtn || !langJaBtn) return;
+
+  const focusTrap = createFocusTrap(langButtons, {
+    initialFocus: false,
+    restoreFocus: false
+  });
 
   // 初期言語の決定（localStorage または デフォルト 'en'）
   let currentLang = localStorage.getItem('preferredLanguage') || 'en';
@@ -18,10 +30,8 @@ export function initLangToggle() {
     document.documentElement.classList.toggle('lang-ja-active', lang === 'ja');
 
     // ボタンの状態更新
-    const langEnBtn = document.getElementById('lang-en');
-    const langJaBtn = document.getElementById('lang-ja');
-    if (langEnBtn) langEnBtn.classList.toggle('active', lang === 'en');
-    if (langJaBtn) langJaBtn.classList.toggle('active', lang === 'ja');
+    langEnBtn.classList.toggle('active', lang === 'en');
+    langJaBtn.classList.toggle('active', lang === 'ja');
   }
 
   // 初期実行
@@ -38,6 +48,21 @@ export function initLangToggle() {
     } else if (btnJa) {
       setLanguage('ja');
       localStorage.setItem('preferredLanguage', 'ja');
+    }
+  });
+
+  // キーボード操作の改善
+  langButtons.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const target = e.target;
+      if (target.id === 'lang-en') {
+        setLanguage('en');
+        localStorage.setItem('preferredLanguage', 'en');
+      } else if (target.id === 'lang-ja') {
+        setLanguage('ja');
+        localStorage.setItem('preferredLanguage', 'ja');
+      }
     }
   });
 }

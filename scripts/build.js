@@ -172,18 +172,6 @@ class SiteBuilder {
     const priority = isPriority ? 'fetchpriority="high"' : '';
     const decoding = isPriority ? 'decoding="sync"' : 'decoding="async"';
 
-    // SoundCloud特殊処理
-    if (work.thumb && work.thumb.includes('soundcloud.com')) {
-      const playIcon = `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 10px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M10 8L16 12L10 16V8Z" fill="currentColor"/></svg>`;
-      
-      return `<img src="https://res.cloudinary.com/ddwxt9vnm/image/upload/v1770820480/ogp_blank_ghjrxq.png" alt="${work.title}" ${loading} ${priority} ${decoding}>
-        <div class="soundcloud-info" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #000; z-index: 2; pointer-events: none; padding: 20px; text-align: center;">
-          ${playIcon}
-          <div style="font-size: 0.9rem; font-weight: 500; letter-spacing: 0.05em; opacity: 0.8;">${work.title}</div>
-        </div>
-        <div class="soundcloud-overlay"></div>`;
-    }
-    
     return `<img src="${thumbInfo.url}" ${imgStyle} alt="${work.title}" ${loading} ${priority} ${decoding}>`;
   }
 
@@ -233,14 +221,9 @@ class SiteBuilder {
         let ogpImageUrl = null;
         
         if (work.thumb) {
-          // SoundCloudの場合は指定されたOGP画像を使用
-          if (work.thumb.includes('soundcloud.com')) {
-            ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_1200,h_630,b_white/l_slvgallo_txf9dz,w_820/fl_layer_apply,g_center/f_auto,q_auto/v1770820480/ogp_blank_ghjrxq.png';
-          } else {
-            const generatedOgp = generateOGPImageUrl(work.thumb);
-            if (generatedOgp) {
-              ogpImageUrl = generatedOgp;
-            }
+          const generatedOgp = generateOGPImageUrl(work.thumb);
+          if (generatedOgp) {
+            ogpImageUrl = generatedOgp;
           }
         }
         
