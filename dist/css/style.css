@@ -133,6 +133,16 @@ a img {
     width: 45px;
     height: 45px;
   }
+
+  .processing-wrap {
+    padding-bottom: 100%;
+    padding-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .processing-wrap:last-child {
+    margin-bottom: 0;
+  }
 }
 
 /* サイトコンテンツ */
@@ -496,27 +506,17 @@ a img {
   }
 
   .sketchfab-wrap {
-    padding-bottom: 100% !important;
-    padding-top: 0;
-    margin-bottom: 20px;
-  }
-
-  .sketchfab-wrap iframe {
-    width: 100% !important;
-    height: 100% !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-  }
-
-  .processing-wrap {
     padding-bottom: 100%;
     padding-top: 0;
     margin-bottom: 20px;
   }
 
-  .processing-wrap:last-child {
-    margin-bottom: 0;
+  .sketchfab-wrap iframe {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 
   .html-wrap {
@@ -885,7 +885,8 @@ a img {
 /* アスペクト比ラッパー共通 */
 .video-wrap,
 .processing-wrap,
-.html-wrap {
+.html-wrap,
+.sketchfab-wrap {
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -923,7 +924,10 @@ a img {
 .processing-wrap object,
 .html-wrap embed,
 .html-wrap iframe,
-.html-wrap object {
+.html-wrap object,
+.sketchfab-wrap embed,
+.sketchfab-wrap iframe,
+.sketchfab-wrap object {
   position: absolute;
   top: 0;
   left: 0;
@@ -932,46 +936,35 @@ a img {
 }
 
 /* Processingラッパー */
-.processing-wrap {
-  padding-bottom: 75%;
-  /* 4:3 アスペクト比 */
-}
-
 .processing-wrap iframe {
   border: none;
 }
 
-/* Sketchfabラッパー */
-.sketchfab-wrap {
-  position: relative;
-  padding-bottom: 75%;
-  /* 4:3 アスペクト比 */
-  padding-top: 0;
-  height: 0;
-  overflow: hidden;
-  width: 100%;
-  max-width: 100%;
-  margin-bottom: 20px;
-}
+@media (min-width: 769px) {
+  .processing-wrap {
+    padding-bottom: 75%;
+    /* 4:3 アスペクト比 */
+  }
 
-/* Sketchfab iframeの強制スタイル */
-.sketchfab-wrap iframe {
-  width: 100% !important;
-  height: 100% !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-}
+  .html-wrap {
+    padding-bottom: 75%;
+    /* 4:3 アスペクト比 */
+    padding-top: 0;
+    height: 0;
+    max-width: 1320px;
+  }
 
-/* HTMLラッパー */
-.html-wrap {
-  padding-bottom: 75%;
-  /* 4:3 アスペクト比 */
-  padding-top: 0;
-  height: 0;
-  max-width: 1320px;
+  .sketchfab-wrap {
+    padding-bottom: 75%;
+    /* 4:3 アスペクト比 */
+    padding-top: 0;
+    height: 0;
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
 }
-
 
 /* 2カラム画像ラッパー */
 .image2column-wrap {
