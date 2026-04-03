@@ -377,6 +377,14 @@ const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_
       }
     });
     
+    // Copy favicon.ico to root of dist directory
+    const faviconSrc = path.join(this.config.srcDir, 'favicon.ico');
+    const faviconDest = path.join(this.config.distDir, 'favicon.ico');
+    if (fs.existsSync(faviconSrc)) {
+      fs.copySync(faviconSrc, faviconDest);
+      console.log('   ✓ Copied favicon.ico');
+    }
+    
     // worksディレクトリ内の静的ファイル（HTMLファイル以外）をコピー
     const worksSrc = path.join(this.config.srcDir, 'works');
     if (fs.existsSync(worksSrc)) {
