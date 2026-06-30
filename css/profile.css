@@ -42,7 +42,7 @@
   font-size: 2.6em;
   font-weight: 400;
   line-height: 1em;
-  margin:0.5em 0 0.2em 0;
+  margin: 0.5em 0 0.2em 0;
   color: var(--color-primary);
 }
 
@@ -173,11 +173,21 @@
   border-color: var(--color-primary);
 }
 
-.lang-en { display: none; }
-.lang-ja { display: none; }
+.lang-en {
+  display: none;
+}
 
-html.lang-en-active .lang-en { display: inline; }
-html.lang-ja-active .lang-ja { display: inline; }
+.lang-ja {
+  display: none;
+}
+
+html.lang-en-active .lang-en {
+  display: inline;
+}
+
+html.lang-ja-active .lang-ja {
+  display: inline;
+}
 
 
 
@@ -187,31 +197,31 @@ html.lang-ja-active .lang-ja { display: inline; }
   .profile-container {
     padding: 1em 0;
   }
-  
+
   .profile-header {
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 1.5em;
   }
-  
+
   .profile-avatar {
     width: 170px;
     height: 170px;
   }
-  
+
   .profile-name {
     font-size: 2em;
   }
-  
+
   .profile-location {
     font-size: 1.1em;
   }
-  
+
   .profile-section p {
     font-size: 1em;
   }
-  
+
   /* 英語テキストのみハイフネーションを有効化 */
   .lang-en {
     hyphens: auto;
@@ -225,11 +235,11 @@ html.lang-ja-active .lang-ja { display: inline; }
   .profile-container {
     padding: 0.5em 0;
   }
-  
+
   .profile-section {
     margin-bottom: 2em;
   }
-  
+
   .profile-section h2 {
     font-size: 1.5em;
   }
