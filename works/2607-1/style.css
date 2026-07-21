@@ -1,0 +1,326 @@
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #050505;
+    }
+
+    .background-output {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+      object-position: center;
+      background: #050505;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    body.has-background #backgroundImg { opacity: 1; }
+
+    #runtimeControls {
+      position: fixed;
+      left: var(--runtime-controls-left, 18px);
+      bottom: var(--runtime-controls-bottom, 18px);
+      z-index: 10;
+      display: flex;
+      align-items: stretch;
+      gap: var(--runtime-control-gap, 5px);
+      width: max-content;
+      pointer-events: none;
+      filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.36));
+      isolation: isolate;
+      transform: scale(var(--runtime-controls-scale, 1));
+      transform-origin: left bottom;
+    }
+
+    #runtimeControls::before {
+      content: "";
+      position: absolute;
+      inset: -5px;
+      z-index: -1;
+      border-radius: 2px;
+      background: rgba(0, 0, 0, 0);
+      transition: background-color 120ms linear;
+    }
+
+    #runtimeControls.is-output-hovered::before {
+      background: rgba(0, 0, 0, 0.22);
+    }
+
+    .playback-button {
+      position: relative;
+      z-index: 1;
+      flex: 0 0 var(--runtime-control-height, 32px);
+      width: var(--runtime-control-height, 32px);
+      height: var(--runtime-control-height, 32px);
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.95);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition:
+        background-color 120ms linear,
+        border-color 120ms linear,
+        opacity 120ms linear;
+      cursor: pointer;
+    }
+
+    .playback-button::before {
+      content: "";
+      position: absolute;
+      left: 53%;
+      top: 50%;
+      width: 30%;
+      height: 42%;
+      background: currentColor;
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      transform: translate(-50%, -50%);
+    }
+
+    .playback-button.is-playing::before {
+      left: 50%;
+      width: 34%;
+      height: 42%;
+      background: linear-gradient(
+        to right,
+        currentColor 0 32%,
+        transparent 32% 68%,
+        currentColor 68% 100%
+      );
+      clip-path: none;
+    }
+
+    .playback-button.is-visible {
+      opacity: 0.68;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    #runtimeControls.is-output-hovered .playback-button.is-visible,
+    .playback-button.is-visible:hover {
+      border-color: rgba(255, 255, 255, 1);
+      background: rgba(255, 255, 255, 0.045);
+      opacity: 1;
+    }
+
+    .playback-button:focus-visible {
+      outline: 1px solid currentColor;
+      outline-offset: 3px;
+    }
+
+    #runtimeOverlay {
+      --runtime-color: rgba(255, 255, 255, 0.92);
+      --runtime-meter-track: rgba(255, 255, 255, 0.14);
+      --runtime-meter-fill: rgba(255, 255, 255, 0.82);
+      --runtime-meter-reject-stripe: rgba(255, 255, 255, 0.72);
+      --runtime-error-color: #ff4d4d;
+      --runtime-text-size: 7.5px;
+      --runtime-row-gap: 3px;
+      --runtime-phase-size: 6.5px;
+      --runtime-meter-height: 6px;
+      --runtime-cell-width: 32px;
+      --runtime-cell-gap: 4px;
+
+      position: relative;
+      z-index: 1;
+      width: max-content;
+      color: var(--runtime-color);
+      font-family:
+        "Noto Sans",
+        "Noto Sans JP",
+        "Noto Sans CJK JP",
+        sans-serif;
+      font-size: var(--runtime-text-size);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.06em;
+      line-height: var(--runtime-text-size);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 120ms linear;
+    }
+
+    #runtimeOverlay.has-source {
+      opacity: 1;
+    }
+
+    .runtime-primary {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: max-content;
+      padding: 7px 8px;
+      white-space: nowrap;
+    }
+
+    .runtime-state,
+    .runtime-seed,
+    .runtime-variant {
+      display: grid;
+      grid-template-rows: repeat(2, var(--runtime-text-size));
+      align-items: center;
+      row-gap: var(--runtime-row-gap);
+    }
+
+    .runtime-state,
+    .runtime-seed,
+    .runtime-section {
+      flex: 0 0 auto;
+    }
+
+    .runtime-state {
+      justify-items: center;
+    }
+
+    .runtime-seed {
+      justify-items: start;
+    }
+
+    .runtime-phase {
+      position: relative;
+      width: var(--runtime-phase-size);
+      height: var(--runtime-phase-size);
+      transform: translateY(-0.5px);
+    }
+
+    .runtime-phase::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1.25px solid currentColor;
+      border-radius: 50%;
+    }
+
+    .runtime-phase.is-filled::before {
+      background: currentColor;
+    }
+
+    .runtime-phase.is-pending::before {
+      border-width: 1.5px;
+      border-style: solid;
+      opacity: 1;
+    }
+
+    .runtime-phase.is-error::before {
+      border-color: var(--runtime-error-color);
+      background: var(--runtime-error-color);
+    }
+
+    .runtime-phase.is-failure-flash::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: calc(100% + 5px);
+      height: calc(100% + 5px);
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .runtime-stack-label {
+      letter-spacing: 0.08em;
+    }
+
+    .runtime-frame-value,
+    .runtime-seed-value {
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    .runtime-frame-value {
+      min-width: 3em;
+      text-align: center;
+    }
+
+    .runtime-seed-value {
+      min-width: 7.5em;
+      text-align: left;
+    }
+
+    .runtime-section {
+      display: flex;
+      align-items: center;
+    }
+
+    .runtime-parameters,
+    .runtime-variant-grid {
+      gap: var(--runtime-cell-gap);
+    }
+
+    .runtime-meter {
+      align-self: center;
+      width: 100%;
+      height: var(--runtime-meter-height);
+      overflow: hidden;
+      background: var(--runtime-meter-track);
+    }
+
+    .runtime-meter > i {
+      display: block;
+      width: var(--value, 0%);
+      height: 100%;
+      background: var(--runtime-meter-fill);
+      transition: width 180ms linear;
+    }
+
+    .runtime-meter.is-pending {
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+    }
+
+    .runtime-meter.is-active {
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.38);
+    }
+
+    .runtime-meter.is-success {
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+    }
+
+    .runtime-meter.is-reject > i {
+      width: var(--value, 0%);
+      background-color: transparent;
+      background-image: linear-gradient(
+        -45deg,
+        var(--runtime-meter-reject-stripe) 0 25%,
+        transparent 25% 50%,
+        var(--runtime-meter-reject-stripe) 50% 75%,
+        transparent 75% 100%
+      );
+      background-size: 4px 4px;
+      transition: none;
+    }
+
+    .runtime-variant-grid {
+      display: grid;
+      grid-template-columns: repeat(
+        var(--runtime-variant-count, 6),
+        var(--runtime-cell-width)
+      );
+    }
+
+    .runtime-variant {
+      width: var(--runtime-cell-width);
+      min-width: var(--runtime-cell-width);
+      text-align: left;
+    }
+
+    @media (max-width: 600px) {
+      .runtime-primary {
+        padding: 6px 7px;
+      }
+    }

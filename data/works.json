@@ -1,5 +1,30 @@
 [
   {
+    "id": "2607-1",
+    "title": "JPGL",
+    "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1784655349/1-composite-03-seed-2710268557_nsvyto.jpg",
+    "tags": [
+      "code"
+    ],
+    "media": [
+      {
+        "type": "html",
+        "src": "/works/2607-1/JPGL.html"
+      },
+      {
+        "type": "image2column",
+        "src": [
+          "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1784655398/1-composite-08-seed-1875352796_jfyiyn.jpg",
+          "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1784655402/1-composite-03-seed-3485831515_uch3wp.jpg",
+          "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1784655398/1-composite-08-seed-3464223255_j4kth9.jpg",
+          "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1784655347/1-composite-01-seed-1307932418_dxna4y.jpg",
+          "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1784655404/1-composite-05-seed-236228107_yod9u9.jpg",
+          "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1784655349/1-composite-02-seed-2761978866_zjrn9l.jpg"
+        ]
+      }
+    ]
+  },
+  {
     "id": "2602-3",
     "title": "MGTM",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1772030755/MGTM-1_wlk1gh.png",
