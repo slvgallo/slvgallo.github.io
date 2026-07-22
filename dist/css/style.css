@@ -847,8 +847,11 @@ html.lang-ja-active .project-desc-lang.lang-ja {
 }
 
 .lang-btn {
+  -webkit-appearance: none;
+  appearance: none;
   background: none;
   border: 1px solid var(--color-primary);
+  color: var(--color-primary);
   padding: 4px 8px;
   cursor: pointer;
   font-size: 0.9em;
