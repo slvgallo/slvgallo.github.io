@@ -17,9 +17,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   initFavicon();
   initFilterFocus();
 
-  // profileページのみ言語切り替えを初期化
-  const isProfilePage = currentPage === 'profile.html';
-  if (isProfilePage) {
+  // 言語切り替えUIがあるページで初期化
+  if (document.querySelector('.lang-buttons')) {
     const { initLangToggle } = await import('./lang-toggle.js');
     initLangToggle();
   }

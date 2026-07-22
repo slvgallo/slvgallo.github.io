@@ -84,9 +84,9 @@ class SiteBuilder {
       
       case 'image2column':
         if (Array.isArray(mediaItem.src)) {
-          return `<div class="image2column-wrap" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          return `<div class="image2column-wrap">
             ${mediaItem.src.map(s => 
-              `<img src="${optimizeCloudinaryUrl(s)}" alt="Project image" loading="lazy" style="width: 100%; height: auto;">`
+              `<img src="${optimizeCloudinaryUrl(s)}" alt="Project image" loading="lazy">`
             ).join('')}
           </div>`;
         }
@@ -153,7 +153,17 @@ class SiteBuilder {
         const hSrc = mediaItem.src.startsWith('/works/') 
           ? mediaItem.src.replace('/works/', '../works/') 
           : mediaItem.src;
-        return `<div class="html-wrap">
+        const ratioMatch = typeof mediaItem.aspectRatio === 'string'
+          ? mediaItem.aspectRatio.match(/^(\d+(?:\.\d+)?)\s*[/:]\s*(\d+(?:\.\d+)?)$/)
+          : null;
+        const hasValidRatio = ratioMatch
+          && Number(ratioMatch[1]) > 0
+          && Number(ratioMatch[2]) > 0;
+        const ratioClass = hasValidRatio ? ' html-wrap--fixed-ratio' : '';
+        const ratioStyle = hasValidRatio
+          ? ` style="--html-aspect-ratio: ${ratioMatch[1]} / ${ratioMatch[2]}"`
+          : '';
+        return `<div class="html-wrap${ratioClass}"${ratioStyle}>
           <iframe src="${hSrc}" frameborder="0" allowfullscreen></iframe>
         </div>`;
       
@@ -183,6 +193,28 @@ class SiteBuilder {
     const tagsHtml = work.tags 
       ? work.tags.map(tag => `<a href="../index.html?filter=${tag}" class="project-tag">#${tag}</a>`).join(' ') 
       : '';
+
+    const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[character]);
+    const formatDescription = description => description || '';
+    const stripHtml = html => String(html || '').replace(/<[^>]*>/g, ' ');
+
+    const hasBilingualDescription = Boolean(work.desc_en && work.desc);
+    const descriptionContent = hasBilingualDescription
+      ? `<div class="project-desc-lang lang-en">${formatDescription(work.desc_en)}</div><div class="project-desc-lang lang-ja">${formatDescription(work.desc)}</div>`
+      : formatDescription(work.desc);
+    const languageButtons = hasBilingualDescription
+      ? `<div class="lang-buttons" role="group" aria-label="Description language">
+              <button id="lang-en" class="lang-btn active" type="button">EN</button>
+              <button id="lang-ja" class="lang-btn" type="button">JP</button>
+            </div>`
+      : '';
+    const metaDescription = escapeHtml(stripHtml(work.desc_en || work.desc).replace(/\s+/g, ' ').trim());
     
     const thumbInfo = this.getProcessedThumb(work.thumb);
     const optimizedThumb = optimizeCloudinaryUrl(thumbInfo.url || work.thumb || '');
@@ -190,7 +222,9 @@ class SiteBuilder {
     return template
       .replace(/\{\{ID\}\}/g, work.id)
       .replace(/\{\{TITLE\}\}/g, work.title)
-      .replace(/\{\{DESC\}\}/g, (work.desc || '').replace(/\n/g, '<br>'))
+      .replace(/\{\{META_DESC\}\}/g, metaDescription)
+      .replace(/\{\{DESC_CONTENT\}\}/g, descriptionContent)
+      .replace(/\{\{LANG_BUTTONS\}\}/g, languageButtons)
       .replace(/\{\{DATE\}\}/g, this.generateDateFromId(work.id))
       .replace(/\{\{THUMB\}\}/g, optimizedThumb)
       .replace(/\{\{TAGS_TEXT\}\}/g, tagsText)
