@@ -125,6 +125,7 @@
   color: var(--color-primary);
   margin-bottom: 1.5em;
   text-align: justify;
+  text-justify: inter-character;
   text-indent: 0;
 }
 
