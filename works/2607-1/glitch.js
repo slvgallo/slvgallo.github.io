@@ -1493,7 +1493,7 @@
       if (distance > 12 || elapsed > 600) return;
       if (!isPointInsideRenderedImage(event.clientX, event.clientY)) return;
       event.preventDefault();
-      toggleAutoPlayback();
+      void toggleAutoPlayback();
     }
 
     function clearPlaybackTap(event) {
@@ -1529,7 +1529,7 @@
     function handlePlaybackButtonClick(event) {
       event.preventDefault();
       event.stopPropagation();
-      toggleAutoPlayback();
+      void toggleAutoPlayback();
     }
 
     function installPlaybackToggle() {
@@ -2043,11 +2043,13 @@
       requestRuntimeOverlayRender();
     }
 
-    function toggleAutoPlayback() {
+    async function toggleAutoPlayback() {
       if (!currentBytes) return;
       if (autoRunning) {
         pauseAuto();
       } else {
+        await unlockTransitionAudio();
+        if (!currentBytes || autoRunning) return;
         startAuto({ resetFrame: false });
       }
     }
@@ -14512,14 +14514,17 @@
 
     function unlockTransitionAudio() {
       const context = getTransitionAudioContext();
-      if (!context) return;
+      if (!context) return Promise.resolve(false);
       const resume = context.state === "running"
         ? Promise.resolve()
         : context.resume();
-      resume.then(() => {
-        if (context.state === "running") removeTransitionAudioUnlock();
+      return resume.then(() => {
+        const isRunning = context.state === "running";
+        if (isRunning) removeTransitionAudioUnlock();
+        return isRunning;
       }).catch(() => {
         // Browsers may reject resume calls that are not tied to a user gesture.
+        return false;
       });
     }
 

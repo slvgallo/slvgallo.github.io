@@ -164,7 +164,7 @@ class SiteBuilder {
           ? ` style="--html-aspect-ratio: ${ratioMatch[1]} / ${ratioMatch[2]}"`
           : '';
         return `<div class="html-wrap${ratioClass}"${ratioStyle}>
-          <iframe src="${hSrc}" frameborder="0" allowfullscreen></iframe>
+          <iframe src="${hSrc}" frameborder="0" allow="autoplay" allowfullscreen></iframe>
         </div>`;
       
       default:
