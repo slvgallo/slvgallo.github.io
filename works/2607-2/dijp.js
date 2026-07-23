@@ -2,22 +2,17 @@
 const canvas = document.getElementById('view');
 const ctx = canvas.getContext('2d', {alpha: false});
 const slider = document.getElementById('phase');
-const readout = document.getElementById('readout');
-const statusEl = document.getElementById('status');
 const phaseValue = document.getElementById('phaseValue');
-const standardView = document.getElementById('standardView');
-const standardModeButton = document.getElementById('standardMode');
-const dedicatedModeButton = document.getElementById('dedicatedMode');
 const playPauseButton = document.getElementById('playPause');
 const stateButtons = Array.from(document.querySelectorAll('[data-phase]'));
 const ASSET_URL = './assets/dual_interpretation.jpg';
 const A_TO_B_MILLISECONDS = 8000;
+const MIDDLE_SNAP_THRESHOLD = 0.015;
 ctx.imageSmoothingEnabled = false;
 let parsed = null;
 let decoded = null;
 let lastRenderedPhase = null;
 let errorLogged = false;
-let mode = 'dedicated';
 let playing = false;
 let playbackDirection = 1;
 let previousFrameTime = null;
@@ -389,13 +384,11 @@ function renderImage(parsed, decoded, t) {
   ox.putImageData(image, 0, 0);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(off, 0, 0, canvas.width, canvas.height);
-  let label = 'STABLE A';
   let currentSection = 'A';
-  if (t >= 0.9999) { label = 'STABLE B'; currentSection = 'B'; }
-  else if (Math.abs(t - 0.5) < 0.0001) { label = 'CANONICAL M'; currentSection = 'M'; }
-  else if (t > 0.0001 && t < 0.5) { label = 'TRANSITION A → M'; currentSection = 'A→M'; }
-  else if (t > 0.5) { label = 'TRANSITION M → B'; currentSection = 'M→B'; }
-  readout.textContent = `${label} · ${t.toFixed(3)}`;
+  if (t >= 0.9999) currentSection = 'B';
+  else if (Math.abs(t - 0.5) < 0.0001) currentSection = 'M';
+  else if (t > 0.0001 && t < 0.5) currentSection = 'A→M';
+  else if (t > 0.5) currentSection = 'M→B';
   canvas.dataset.section = currentSection;
   canvas.dataset.collisions = String(collisions);
   canvas.dataset.gaps = String(gaps);
@@ -407,13 +400,7 @@ function renderImage(parsed, decoded, t) {
 }
 function showError(error) {
   const detail = error && error.message ? error.message : String(error);
-  let message = 'DIJP DECODE ERROR';
-  if (/APP15|metadata|grid/i.test(detail)) message = 'INVALID APP15';
-  else if (/version/i.test(detail)) message = 'DIJP VERSION MISMATCH';
-  else if (/unsupported|4:4:4|SOF0|scan|JPEG/i.test(detail)) message = 'UNSUPPORTED JPEG';
-  statusEl.textContent = message;
-  readout.textContent = `ERROR\n${message}`;
-  if (!errorLogged) { console.error(detail); errorLogged = true; }
+  if (!errorLogged) { console.error('DIJP DECODE ERROR:', detail); errorLogged = true; }
 }
 function loadBytes(bytes) {
   try {
@@ -424,25 +411,36 @@ function loadBytes(bytes) {
     canvas.width = jp.sof.width;
     canvas.height = jp.sof.height;
     lastRenderedPhase = null;
-    statusEl.textContent = `LOADED ${jp.meta.format || 'DIJP'} · ${jp.sof.width}×${jp.sof.height}`;
     requestRender(Number(slider.value));
   } catch (err) { showError(err); }
 }
+
+function updateStateButtonActivity(phase) {
+  const threshold = playing ? MIDDLE_SNAP_THRESHOLD : 0;
+  for (const button of stateButtons) {
+    const distance = Math.abs(phase - Number(button.dataset.phase));
+    button.setAttribute('aria-pressed', String(distance <= threshold));
+  }
+}
+
 function requestRender(value) {
   const phase = clamp(Number.isFinite(value) ? value : 0, 0, 1);
   slider.value = String(phase);
   phaseValue.value = phase.toFixed(3);
-  if (!parsed || !decoded || mode !== 'dedicated') return;
+  updateStateButtonActivity(phase);
+  if (!parsed || !decoded) return;
   if (lastRenderedPhase === phase) return;
   lastRenderedPhase = phase;
   renderImage(parsed, decoded, phase);
 }
 
 function setPlaying(nextPlaying) {
-  playing = nextPlaying && mode === 'dedicated';
+  playing = nextPlaying;
   previousFrameTime = null;
-  playPauseButton.textContent = playing ? 'PAUSE' : 'PLAY';
+  playPauseButton.setAttribute('aria-label', playing ? 'Pause' : 'Play');
   playPauseButton.setAttribute('aria-pressed', String(playing));
+  canvas.setAttribute('aria-label', `Dedicated DIJP decoder output. Click to ${playing ? 'pause' : 'play'}.`);
+  updateStateButtonActivity(Number(slider.value));
   if (playing) requestAnimationFrame(animate);
 }
 
@@ -463,28 +461,6 @@ function animate(timestamp) {
   requestAnimationFrame(animate);
 }
 
-function setMode(nextMode) {
-  if (nextMode !== 'standard' && nextMode !== 'dedicated') return;
-  setPlaying(false);
-  mode = nextMode;
-  const standard = mode === 'standard';
-  standardView.hidden = !standard;
-  canvas.hidden = standard;
-  standardModeButton.setAttribute('aria-pressed', String(standard));
-  dedicatedModeButton.setAttribute('aria-pressed', String(!standard));
-  slider.disabled = standard;
-  playPauseButton.disabled = standard;
-  for (const button of stateButtons) button.disabled = standard;
-  if (standard) {
-    slider.value = '0.5';
-    phaseValue.value = '0.500';
-    readout.textContent = 'STANDARD · M · 0.500';
-  } else {
-    lastRenderedPhase = null;
-    requestRender(Number(slider.value));
-  }
-}
-
 async function loadAsset() {
   try {
     const response = await fetch(ASSET_URL);
@@ -497,7 +473,8 @@ async function loadAsset() {
 
 slider.addEventListener('input', () => {
   setPlaying(false);
-  requestRender(Number(slider.value));
+  const phase = Number(slider.value);
+  requestRender(Math.abs(phase - 0.5) <= MIDDLE_SNAP_THRESHOLD ? 0.5 : phase);
 });
 stateButtons.forEach(button => button.addEventListener('click', () => {
   setPlaying(false);
@@ -506,16 +483,17 @@ stateButtons.forEach(button => button.addEventListener('click', () => {
   requestRender(phase);
 }));
 playPauseButton.addEventListener('click', () => setPlaying(!playing));
-standardModeButton.addEventListener('click', () => setMode('standard'));
-dedicatedModeButton.addEventListener('click', () => setMode('dedicated'));
+canvas.addEventListener('click', () => setPlaying(!playing));
+canvas.addEventListener('keydown', event => {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  event.preventDefault();
+  setPlaying(!playing);
+});
 window.addEventListener('keydown', event => {
-  if (mode !== 'dedicated' || (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')) return;
+  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
   event.preventDefault();
   setPlaying(false);
   const delta = event.shiftKey ? 0.05 : 0.01;
   requestRender(Number(slider.value) + (event.key === 'ArrowRight' ? delta : -delta));
 });
-standardView.addEventListener('error', () => showError(new Error('Standard JPEG load failed')));
-
-setMode('dedicated');
 loadAsset();

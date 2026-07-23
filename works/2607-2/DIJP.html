@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A static viewer for a Dual-Interpretation JPEG.">
+  <title>DIJP — Dual-Interpretation JPEG</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./dijp.js" defer></script>
+</head>
+<body>
+  <main class="viewer">
+    <section class="artwork" aria-label="Dual-Interpretation JPEG viewer">
+      <div class="stage">
+        <canvas
+          id="view"
+          width="256"
+          height="256"
+          role="button"
+          tabindex="0"
+          aria-label="Dedicated DIJP decoder output. Click to play."
+        ></canvas>
+      </div>
+
+      <div class="overlay">
+        <div class="control-panel">
+          <button
+            id="playPause"
+            class="play-button"
+            type="button"
+            aria-label="Play"
+            aria-pressed="false"
+          ></button>
+
+          <span class="phase-readout">
+            <span>PHASE</span>
+            <output id="phaseValue" for="phase">0.500</output>
+          </span>
+
+          <div class="phase-stack">
+            <div class="phase-control">
+              <input
+                id="phase"
+                type="range"
+                min="0"
+                max="1"
+                value="0.5"
+                step="0.0001"
+                aria-label="Dedicated decoder phase"
+              >
+            </div>
+
+            <div class="transport" aria-label="Phase presets">
+              <button class="state-button" data-phase="0" type="button" aria-pressed="false">Interpretation A</button>
+              <button class="state-button" data-phase="0.5" type="button" aria-pressed="true">Standard JPEG</button>
+              <button class="state-button" data-phase="1" type="button" aria-pressed="false">Interpretation B</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

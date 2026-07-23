@@ -274,6 +274,7 @@
     const analysis = input.analysis || {};
     const fields = input.fields || {};
     const warnings = [];
+    const caveats = ["meanTexture:possible-edge-overlap"];
     const availability = Object.fromEntries(
       FEATURE_NAMES.map((name) => [name, true])
     );
@@ -392,7 +393,6 @@
       availability.meanTexture = false;
       pushWarning(warnings, "meanTexture:missing-field");
     }
-    pushWarning(warnings, "meanTexture:possible-edge-overlap");
 
     const rgbChannelVariance = computeRgbChannelVariance(
       input.originalImageData
@@ -492,6 +492,7 @@
         }
       },
       availability,
+      caveats,
       warnings
     };
   }
@@ -595,6 +596,7 @@
       raw: analyzed.raw,
       metadata: analyzed.metadata,
       availability: analyzed.availability,
+      caveats: analyzed.caveats,
       warnings: analyzed.warnings,
       valid: false
     };
