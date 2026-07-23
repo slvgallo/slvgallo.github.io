@@ -16,24 +16,25 @@ damage, crossfades, or post-render noise.
 
 ## Local preview
 
-Serve the repository root with any static HTTP server, then open `/dijp/`.
+Serve the repository root with any static HTTP server, then open
+`/works/2607-2/`.
 For example:
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Open `http://127.0.0.1:8000/dijp/`. Direct `file://` access is not supported
-because the viewer fetches its JPEG asset.
+Open `http://127.0.0.1:8000/works/2607-2/`. Direct `file://` access is not
+supported because the viewer fetches its JPEG asset.
 
 ## GitHub Pages
 
-Publish the repository root or copy this directory to a personal Pages
-repository. Keep the directory name `dijp`; every runtime URL is relative, so
-the viewer works at:
+Publish the repository root or copy this directory to `works/2607-2/` in a
+personal Pages repository. Every runtime URL is relative, so the viewer works
+at:
 
 ```text
-https://<username>.github.io/dijp/
+https://<username>.github.io/works/2607-2/
 ```
 
 This viewer uses a fixed JPEG and does not include the two-image generation UI.

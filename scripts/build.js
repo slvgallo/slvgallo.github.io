@@ -400,7 +400,7 @@ const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_
   copyAssets() {
     console.log('📦 Copying assets...');
     
-    const assets = ['css', 'js', 'img', 'data', 'dijp'];
+    const assets = ['css', 'js', 'img', 'data'];
     assets.forEach(asset => {
       const src = path.join(this.config.srcDir, asset);
       const dest = path.join(this.config.distDir, asset);
