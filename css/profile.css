@@ -129,8 +129,19 @@
   text-indent: 0;
 }
 
-.profile-statement span {
-  white-space: pre-wrap;
+.profile-statement > .lang-en,
+.profile-statement > .lang-ja {
+  width: 100%;
+  white-space: normal;
+}
+
+html.lang-en-active .profile-statement > .lang-en,
+html.lang-ja-active .profile-statement > .lang-ja {
+  display: block;
+}
+
+.profile-paragraph {
+  display: block;
 }
 
 .profile-signature {
