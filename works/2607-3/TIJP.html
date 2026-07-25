@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="TIJP — Triple-Interpretation JPEG full-screen viewer">
+  <meta name="theme-color" content="#050606">
+  <title>TIJP — Triple-Interpretation JPEG</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./tijp.js" defer></script>
+</head>
+<body>
+  <main id="viewer" aria-busy="true">
+    <canvas
+      id="decoded-canvas"
+      role="button"
+      tabindex="0"
+      aria-label="Decoded TIJP image. Click to play or pause automatic interpretation."
+      aria-pressed="false"
+    ></canvas>
+
+    <div id="image-ui-frame" class="image-ui-frame">
+      <section id="control-overlay" class="control-overlay" aria-label="TIJP controls and A B C ratios">
+        <div class="control-panel">
+          <div class="controller-section" aria-label="Interpretation controller">
+            <svg
+              id="triangle-controller"
+              viewBox="0 0 300 260"
+              role="application"
+              aria-label="TIJP interpretation space. Use pointer, A B C, Home, or arrow keys."
+              tabindex="0"
+            >
+              <polygon class="triangle-hit" points="24,236 150,20 276,236"></polygon>
+              <polygon class="triangle-edge" points="24,236 150,20 276,236"></polygon>
+              <g class="region-lines">
+                <line id="line-ma"></line>
+                <line id="line-mb"></line>
+                <line id="line-mc"></line>
+              </g>
+              <g class="anchor-group" data-anchor="A">
+                <circle class="anchor-hit" r="22"></circle>
+                <circle class="anchor-dot" r="3"></circle>
+                <text>A</text>
+              </g>
+              <g class="anchor-group" data-anchor="B">
+                <circle class="anchor-hit" r="22"></circle>
+                <circle class="anchor-dot" r="3"></circle>
+                <text>B</text>
+              </g>
+              <g class="anchor-group" data-anchor="C">
+                <circle class="anchor-hit" r="22"></circle>
+                <circle class="anchor-dot" r="3"></circle>
+                <text>C</text>
+              </g>
+              <g id="standard-marker" class="standard-marker" data-anchor="M">
+                <circle class="anchor-hit" r="22"></circle>
+                <circle class="standard-ring" r="7"></circle>
+                <path d="M-4 0H4M0-4V4"></path>
+                <text>Std</text>
+              </g>
+              <g id="current-marker" class="current-marker" aria-hidden="true">
+                <circle class="current-halo" r="9"></circle>
+                <circle class="current-dot" r="5"></circle>
+              </g>
+            </svg>
+            <div class="controller-footer">
+              <button
+                id="play-pause"
+                class="play-button"
+                type="button"
+                aria-label="Play automatic interpretation"
+                aria-pressed="false"
+                disabled
+              ></button>
+
+              <div class="ratio-section">
+                <p class="interpretation-label">Interpretation</p>
+                <div class="ratio-values" role="group" aria-label="Interpretation presets and ratios">
+                  <button class="ratio-button" data-ratio-anchor="A" type="button" aria-label="Set interpretation A to 100 percent" aria-pressed="false">
+                    <span>A</span><output id="ratio-a">0.0%</output>
+                  </button>
+                  <button class="ratio-button" data-ratio-anchor="B" type="button" aria-label="Set interpretation B to 100 percent" aria-pressed="false">
+                    <span>B</span><output id="ratio-b">0.0%</output>
+                  </button>
+                  <button class="ratio-button" data-ratio-anchor="C" type="button" aria-label="Set interpretation C to 100 percent" aria-pressed="false">
+                    <span>C</span><output id="ratio-c">0.0%</output>
+                  </button>
+                  <button class="ratio-button" data-ratio-anchor="M" type="button" aria-label="Set standard interpretation to 100 percent" aria-pressed="true">
+                    <span>Std</span><output id="ratio-m">100.0%</output>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p id="controller-announcement" class="sr-only" aria-live="polite"></p>
+      </section>
+
+      <p id="loading-overlay" class="message-overlay">LOADING TIJP</p>
+      <div id="error-overlay" class="message-overlay error-overlay" hidden>
+        <p id="error-title">TIJP DECODE ERROR</p>
+        <span id="error-detail"></span>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,392 @@
+:root {
+  color-scheme: dark;
+  --background: #050505;
+  --ui: rgba(255, 255, 255, .92);
+  --ui-soft: rgba(255, 255, 255, .56);
+  --ui-faint: rgba(255, 255, 255, .32);
+  --backing: rgba(0, 0, 0, .22);
+  --panel-inset: clamp(8px, 2.5vmin, 18px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--background);
+  color: var(--ui);
+  font-family: "Noto Sans", "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+button:focus-visible,
+#triangle-controller:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 3px;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: .32;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+#viewer {
+  position: fixed;
+  inset: 0 auto auto 0;
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100%;
+  overflow: hidden;
+  background: var(--background);
+  color: var(--ui);
+  touch-action: none;
+}
+
+#decoded-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--background);
+  cursor: pointer;
+}
+
+#decoded-canvas:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, .7);
+  outline-offset: -2px;
+}
+
+.image-ui-frame {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.control-overlay {
+  position: absolute;
+  z-index: 3;
+  left: max(var(--panel-inset), env(safe-area-inset-left));
+  bottom: max(var(--panel-inset), env(safe-area-inset-bottom));
+  width: min(330px, calc(100% - var(--panel-inset) * 2));
+  padding: 7px;
+  color: var(--ui);
+  background: var(--backing);
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .36));
+  pointer-events: auto;
+  transition: background-color 120ms linear;
+}
+
+.control-overlay:hover {
+  background: rgba(0, 0, 0, .34);
+}
+
+.control-panel {
+  display: block;
+}
+
+.controller-section {
+  min-width: 0;
+  user-select: none;
+}
+
+#triangle-controller {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  color: var(--ui);
+  cursor: crosshair;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .55));
+  touch-action: none;
+}
+
+.triangle-hit,
+.anchor-hit {
+  fill: transparent;
+  pointer-events: all;
+}
+
+.triangle-edge {
+  fill: var(--backing);
+  stroke: currentColor;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.region-lines line {
+  stroke: currentColor;
+  stroke-width: 1;
+  stroke-opacity: .23;
+  vector-effect: non-scaling-stroke;
+}
+
+.anchor-group,
+.standard-marker {
+  transform-box: fill-box;
+}
+
+.anchor-dot,
+.current-dot {
+  fill: currentColor;
+}
+
+.anchor-group text,
+.standard-marker text {
+  fill: currentColor;
+  font-size: 13px;
+  font-weight: 500;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.anchor-group[data-anchor="A"] text {
+  transform: translate(-14px, 2px);
+}
+
+.anchor-group[data-anchor="B"] text {
+  transform: translate(0, -14px);
+}
+
+.anchor-group[data-anchor="C"] text {
+  transform: translate(14px, 2px);
+}
+
+.standard-marker text {
+  transform: translate(21px, 0);
+}
+
+.standard-ring,
+.current-halo {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.standard-marker path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.current-marker {
+  pointer-events: none;
+}
+
+.current-halo {
+  stroke-width: 2;
+}
+
+.current-dot {
+  stroke: rgba(0, 0, 0, .7);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.current-marker.is-snapped .current-halo {
+  stroke-width: 3;
+}
+
+.controller-footer {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  align-items: end;
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.play-button {
+  position: relative;
+  display: block;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--ui);
+  border-radius: 50%;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  opacity: .72;
+  transition:
+    background-color 120ms linear,
+    border-color 120ms linear,
+    opacity 120ms linear;
+}
+
+.play-button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 53%;
+  width: 30%;
+  height: 42%;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  transform: translate(-50%, -50%);
+}
+
+.play-button[aria-pressed="true"]::before {
+  left: 50%;
+  width: 34%;
+  background: linear-gradient(
+    to right,
+    currentColor 0 32%,
+    transparent 32% 68%,
+    currentColor 68% 100%
+  );
+  clip-path: none;
+}
+
+.play-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, .045);
+  opacity: 1;
+}
+
+.ratio-section {
+  display: grid;
+  min-width: 0;
+  gap: 7px;
+}
+
+.interpretation-label {
+  margin: 0;
+  color: var(--ui);
+  font-size: 9px;
+  line-height: 1;
+  letter-spacing: .08em;
+}
+
+.ratio-values {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+  font-variant-numeric: tabular-nums;
+  transform: translateY(-1px);
+}
+
+.ratio-button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 35px;
+  align-items: center;
+  column-gap: 3px;
+  min-width: 0;
+  height: 15px;
+  padding: 0 2px 0 4px;
+  border: 1px solid var(--ui);
+  color: var(--ui);
+  background: transparent;
+  font-size: 9px;
+  line-height: 1;
+  letter-spacing: .06em;
+  cursor: pointer;
+}
+
+.ratio-button span {
+  color: inherit;
+  text-align: left;
+}
+
+.ratio-button output {
+  min-width: 0;
+  overflow: hidden;
+  text-align: right;
+  text-overflow: clip;
+}
+
+.ratio-button[aria-pressed="true"] {
+  background: var(--ui);
+  color: var(--background);
+}
+
+.ratio-button[aria-pressed="true"] span {
+  color: inherit;
+}
+
+.ratio-button:not([aria-pressed="true"]):hover {
+  background: rgba(255, 255, 255, .18);
+}
+
+.message-overlay {
+  position: absolute;
+  z-index: 8;
+  left: 50%;
+  bottom: max(22px, 8vh);
+  margin: 0;
+  padding: 3px 6px;
+  color: var(--ui);
+  background: var(--backing);
+  font-size: 9px;
+  letter-spacing: .06em;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.error-overlay {
+  text-align: center;
+}
+
+.error-overlay p {
+  margin: 0;
+}
+
+.error-overlay span {
+  display: block;
+  margin-top: 2px;
+  color: var(--ui-soft);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 380px) {
+  .control-overlay {
+    padding: 6px;
+  }
+
+  .controller-footer {
+    gap: 8px;
+  }
+
+  .ratio-values {
+    gap: 3px;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control-overlay,
+  .play-button {
+    transition: none;
+  }
+}
