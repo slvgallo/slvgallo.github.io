@@ -1,5 +1,34 @@
 [
   {
+    "id": "2607-4",
+    "title": "Peirce Quincuncial Projection",
+    "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1785266133/PeirceQuincuncialProjection_qlbs81.png",
+    "tags": [
+      "code",
+      "geometry"
+    ],
+    "desc": "<p>パース・クインカンシャル図法は、チャールズ・サンダース・パースによって1879年に考案された、球面を正方形へ写す世界地図投影法である。</p><p>この図法では、北極が正方形の中心に置かれ、南極は四つの隅へ分割される。赤道は各辺の中点を結ぶ菱形として現れ、北半球はその内側、南半球は外側へ配置される。投影された正方形を向きを変えながら接続することで、同じ地球表面によって平面を反復的に充填することもできる。</p><p>パース・クインカンシャル図法の魅力は、世界を正方形へ収めることだけではない。球面の連続性、極の位置、投影の切断と接続、二つの半球の関係が、中心、四隅、辺、菱形という明快な幾何学として現れる。一般的な世界地図では外周へ置かれることの多い継ぎ目が、この図法では正方形の構造そのものとして可視化される。</p><p>数学的には、複素関数論に基づく正角写像によって球面と正方形を対応させる。ヤコビの楕円関数を介して、球面上の経度・緯度と正方形上の座標が相互に変換される。これにより、限られた特異点を除いて局所的な角度が保たれ、球面の対称性が正方形の幾何学へ移される。</p><p>本プログラムは、このパース・クインカンシャル図法をブラウザ上で再現し、その構造をインタラクティブに観察できるようにしたものである。</p><p>画面上をドラッグすると、平面化された地図画像が移動するのではなく、操作位置が正方形から球面座標へ逆変換される。その座標を基準に地球の向きが変更され、再び正方形へ投影される。経度、緯度、ロールの調整に加え、ズーム、パン、経緯線、赤道、本初子午線、北極・南極、ティソーの指示楕円、国名、都市名などを切り替えられる。</p><p>一枚の地図を見るだけでなく、球面と正方形がどのように対応し、投影の中心、継ぎ目、極、歪みが操作に応じてどのように変化するのかを確認するためのプログラムである。</p><h2>データと境界表示</h2><p>地理情報にはNatural Earthの50mおよび10mデータを使用している。これらは世界地図表示用に簡略化されたデータであり、測量や法的境界の確認を目的とするものではない。</p><p>表示される国境・地域区分は使用データに基づく参照表示であり、領有権や政治的立場を示すものではない。</p>",
+    "desc_en": "<p>The Peirce Quincuncial Projection is a map projection that maps the sphere onto a square, devised by Charles Sanders Peirce in 1879.</p><p>In this projection, the North Pole is placed at the center of the square, while the South Pole is split across the four corners. The equator appears as a rhombus (diamond) connecting the midpoints of each side, with the Northern Hemisphere placed inside it and the Southern Hemisphere placed outside. By rotating and connecting the projected squares, the same Earth's surface can also be used to tile a plane repeatedly.</p><p>The appeal of the Peirce Quincuncial Projection lies not only in fitting the world into a square. The continuity of the sphere, the position of the poles, the cuts and connections of the projection, and the relationship between the two hemispheres all emerge as clear geometry — center, four corners, edges, and rhombus. The seam that, in typical world maps, is often placed at the outer edge, is here visualized as the very structure of the square itself.</p><p>Mathematically, a conformal mapping based on complex function theory relates the sphere to the square. Longitude and latitude on the sphere are converted to coordinates on the square (and vice versa) via Jacobi elliptic functions. This preserves local angles everywhere except at a limited number of singular points, transferring the sphere's symmetry into the geometry of the square.</p><p>This program reproduces the Peirce Quincuncial Projection in the browser, allowing its structure to be observed interactively.</p><p>Dragging on the screen does not move the flattened map image directly; instead, the drag position is inverse-transformed from square coordinates back to spherical coordinates. Based on that coordinate, the Earth's orientation is changed, and it is projected onto the square again. In addition to adjusting longitude, latitude, and roll, you can toggle zoom, pan, graticule (grid lines), the equator, the prime meridian, the North/South Poles, Tissot's indicatrix, country names, and city names.</p><p>This is a program not just for viewing a single map, but for confirming how the sphere and the square correspond to each other, and how the center of the projection, the seams, the poles, and the distortion change in response to user interaction.</p><h2>Data and Boundary Display</h2><p>The geographic information uses Natural Earth's 50m and 10m datasets. This data is simplified for world map display purposes and is not intended for surveying or legal boundary verification.</p><p>The national borders and regional divisions shown are reference displays based on the data used, and do not indicate territorial claims or political positions.</p>",
+    "source": {
+      "name": "Natural Earth",
+      "url": "https://www.naturalearthdata.com/"
+    },
+    "media": [
+      {
+        "type": "html",
+        "src": "/works/2607-4/PQP.html",
+        "aspectRatio": "1 / 1"
+      },
+      {
+        "type": "link-card",
+        "src": "/works/2607-4/PeirceQuincuncialProjection.html",
+        "title": "Peirce Quincuncial Projection",
+        "label": "Open Full Version",
+        "placement": "full"
+      }
+    ]
+  },
+  {
     "id": "2607-3",
     "title": "TIJP",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1785071064/copy_of_img_4757_yrnsah.jpg",

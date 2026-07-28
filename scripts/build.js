@@ -159,13 +159,35 @@ class SiteBuilder {
         const hasValidRatio = ratioMatch
           && Number(ratioMatch[1]) > 0
           && Number(ratioMatch[2]) > 0;
-        const ratioClass = hasValidRatio ? ' html-wrap--fixed-ratio' : '';
+        const isSquareRatio = hasValidRatio
+          && Number(ratioMatch[1]) === Number(ratioMatch[2]);
+        const ratioClass = hasValidRatio
+          ? ` html-wrap--fixed-ratio${isSquareRatio ? ' html-wrap--square' : ''}`
+          : '';
         const ratioStyle = hasValidRatio
           ? ` style="--html-aspect-ratio: ${ratioMatch[1]} / ${ratioMatch[2]}"`
           : '';
         return `<div class="html-wrap${ratioClass}"${ratioStyle}>
           <iframe src="${hSrc}" frameborder="0" allow="autoplay" allowfullscreen></iframe>
         </div>`;
+
+      case 'link-card':
+        const linkHref = mediaItem.src.startsWith('/works/')
+          ? mediaItem.src.replace('/works/', '../works/')
+          : mediaItem.src;
+        const escapeLinkText = value => String(value || '').replace(/[&<>"']/g, character => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        })[character]);
+        const linkTitle = escapeLinkText(mediaItem.title || workTitle);
+        const linkLabel = escapeLinkText(mediaItem.label || 'Open');
+        return `<a class="project-link-card" href="${escapeLinkText(linkHref)}" target="_blank" rel="noopener noreferrer">
+          <strong class="project-link-card__title">${linkTitle}</strong>
+          <span class="project-link-card__action">${linkLabel}</span>
+        </a>`;
       
       default:
         console.warn(`Unknown media type: ${mediaItem.type}`);
@@ -193,6 +215,15 @@ class SiteBuilder {
     const tagsHtml = work.tags 
       ? work.tags.map(tag => `<a href="../index.html?filter=${tag}" class="project-tag">#${tag}</a>`).join(' ') 
       : '';
+    const mainAspectRatio = work.media?.[0]?.aspectRatio;
+    const mainRatioMatch = typeof mainAspectRatio === 'string'
+      ? mainAspectRatio.match(/^(\d+(?:\.\d+)?)\s*[/:]\s*(\d+(?:\.\d+)?)$/)
+      : null;
+    const squarePageClass = mainRatioMatch
+      && Number(mainRatioMatch[1]) > 0
+      && Number(mainRatioMatch[1]) === Number(mainRatioMatch[2])
+      ? ' page-permalink--square'
+      : '';
 
     const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({
       '&': '&amp;',
@@ -203,11 +234,16 @@ class SiteBuilder {
     })[character]);
     const formatDescription = description => description || '';
     const stripHtml = html => String(html || '').replace(/<[^>]*>/g, ' ');
+    const sourceName = work.source?.name ? escapeHtml(work.source.name) : '';
+    const sourceUrl = work.source?.url ? escapeHtml(work.source.url) : '';
+    const sourceMarkup = label => sourceName && sourceUrl
+      ? `<p class="project-source">${label}: <a href="${sourceUrl}" target="_blank" rel="noopener noreferrer">${sourceName}</a></p>`
+      : '';
 
     const hasBilingualDescription = Boolean(work.desc_en && work.desc);
     const descriptionContent = hasBilingualDescription
-      ? `<div class="project-desc-lang lang-en">${formatDescription(work.desc_en)}</div><div class="project-desc-lang lang-ja">${formatDescription(work.desc)}</div>`
-      : formatDescription(work.desc);
+      ? `<div class="project-desc-lang lang-en">${formatDescription(work.desc_en)}${sourceMarkup('Source')}</div><div class="project-desc-lang lang-ja">${formatDescription(work.desc)}${sourceMarkup('出典')}</div>`
+      : `${formatDescription(work.desc)}${sourceMarkup('出典')}`;
     const languageButtons = hasBilingualDescription
       ? `<div class="lang-buttons" role="group" aria-label="Description language">
               <button id="lang-en" class="lang-btn active" type="button">EN</button>
@@ -221,6 +257,7 @@ class SiteBuilder {
 
     return template
       .replace(/\{\{ID\}\}/g, work.id)
+      .replace(/\{\{PAGE_MODIFIER_CLASS\}\}/g, squarePageClass)
       .replace(/\{\{TITLE\}\}/g, work.title)
       .replace(/\{\{META_DESC\}\}/g, metaDescription)
       .replace(/\{\{DESC_CONTENT\}\}/g, descriptionContent)
@@ -268,8 +305,8 @@ class SiteBuilder {
         if (work.media && Array.isArray(work.media)) {
           work.media.forEach((mediaItem, index) => {
             const mediaHTML = this.generateMediaHTML(mediaItem, index === 0, work.title);
-            if (index === 0) {
-              fullMediaContent = mediaHTML;
+            if (index === 0 || mediaItem.placement === 'full') {
+              fullMediaContent += mediaHTML;
             } else {
               contentMediaContent += mediaHTML;
             }
