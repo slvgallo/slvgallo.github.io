@@ -131,6 +131,11 @@ button:focus-visible {
   background: rgba(0, 0, 0, 0.34);
 }
 
+.overlay.is-background-transparent,
+.overlay.is-background-transparent:hover {
+  background: transparent;
+}
+
 .play-button {
   display: block;
   position: relative;
@@ -287,6 +292,15 @@ input[type="range"]::-moz-range-thumb {
 
 .state-button:not([aria-pressed="true"]):hover {
   background: rgba(255, 255, 255, 0.18);
+}
+
+@media (max-width: 640px), (max-height: 640px) and (pointer: coarse) {
+  .overlay {
+    right: max(var(--display-inset), env(safe-area-inset-right, 0px));
+    bottom: max(var(--display-inset), env(safe-area-inset-bottom, 0px));
+    left: max(var(--display-inset), env(safe-area-inset-left, 0px));
+    width: auto;
+  }
 }
 
 @media (max-width: 640px) {

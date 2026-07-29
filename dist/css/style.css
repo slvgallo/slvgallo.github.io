@@ -807,6 +807,25 @@ a img {
   .entry-title {
     font-size: 2em;
   }
+
+  .work-title-row.is-measuring .entry-title {
+    white-space: nowrap;
+  }
+
+  .work-title-row.is-stacked {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .work-title-row.is-stacked .entry-title {
+    width: 100%;
+    flex: 0 0 100%;
+  }
+
+  .work-title-row.is-stacked .lang-buttons {
+    order: -1;
+    margin-left: auto;
+  }
 }
 
 #project-desc {

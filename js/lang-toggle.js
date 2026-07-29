@@ -11,6 +11,41 @@ export function initLangToggle() {
 
   if (!langButtons || !langEnBtn || !langJaBtn) return;
 
+  const titleRow = langButtons.closest('.work-title-row');
+  const entryTitle = titleRow?.querySelector('.entry-title');
+  const mobileTitleLayout = window.matchMedia('(max-width: 768px)');
+  let titleLayoutFrame = 0;
+
+  function updateTitleLayout() {
+    titleLayoutFrame = 0;
+    if (!titleRow || !entryTitle) return;
+
+    titleRow.classList.remove('is-stacked');
+    if (!mobileTitleLayout.matches) return;
+
+    titleRow.classList.add('is-measuring');
+    const rowStyle = window.getComputedStyle(titleRow);
+    const gap = parseFloat(rowStyle.columnGap || rowStyle.gap) || 0;
+    const requiredWidth = entryTitle.scrollWidth + langButtons.offsetWidth + gap;
+    const availableWidth = titleRow.clientWidth;
+    titleRow.classList.remove('is-measuring');
+    titleRow.classList.toggle('is-stacked', requiredWidth > availableWidth + 0.5);
+  }
+
+  function scheduleTitleLayout() {
+    if (titleLayoutFrame) cancelAnimationFrame(titleLayoutFrame);
+    titleLayoutFrame = requestAnimationFrame(updateTitleLayout);
+  }
+
+  scheduleTitleLayout();
+  window.addEventListener('resize', scheduleTitleLayout, {passive: true});
+  if (mobileTitleLayout.addEventListener) {
+    mobileTitleLayout.addEventListener('change', scheduleTitleLayout);
+  }
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(scheduleTitleLayout);
+  }
+
   const focusTrap = createFocusTrap(langButtons, {
     initialFocus: false,
     restoreFocus: false

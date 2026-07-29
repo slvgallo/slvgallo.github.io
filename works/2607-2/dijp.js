@@ -4,6 +4,7 @@ const ctx = canvas.getContext('2d', {alpha: false});
 const slider = document.getElementById('phase');
 const phaseValue = document.getElementById('phaseValue');
 const playPauseButton = document.getElementById('playPause');
+const overlay = document.querySelector('.overlay');
 const stateButtons = Array.from(document.querySelectorAll('[data-phase]'));
 const ASSET_URL = './assets/dual_interpretation.jpg';
 const A_TO_B_MILLISECONDS = 8000;
@@ -14,6 +15,7 @@ let decoded = null;
 let lastRenderedPhase = null;
 let errorLogged = false;
 let playing = false;
+let parameterInteracting = false;
 let playbackDirection = 1;
 let previousFrameTime = null;
 function u16(bytes, index) { return (bytes[index] << 8) | bytes[index + 1]; }
@@ -441,7 +443,20 @@ function setPlaying(nextPlaying) {
   playPauseButton.setAttribute('aria-pressed', String(playing));
   canvas.setAttribute('aria-label', `Dedicated DIJP decoder output. Click to ${playing ? 'pause' : 'play'}.`);
   updateStateButtonActivity(Number(slider.value));
+  updateOverlayBackground();
   if (playing) requestAnimationFrame(animate);
+}
+
+function updateOverlayBackground() {
+  overlay.classList.toggle(
+    'is-background-transparent',
+    playing || parameterInteracting,
+  );
+}
+
+function setParameterInteracting(interacting) {
+  parameterInteracting = Boolean(interacting);
+  updateOverlayBackground();
 }
 
 function animate(timestamp) {
@@ -476,6 +491,12 @@ slider.addEventListener('input', () => {
   const phase = Number(slider.value);
   requestRender(Math.abs(phase - 0.5) <= MIDDLE_SNAP_THRESHOLD ? 0.5 : phase);
 });
+slider.addEventListener('pointerdown', () => setParameterInteracting(true));
+stateButtons.forEach(button => {
+  button.addEventListener('pointerdown', () => setParameterInteracting(true));
+});
+window.addEventListener('pointerup', () => setParameterInteracting(false));
+window.addEventListener('pointercancel', () => setParameterInteracting(false));
 stateButtons.forEach(button => button.addEventListener('click', () => {
   setPlaying(false);
   const phase = Number(button.dataset.phase);
@@ -492,8 +513,14 @@ canvas.addEventListener('keydown', event => {
 window.addEventListener('keydown', event => {
   if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
   event.preventDefault();
+  setParameterInteracting(true);
   setPlaying(false);
   const delta = event.shiftKey ? 0.05 : 0.01;
   requestRender(Number(slider.value) + (event.key === 'ArrowRight' ? delta : -delta));
+});
+window.addEventListener('keyup', event => {
+  if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+    setParameterInteracting(false);
+  }
 });
 loadAsset();

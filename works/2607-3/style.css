@@ -97,6 +97,15 @@ button:disabled {
   background: rgba(0, 0, 0, .34);
 }
 
+.control-overlay.is-background-transparent,
+.control-overlay.is-background-transparent:hover {
+  background: transparent;
+}
+
+.control-overlay.is-background-transparent .triangle-edge {
+  fill: transparent;
+}
+
 .control-panel {
   display: block;
 }
@@ -382,6 +391,19 @@ button:disabled {
     gap: 3px;
   }
 
+}
+
+@media (max-width: 640px), (max-height: 640px) and (pointer: coarse) {
+  .control-overlay {
+    top: max(var(--panel-inset), env(safe-area-inset-top));
+    right: max(var(--panel-inset), env(safe-area-inset-right));
+    bottom: max(var(--panel-inset), env(safe-area-inset-bottom));
+    left: max(var(--panel-inset), env(safe-area-inset-left));
+    width: auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

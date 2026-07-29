@@ -568,6 +568,7 @@
     viewer: document.getElementById('viewer'),
     canvas: document.getElementById('decoded-canvas'),
     imageUiFrame: document.getElementById('image-ui-frame'),
+    controlOverlay: document.getElementById('control-overlay'),
     playPause: document.getElementById('play-pause'),
     ratioA: document.getElementById('ratio-a'),
     ratioB: document.getElementById('ratio-b'),
@@ -964,6 +965,14 @@
         ? 'Decoded TIJP image. Click to pause automatic interpretation.'
         : 'Decoded TIJP image. Click to play automatic interpretation.',
     );
+    updateControlBackground();
+  }
+
+  function updateControlBackground() {
+    elements.controlOverlay.classList.toggle(
+      'is-background-transparent',
+      state.dragging || state.playing,
+    );
   }
 
   function setPlayback(playing, options = {}) {
@@ -1093,6 +1102,7 @@
     event.preventDefault();
     setPlayback(false, {reset: true});
     state.dragging = true;
+    updateControlBackground();
     state.pointerId = event.pointerId;
     elements.triangle.setPointerCapture(event.pointerId);
     const point = pointFromPointer(event);
@@ -1111,6 +1121,7 @@
   function endPointer(event) {
     if (!state.dragging || event.pointerId !== state.pointerId) return;
     state.dragging = false;
+    updateControlBackground();
     if (elements.triangle.hasPointerCapture(event.pointerId)) elements.triangle.releasePointerCapture(event.pointerId);
     state.pointerId = null;
     scheduleDecode(state.position, {commit: true, announce: true});
