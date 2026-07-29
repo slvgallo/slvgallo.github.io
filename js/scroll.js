@@ -15,14 +15,15 @@ export function initScroll() {
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
     ) || window.innerWidth <= 768;
-  const usesNativeScrollAnimation =
-    isMobile &&
+  const supportsNativeScrollAnimation =
     typeof CSS !== 'undefined' &&
     CSS.supports('animation-timeline: scroll()');
+  const usesNativeMobileScrollAnimation =
+    isMobile && supportsNativeScrollAnimation;
 
   // 対応ブラウザではCSSのスクロールタイムラインに任せ、
   // メインスレッド上のscrollイベント処理を実行しない
-  if (usesNativeScrollAnimation) return;
+  if (usesNativeMobileScrollAnimation) return;
 
   function checkMenuState() {
     const isHamburgerMenu = window.matchMedia('(max-width: 767px)').matches;
@@ -58,7 +59,7 @@ export function initScroll() {
       const scale = minScale + (1 - progress) * (1 - minScale);
       header.style.setProperty('--mobile-header-offset', `${offset}rem`);
       header.style.setProperty('--mobile-logo-scale', String(scale));
-    } else {
+    } else if (!supportsNativeScrollAnimation) {
       // PC: 従来どおりpaddingとロゴの高さを変更
       const currentPadding =
         HEADER_MAX_PADDING -
