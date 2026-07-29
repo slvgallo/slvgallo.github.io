@@ -252,6 +252,36 @@ a img {
   box-sizing: border-box;
 }
 
+@keyframes header-scroll-shift {
+  from {
+    transform: translate3d(0, var(--header-shift-start), 0);
+  }
+
+  to {
+    transform: translate3d(0, var(--header-shift-end), 0);
+  }
+}
+
+@keyframes header-logo-scale {
+  from {
+    transform: translateZ(0) scale(1);
+  }
+
+  to {
+    transform: translateZ(0) scale(0.6666667);
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .header-title a {
+    animation: header-logo-scale linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0px 200px;
+    transform-origin: left top;
+    will-change: transform;
+  }
+}
+
 @media (min-width: 768px) {
   .header {
     padding: 5em 0;
@@ -276,17 +306,11 @@ a img {
     }
 
     .header-wrapper {
-      animation: desktop-header-shift linear both;
+      --header-shift-start: 4rem;
+      --header-shift-end: 0rem;
+      animation: header-scroll-shift linear both;
       animation-timeline: scroll(root block);
       animation-range: 0px 200px;
-    }
-
-    .header-title a {
-      animation: desktop-header-logo-scale linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0px 200px;
-      transform-origin: left top;
-      will-change: transform;
     }
   }
 }
@@ -423,56 +447,16 @@ a img {
   top: 21px;
 }
 
-@keyframes mobile-header-shift {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    transform: translate3d(0, -4rem, 0);
-  }
-}
-
-@keyframes mobile-header-logo-scale {
-  from {
-    transform: translateZ(0) scale(1);
-  }
-
-  to {
-    transform: translateZ(0) scale(0.6666667);
-  }
-}
-
-@keyframes desktop-header-shift {
-  from {
-    transform: translate3d(0, 4rem, 0);
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@keyframes desktop-header-logo-scale {
-  from {
-    transform: translateZ(0) scale(1);
-  }
-
-  to {
-    transform: translateZ(0) scale(0.6666667);
-  }
-}
-
 @media (max-width: 767px) {
   .header {
-    --mobile-header-offset: 0em;
-    --mobile-logo-scale: 1;
+    --header-fallback-offset: 0rem;
+    --header-fallback-logo-scale: 1;
     pointer-events: none;
   }
 
   .menu-toggle {
     display: block;
-    transform: translate3d(0, var(--mobile-header-offset), 0);
+    transform: translate3d(0, var(--header-fallback-offset), 0);
     will-change: transform;
     pointer-events: auto;
   }
@@ -488,13 +472,13 @@ a img {
     width: auto;
     position: relative;
     z-index: 1001;
-    transform: translate3d(0, var(--mobile-header-offset), 0);
+    transform: translate3d(0, var(--header-fallback-offset), 0);
     will-change: transform;
     pointer-events: auto;
   }
 
   .header-title a {
-    transform: translateZ(0) scale(var(--mobile-logo-scale));
+    transform: translateZ(0) scale(var(--header-fallback-logo-scale));
     transform-origin: left top;
     will-change: transform;
   }
@@ -502,13 +486,9 @@ a img {
   @supports (animation-timeline: scroll()) {
     .menu-toggle,
     .header-box-title {
-      animation: mobile-header-shift linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0px 200px;
-    }
-
-    .header-title a {
-      animation: mobile-header-logo-scale linear both;
+      --header-shift-start: 0rem;
+      --header-shift-end: -4rem;
+      animation: header-scroll-shift linear both;
       animation-timeline: scroll(root block);
       animation-range: 0px 200px;
     }

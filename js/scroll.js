@@ -1,45 +1,69 @@
 import { state } from './state.js';
+import { supportsScrollDrivenAnimations } from './utils.js';
+
+const MOBILE_MEDIA_QUERY = '(max-width: 767px)';
+const IMG_MAX_HEIGHT = 3;
+const IMG_MIN_HEIGHT = 2;
+const HEADER_MAX_PADDING = 5;
+const HEADER_MIN_PADDING = 1;
+const SCROLL_RANGE = 200;
+const AUTO_HIDE_THRESHOLD = 100;
+const HIDE_DELAY = 3000;
 
 export function initScroll() {
   if (state.init.scrollInitialized) return;
   state.init.scrollInitialized = true;
 
-  const IMG_MAX_HEIGHT = 3.0; // rem（見た目基準）
-  const IMG_MIN_HEIGHT = 2.0;
-  const HEADER_MAX_PADDING = 5.0;
-  const HEADER_MIN_PADDING = 1.0;
-  const SCROLL_RANGE = 200;
-  const HIDE_DELAY = 3000;
+  const header = document.querySelector('.header');
+  if (!header) return;
 
-  const isMobile =
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    ) || window.innerWidth <= 768;
-  const supportsNativeScrollAnimation =
-    typeof CSS !== 'undefined' &&
-    CSS.supports('animation-timeline: scroll()');
-  const usesNativeMobileScrollAnimation =
-    isMobile && supportsNativeScrollAnimation;
+  const logoImg = header.querySelector('.header-title img');
+  const mobileMediaQuery = window.matchMedia(MOBILE_MEDIA_QUERY);
+  const supportsNativeScrollAnimation = supportsScrollDrivenAnimations();
+  let scrollListenerAttached = false;
 
-  // 対応ブラウザではCSSのスクロールタイムラインに任せ、
-  // メインスレッド上のscrollイベント処理を実行しない
-  if (usesNativeMobileScrollAnimation) return;
-
-  function checkMenuState() {
-    const isHamburgerMenu = window.matchMedia('(max-width: 767px)').matches;
-    state.ui.shouldAutoHide = !isMobile && !isHamburgerMenu;
-    return state.ui.shouldAutoHide;
+  function isMobileLayout() {
+    return mobileMediaQuery.matches;
   }
 
-  function updateHeader() {
-    const header = document.querySelector('.header');
-    const logoImg = document.querySelector('.header-title img');
-    if (!header) return;
+  function checkMenuState() {
+    state.ui.shouldAutoHide = !isMobileLayout();
+  }
 
-    const scrollY = window.scrollY;
-    checkMenuState();
+  function applyFallbackHeaderMotion(scrollY) {
+    if (supportsNativeScrollAnimation) return;
 
-    // スクロール方向判定
+    const progress = Math.max(0, Math.min(scrollY / SCROLL_RANGE, 1));
+
+    if (isMobileLayout()) {
+      const offset =
+        -progress * (HEADER_MAX_PADDING - HEADER_MIN_PADDING);
+      const minScale = IMG_MIN_HEIGHT / IMG_MAX_HEIGHT;
+      const scale = minScale + (1 - progress) * (1 - minScale);
+
+      header.style.setProperty('--header-fallback-offset', `${offset}rem`);
+      header.style.setProperty(
+        '--header-fallback-logo-scale',
+        String(scale)
+      );
+      return;
+    }
+
+    const currentPadding =
+      HEADER_MAX_PADDING -
+      progress * (HEADER_MAX_PADDING - HEADER_MIN_PADDING);
+    header.style.paddingTop =
+      `calc(${currentPadding}em + env(safe-area-inset-top, 0px))`;
+    header.style.paddingBottom = `${currentPadding}em`;
+
+    if (logoImg) {
+      const currentHeight =
+        IMG_MAX_HEIGHT - progress * (IMG_MAX_HEIGHT - IMG_MIN_HEIGHT);
+      logoImg.style.height = `${currentHeight}rem`;
+    }
+  }
+
+  function updateScrollDirection(scrollY) {
     if (scrollY > state.ui.lastScrollY) {
       state.ui.scrollDirection = 'down';
       state.ui.continuousDownScroll++;
@@ -47,147 +71,126 @@ export function initScroll() {
       state.ui.scrollDirection = 'up';
       state.ui.continuousDownScroll = 0;
     }
+  }
 
-    const progress = Math.max(0, Math.min(scrollY / SCROLL_RANGE, 1));
-
-    // ===== ロゴのスケール制御（PC/モバイル分岐） =====
-    if (isMobile) {
-      // モバイル: レイアウトを変えず、従来と同じ位置と倍率をtransformで再現
-      const offset =
-        -progress * (HEADER_MAX_PADDING - HEADER_MIN_PADDING);
-      const minScale = IMG_MIN_HEIGHT / IMG_MAX_HEIGHT;
-      const scale = minScale + (1 - progress) * (1 - minScale);
-      header.style.setProperty('--mobile-header-offset', `${offset}rem`);
-      header.style.setProperty('--mobile-logo-scale', String(scale));
-    } else if (!supportsNativeScrollAnimation) {
-      // PC: 従来どおりpaddingとロゴの高さを変更
-      const currentPadding =
-        HEADER_MAX_PADDING -
-        progress * (HEADER_MAX_PADDING - HEADER_MIN_PADDING);
-      header.style.paddingTop = `calc(${currentPadding}em + env(safe-area-inset-top, 0px))`;
-      header.style.paddingBottom = `${currentPadding}em`;
-
-      if (logoImg) {
-        // PC: heightをrem単位で直接変更
-        const currentHeight = IMG_MAX_HEIGHT - progress * (IMG_MAX_HEIGHT - IMG_MIN_HEIGHT);
-        logoImg.style.height = `${currentHeight}rem`;
-      }
-    }
-
-    // ヘッダー表示制御
-    if (scrollY > 100) {
-      header.classList.add('scrolled');
-      clearTimeout(state.ui.scrollTimer);
-
-      if (
-        !state.ui.isHeaderHovered &&
-        state.ui.shouldAutoHide &&
-        state.ui.continuousDownScroll > 5
-      ) {
-        header.classList.add('hidden');
-        state.ui.isHeaderHidden = true;
-      } else if (!state.ui.isHeaderHovered && state.ui.shouldAutoHide) {
-        state.ui.scrollTimer = setTimeout(() => {
-          header.classList.add('hidden');
-          state.ui.isHeaderHidden = true;
-        }, HIDE_DELAY);
-      }
-
-      if (
-        state.ui.isHeaderHidden &&
-        state.ui.scrollDirection === 'up'
-      ) {
-        header.classList.remove('hidden');
-        header.classList.add('showing');
-        state.ui.isHeaderHidden = false;
-
-        setTimeout(() => {
-          header.classList.remove('showing');
-        }, 500);
-      }
-    } else {
+  function updateHeaderVisibility(scrollY) {
+    if (scrollY <= AUTO_HIDE_THRESHOLD) {
       header.classList.remove('scrolled', 'hidden', 'showing');
       state.ui.isHeaderHidden = false;
       state.ui.continuousDownScroll = 0;
       clearTimeout(state.ui.scrollTimer);
+      return;
     }
+
+    header.classList.add('scrolled');
+    clearTimeout(state.ui.scrollTimer);
+
+    if (
+      !state.ui.isHeaderHovered &&
+      state.ui.shouldAutoHide &&
+      state.ui.continuousDownScroll > 5
+    ) {
+      header.classList.add('hidden');
+      state.ui.isHeaderHidden = true;
+    } else if (!state.ui.isHeaderHovered && state.ui.shouldAutoHide) {
+      state.ui.scrollTimer = setTimeout(() => {
+        header.classList.add('hidden');
+        state.ui.isHeaderHidden = true;
+      }, HIDE_DELAY);
+    }
+
+    if (
+      state.ui.isHeaderHidden &&
+      state.ui.scrollDirection === 'up'
+    ) {
+      header.classList.remove('hidden');
+      header.classList.add('showing');
+      state.ui.isHeaderHidden = false;
+
+      setTimeout(() => {
+        header.classList.remove('showing');
+      }, 500);
+    }
+  }
+
+  function updateHeader() {
+    const scrollY = window.scrollY;
+
+    checkMenuState();
+    updateScrollDirection(scrollY);
+    applyFallbackHeaderMotion(scrollY);
+    updateHeaderVisibility(scrollY);
 
     state.ui.lastScrollY = scrollY;
     state.ui.ticking = false;
   }
 
   function requestTick() {
-    if (!state.ui.ticking) {
-      window.requestAnimationFrame(updateHeader);
-      state.ui.ticking = true;
+    if (state.ui.ticking) return;
+
+    window.requestAnimationFrame(updateHeader);
+    state.ui.ticking = true;
+  }
+
+  function shouldTrackScroll() {
+    return !supportsNativeScrollAnimation || !isMobileLayout();
+  }
+
+  function syncScrollListener() {
+    const shouldAttach = shouldTrackScroll();
+
+    if (shouldAttach && !scrollListenerAttached) {
+      window.addEventListener('scroll', requestTick);
+      scrollListenerAttached = true;
+      requestTick();
+    } else if (!shouldAttach && scrollListenerAttached) {
+      window.removeEventListener('scroll', requestTick);
+      scrollListenerAttached = false;
     }
   }
 
-  window.addEventListener('scroll', requestTick);
+  function resetFallbackInlineStyles() {
+    header.style.removeProperty('padding-top');
+    header.style.removeProperty('padding-bottom');
+    if (logoImg) logoImg.style.removeProperty('height');
+  }
 
-  // メディアクエリ監視
-  window.matchMedia('(max-width: 767px)').addEventListener('change', () => {
-    const oldAutoHide = state.ui.shouldAutoHide;
+  function handleLayoutChange() {
+    resetFallbackInlineStyles();
     checkMenuState();
-
-    if (oldAutoHide !== state.ui.shouldAutoHide) {
-      const header = document.querySelector('.header');
-      if (header) header.classList.remove('hidden', 'showing');
-      state.ui.isHeaderHidden = false;
-      clearTimeout(state.ui.scrollTimer);
-    }
-  });
-
-  // ヘッダーマウス制御
-  const headerEl = document.querySelector('.header');
-  if (headerEl) {
-    headerEl.addEventListener('mouseenter', () => {
-      state.ui.isHeaderHovered = true;
-      clearTimeout(state.ui.scrollTimer);
-
-      if (state.ui.isHeaderHidden) {
-        headerEl.classList.remove('hidden');
-        headerEl.classList.add('showing');
-        state.ui.isHeaderHidden = false;
-        setTimeout(() => headerEl.classList.remove('showing'), 300);
-      }
-    });
-
-    headerEl.addEventListener('mouseleave', () => {
-      state.ui.isHeaderHovered = false;
-
-      if (
-        state.ui.shouldAutoHide &&
-        window.scrollY > 100 &&
-        !state.ui.isHeaderHidden
-      ) {
-        state.ui.scrollTimer = setTimeout(() => {
-          headerEl.classList.add('hidden');
-          state.ui.isHeaderHidden = true;
-        }, HIDE_DELAY);
-      }
-    });
+    header.classList.remove('hidden', 'showing');
+    state.ui.isHeaderHidden = false;
+    state.ui.lastScrollY = window.scrollY;
+    clearTimeout(state.ui.scrollTimer);
+    syncScrollListener();
   }
 
-  // 近接マウス移動で復帰
-  document.addEventListener('mousemove', (e) => {
-    if (
-      state.ui.shouldAutoHide &&
-      state.ui.isHeaderHidden &&
-      e.clientY < 100 &&
-      !state.ui.isHeaderHovered &&
-      state.ui.scrollDirection === 'up'
-    ) {
-      const header = document.querySelector('.header');
-      if (!header) return;
+  if (typeof mobileMediaQuery.addEventListener === 'function') {
+    mobileMediaQuery.addEventListener('change', handleLayoutChange);
+  } else {
+    mobileMediaQuery.addListener(handleLayoutChange);
+  }
 
+  header.addEventListener('mouseenter', () => {
+    state.ui.isHeaderHovered = true;
+    clearTimeout(state.ui.scrollTimer);
+
+    if (state.ui.isHeaderHidden) {
       header.classList.remove('hidden');
       header.classList.add('showing');
       state.ui.isHeaderHidden = false;
+      setTimeout(() => header.classList.remove('showing'), 300);
+    }
+  });
 
-      setTimeout(() => header.classList.remove('showing'), 500);
+  header.addEventListener('mouseleave', () => {
+    state.ui.isHeaderHovered = false;
 
-      clearTimeout(state.ui.scrollTimer);
+    if (
+      state.ui.shouldAutoHide &&
+      window.scrollY > AUTO_HIDE_THRESHOLD &&
+      !state.ui.isHeaderHidden
+    ) {
       state.ui.scrollTimer = setTimeout(() => {
         header.classList.add('hidden');
         state.ui.isHeaderHidden = true;
@@ -195,13 +198,36 @@ export function initScroll() {
     }
   });
 
-  // 初期化
-  checkMenuState();
-  requestTick();
+  document.addEventListener('mousemove', (event) => {
+    if (
+      !state.ui.shouldAutoHide ||
+      !state.ui.isHeaderHidden ||
+      event.clientY >= AUTO_HIDE_THRESHOLD ||
+      state.ui.isHeaderHovered ||
+      state.ui.scrollDirection !== 'up'
+    ) {
+      return;
+    }
 
-  // フッター監視
+    header.classList.remove('hidden');
+    header.classList.add('showing');
+    state.ui.isHeaderHidden = false;
+
+    setTimeout(() => header.classList.remove('showing'), 500);
+
+    clearTimeout(state.ui.scrollTimer);
+    state.ui.scrollTimer = setTimeout(() => {
+      header.classList.add('hidden');
+      state.ui.isHeaderHidden = true;
+    }, HIDE_DELAY);
+  });
+
+  checkMenuState();
+  syncScrollListener();
+
   const siteFooter = document.querySelector('.site-footer');
   const profileFloat = document.querySelector('.profile-float');
+
   if (profileFloat && siteFooter) {
     new IntersectionObserver(
       (entries) => {
