@@ -15,6 +15,14 @@ export function initScroll() {
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
     ) || window.innerWidth <= 768;
+  const usesNativeScrollAnimation =
+    isMobile &&
+    typeof CSS !== 'undefined' &&
+    CSS.supports('animation-timeline: scroll()');
+
+  // 対応ブラウザではCSSのスクロールタイムラインに任せ、
+  // メインスレッド上のscrollイベント処理を実行しない
+  if (usesNativeScrollAnimation) return;
 
   function checkMenuState() {
     const isHamburgerMenu = window.matchMedia('(max-width: 767px)').matches;

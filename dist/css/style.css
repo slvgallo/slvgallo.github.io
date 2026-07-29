@@ -385,6 +385,26 @@ a img {
   transition: 0.3s;
 }
 
+@keyframes mobile-header-shift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, -4em, 0);
+  }
+}
+
+@keyframes mobile-header-logo-scale {
+  from {
+    transform: translateZ(0) scale(1);
+  }
+
+  to {
+    transform: translateZ(0) scale(0.6666667);
+  }
+}
+
 @media (max-width: 767px) {
   .header {
     --mobile-header-offset: 0em;
@@ -419,6 +439,21 @@ a img {
     transform: translateZ(0) scale(var(--mobile-logo-scale));
     transform-origin: left top;
     will-change: transform;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .menu-toggle,
+    .header-box-title {
+      animation: mobile-header-shift linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0px 200px;
+    }
+
+    .header-title a {
+      animation: mobile-header-logo-scale linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0px 200px;
+    }
   }
 
   .header-title img,
