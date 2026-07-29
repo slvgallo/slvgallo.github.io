@@ -391,7 +391,7 @@ a img {
   }
 
   to {
-    transform: translate3d(0, -4em, 0);
+    transform: translate3d(0, -4rem, 0);
   }
 }
 

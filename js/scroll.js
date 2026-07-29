@@ -56,7 +56,7 @@ export function initScroll() {
         -progress * (HEADER_MAX_PADDING - HEADER_MIN_PADDING);
       const minScale = IMG_MIN_HEIGHT / IMG_MAX_HEIGHT;
       const scale = minScale + (1 - progress) * (1 - minScale);
-      header.style.setProperty('--mobile-header-offset', `${offset}em`);
+      header.style.setProperty('--mobile-header-offset', `${offset}rem`);
       header.style.setProperty('--mobile-logo-scale', String(scale));
     } else {
       // PC: 従来どおりpaddingとロゴの高さを変更
