@@ -386,8 +386,17 @@ a img {
 }
 
 @media (max-width: 767px) {
+  .header {
+    --mobile-header-offset: 0em;
+    --mobile-logo-scale: 1;
+    pointer-events: none;
+  }
+
   .menu-toggle {
     display: block;
+    transform: translate3d(0, var(--mobile-header-offset), 0);
+    will-change: transform;
+    pointer-events: auto;
   }
 
   .header-wrapper {
@@ -401,6 +410,22 @@ a img {
     width: auto;
     position: relative;
     z-index: 1001;
+    transform: translate3d(0, var(--mobile-header-offset), 0);
+    will-change: transform;
+    pointer-events: auto;
+  }
+
+  .header-title a {
+    transform: translateZ(0) scale(var(--mobile-logo-scale));
+    transform-origin: left top;
+    will-change: transform;
+  }
+
+  .header-title img,
+  .header-title img:hover {
+    transform: none;
+    transition: none;
+    will-change: auto;
   }
 
   .header-box-nav {
@@ -421,6 +446,7 @@ a img {
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
     box-sizing: border-box;
+    pointer-events: auto;
   }
 
   .header-box-nav.active {

@@ -39,30 +39,26 @@ export function initScroll() {
       state.ui.continuousDownScroll = 0;
     }
 
-    // モバイルでは transition を一時無効
-    if (isMobile) {
-      header.style.transition = 'none';
-      if (logoImg) logoImg.style.transition = 'none';
-    }
-
     const progress = Math.max(0, Math.min(scrollY / SCROLL_RANGE, 1));
 
-    // header padding（従来どおり）
-    const currentPadding =
-      HEADER_MAX_PADDING -
-      progress * (HEADER_MAX_PADDING - HEADER_MIN_PADDING);
-
-    header.style.paddingTop = `calc(${currentPadding}em + env(safe-area-inset-top, 0px))`;
-    header.style.paddingBottom = `${currentPadding}em`;
-
     // ===== ロゴのスケール制御（PC/モバイル分岐） =====
-    if (logoImg) {
-      if (isMobile) {
-        // モバイル: transformのみでサイズ変化
-        const minScale = IMG_MIN_HEIGHT / IMG_MAX_HEIGHT;
-        const scale = minScale + (1 - progress) * (1 - minScale);
-        logoImg.style.transform = `scale(${scale})`;
-      } else {
+    if (isMobile) {
+      // モバイル: レイアウトを変えず、従来と同じ位置と倍率をtransformで再現
+      const offset =
+        -progress * (HEADER_MAX_PADDING - HEADER_MIN_PADDING);
+      const minScale = IMG_MIN_HEIGHT / IMG_MAX_HEIGHT;
+      const scale = minScale + (1 - progress) * (1 - minScale);
+      header.style.setProperty('--mobile-header-offset', `${offset}em`);
+      header.style.setProperty('--mobile-logo-scale', String(scale));
+    } else {
+      // PC: 従来どおりpaddingとロゴの高さを変更
+      const currentPadding =
+        HEADER_MAX_PADDING -
+        progress * (HEADER_MAX_PADDING - HEADER_MIN_PADDING);
+      header.style.paddingTop = `calc(${currentPadding}em + env(safe-area-inset-top, 0px))`;
+      header.style.paddingBottom = `${currentPadding}em`;
+
+      if (logoImg) {
         // PC: heightをrem単位で直接変更
         const currentHeight = IMG_MAX_HEIGHT - progress * (IMG_MAX_HEIGHT - IMG_MIN_HEIGHT);
         logoImg.style.height = `${currentHeight}rem`;
@@ -105,14 +101,6 @@ export function initScroll() {
       state.ui.isHeaderHidden = false;
       state.ui.continuousDownScroll = 0;
       clearTimeout(state.ui.scrollTimer);
-    }
-
-    // モバイル：次フレームで transition 復帰
-    if (isMobile) {
-      requestAnimationFrame(() => {
-        header.style.transition = '';
-        if (logoImg) logoImg.style.transition = '';
-      });
     }
 
     state.ui.lastScrollY = scrollY;
