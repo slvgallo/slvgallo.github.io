@@ -389,20 +389,38 @@ a img {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0 20px 0 0;
+  width: 45px;
+  height: 29px;
+  padding: 0;
   z-index: 1001;
   position: absolute;
   top: 0;
   right: 0;
+  box-sizing: border-box;
 }
 
 .menu-toggle span {
   display: block;
+  position: absolute;
+  right: 20px;
   width: 25px;
   height: 3px;
   background-color: var(--color-primary);
-  margin: 5px 0;
-  transition: 0.3s;
+  margin: 0;
+  transform-origin: center;
+  transition: top 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+}
+
+.menu-toggle span:nth-child(1) {
+  top: 5px;
+}
+
+.menu-toggle span:nth-child(2) {
+  top: 13px;
+}
+
+.menu-toggle span:nth-child(3) {
+  top: 21px;
 }
 
 @keyframes mobile-header-shift {
@@ -550,7 +568,8 @@ a img {
   }
 
   .menu-toggle.active span:nth-child(1) {
-    transform: rotate(-45deg) translate(-5px, 6px);
+    top: 13px;
+    transform: rotate(-45deg);
   }
 
   .menu-toggle.active span:nth-child(2) {
@@ -558,7 +577,8 @@ a img {
   }
 
   .menu-toggle.active span:nth-child(3) {
-    transform: rotate(45deg) translate(-5px, -6px);
+    top: 13px;
+    transform: rotate(45deg);
   }
 
 
