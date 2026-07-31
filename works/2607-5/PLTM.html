@@ -34,7 +34,7 @@
     position:relative; height:100vh; height:100dvh; width:100vw;
   }
   .panel-topbar{
-    position:fixed; bottom:18px; left:50%; z-index:20;
+    position:fixed; bottom:calc(18px + env(safe-area-inset-bottom, 0px)); left:50%; z-index:20;
     width:38px; height:38px;
     transform:translateX(-50%);
   }
@@ -55,12 +55,12 @@
   #panelToggle:active{ transform:scale(.96); }
   .stage-play-button{
     position:fixed;
-    left:max(18px, env(safe-area-inset-left, 0px));
-    bottom:max(18px, env(safe-area-inset-bottom, 0px));
+    left:calc(18px + env(safe-area-inset-left, 0px));
+    bottom:calc(18px + env(safe-area-inset-bottom, 0px));
     z-index:20;
     display:block;
-    width:32px;
-    height:32px;
+    width:38px;
+    height:38px;
     margin:0;
     padding:0;
     border:1px solid var(--brass);
@@ -527,7 +527,7 @@
     <div class="stage">
       <canvas
         id="canvas"
-        aria-label="Rhythm rings. Drag outside the center plus to move, and double click outside the center plus to reset the view. Left click the center plus to add a ring; right click it to remove the outermost ring. Left click a ring to increase its hit count; right click to decrease its hit count."
+        aria-label="Rhythm rings. Drag outside the center plus to move, pinch to zoom, and double click outside the center plus to reset the view. Left click the center plus to add a ring; right click it to remove the outermost ring. Left click a ring to increase its hit count; right click to decrease its hit count."
       ></canvas>
     </div>
     <aside class="panel" id="controlPanel" aria-hidden="true" inert>
@@ -552,7 +552,7 @@
         <dl class="control-guide">
           <dt>Center +</dt><dd>Left Click: add ring · Right Click: remove outer ring</dd>
           <dt>Ring</dt><dd>Left Click: increase hit count · Right Click: decrease hit count</dd>
-          <dt>View</dt><dd>Drag: move · Double Click: reset view</dd>
+          <dt>View</dt><dd>Drag: move · Pinch: zoom · Double Click: reset view</dd>
           <dt>Sliders</dt><dd>Double Click: reset to default</dd>
           <dt>Space key</dt><dd>Play / Stop</dd>
           <dt>H key</dt><dd>Show / Hide Panel</dd>
@@ -693,6 +693,8 @@
   const MAX_DELAY_SECONDS = 120;
   const MAX_CENTER_SOURCE_EVENTS = 1600;
   const MAX_CENTER_DELAY_ECHOES = 5;
+  const MIN_VIEW_SCALE = 0.55;
+  const MAX_VIEW_SCALE = 3;
   const NOTE_MIDI_MIN = 24;  // C1
   const NOTE_MIDI_MAX = 131; // B9
 
@@ -1152,11 +1154,16 @@
   let centerPulseStartedAt = null;
   let exitingRingVisuals = [];
   let previousDrawAt = performance.now();
+  let viewScale = 1;
+  let targetViewScale = 1;
   let viewOffsetX = 0;
   let viewOffsetY = 0;
   let targetViewOffsetX = 0;
   let targetViewOffsetY = 0;
   let dragGesture = null;
+  const activeTouchPointers = new Map();
+  let pinchGesture = null;
+  let pinchInteractionActive = false;
   let suppressNextCanvasClick = false;
   let pendingCanvasClick = null;
   const reducedMotionQuery = window.matchMedia
@@ -1392,9 +1399,10 @@
     if (!rect.width || !rect.height) return null;
     const canvasX = (event.clientX - rect.left) * W / rect.width;
     const canvasY = (event.clientY - rect.top) * H / rect.height;
+    const safeScale = Math.max(0.001, viewScale);
     return {
-      x:canvasX - viewOffsetX,
-      y:canvasY - viewOffsetY
+      x:W/2 + (canvasX - W/2 - viewOffsetX) / safeScale,
+      y:H/2 + (canvasY - H/2 - viewOffsetY) / safeScale
     };
   }
 
@@ -1419,8 +1427,8 @@
     const minimumTolerance = coarsePointer ? 12 : 6;
     const maximumTolerance = coarsePointer ? 20 : 14;
     const tolerance = Math.max(
-      minimumTolerance,
-      Math.min(maximumTolerance, layout.gap * 0.42)
+      minimumTolerance / viewScale,
+      Math.min(maximumTolerance / viewScale, layout.gap * 0.42)
     );
     let nearest = null;
     let nearestDistance = Infinity;
@@ -1495,13 +1503,91 @@
     }
     targetViewOffsetX = 0;
     targetViewOffsetY = 0;
+    targetViewScale = 1;
     if (reducedMotionQuery.matches){
       viewOffsetX = 0;
       viewOffsetY = 0;
+      viewScale = 1;
     }
   });
 
+  function canvasPositionFromClient(clientX, clientY){
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x:(clientX - rect.left) * W / Math.max(1, rect.width),
+      y:(clientY - rect.top) * H / Math.max(1, rect.height)
+    };
+  }
+
+  function beginPinchGesture(){
+    const points = Array.from(activeTouchPointers.values()).slice(0, 2);
+    if (points.length < 2) return;
+    const distance = Math.hypot(
+      points[1].clientX - points[0].clientX,
+      points[1].clientY - points[0].clientY
+    );
+    if (distance < 1) return;
+    const midpoint = canvasPositionFromClient(
+      (points[0].clientX + points[1].clientX) / 2,
+      (points[0].clientY + points[1].clientY) / 2
+    );
+    const startScale = Math.max(0.001, viewScale);
+    pinchGesture = {
+      startDistance:distance,
+      startScale,
+      worldX:W/2 + (midpoint.x - W/2 - viewOffsetX) / startScale,
+      worldY:H/2 + (midpoint.y - H/2 - viewOffsetY) / startScale
+    };
+    pinchInteractionActive = true;
+    dragGesture = null;
+    centerControlHovered = false;
+  }
+
+  function updatePinchGesture(){
+    if (!pinchGesture || activeTouchPointers.size < 2) return;
+    const points = Array.from(activeTouchPointers.values()).slice(0, 2);
+    const distance = Math.hypot(
+      points[1].clientX - points[0].clientX,
+      points[1].clientY - points[0].clientY
+    );
+    const midpoint = canvasPositionFromClient(
+      (points[0].clientX + points[1].clientX) / 2,
+      (points[0].clientY + points[1].clientY) / 2
+    );
+    const nextScale = Math.max(
+      MIN_VIEW_SCALE,
+      Math.min(
+        MAX_VIEW_SCALE,
+        pinchGesture.startScale * distance / pinchGesture.startDistance
+      )
+    );
+    const nextOffsetX =
+      midpoint.x - W/2 - nextScale * (pinchGesture.worldX - W/2);
+    const nextOffsetY =
+      midpoint.y - H/2 - nextScale * (pinchGesture.worldY - H/2);
+    targetViewScale = nextScale;
+    viewScale = nextScale;
+    targetViewOffsetX = nextOffsetX;
+    targetViewOffsetY = nextOffsetY;
+    viewOffsetX = nextOffsetX;
+    viewOffsetY = nextOffsetY;
+  }
+
   canvas.addEventListener('pointerdown', event=>{
+    if (event.pointerType === 'touch'){
+      activeTouchPointers.set(event.pointerId, {
+        clientX:event.clientX,
+        clientY:event.clientY
+      });
+      canvas.setPointerCapture(event.pointerId);
+      if (activeTouchPointers.size >= 2){
+        event.preventDefault();
+        beginPinchGesture();
+        updatePinchGesture();
+        return;
+      }
+      if (pinchInteractionActive) return;
+    }
     if (!event.isPrimary || event.button !== 0) return;
     if (centerControlAtPointer(event)) return;
     dragGesture = {
@@ -1512,10 +1598,25 @@
       startOffsetY:targetViewOffsetY,
       moved:false
     };
-    canvas.setPointerCapture(event.pointerId);
+    if (!canvas.hasPointerCapture(event.pointerId)){
+      canvas.setPointerCapture(event.pointerId);
+    }
   });
 
   canvas.addEventListener('pointermove', event=>{
+    if (event.pointerType === 'touch' && activeTouchPointers.has(event.pointerId)){
+      activeTouchPointers.set(event.pointerId, {
+        clientX:event.clientX,
+        clientY:event.clientY
+      });
+      if (activeTouchPointers.size >= 2){
+        event.preventDefault();
+        if (!pinchGesture) beginPinchGesture();
+        updatePinchGesture();
+        return;
+      }
+      if (pinchInteractionActive) return;
+    }
     if (dragGesture && event.pointerId === dragGesture.pointerId){
       const clientDeltaX = event.clientX - dragGesture.startClientX;
       const clientDeltaY = event.clientY - dragGesture.startClientY;
@@ -1540,7 +1641,30 @@
   });
 
   function finishCanvasDrag(event){
-    if (!dragGesture || event.pointerId !== dragGesture.pointerId) return;
+    if (event.pointerType === 'touch'){
+      activeTouchPointers.delete(event.pointerId);
+      if (pinchInteractionActive){
+        if (activeTouchPointers.size >= 2) beginPinchGesture();
+        else pinchGesture = null;
+        suppressNextCanvasClick = true;
+        if (activeTouchPointers.size === 0){
+          pinchInteractionActive = false;
+          setTimeout(()=>{ suppressNextCanvasClick = false; }, 400);
+        }
+        if (canvas.hasPointerCapture(event.pointerId)){
+          canvas.releasePointerCapture(event.pointerId);
+        }
+        dragGesture = null;
+        canvas.style.cursor = 'grab';
+        return;
+      }
+    }
+    if (!dragGesture || event.pointerId !== dragGesture.pointerId){
+      if (canvas.hasPointerCapture(event.pointerId)){
+        canvas.releasePointerCapture(event.pointerId);
+      }
+      return;
+    }
     if (dragGesture.moved && event.type === 'pointerup'){
       suppressNextCanvasClick = true;
       setTimeout(()=>{ suppressNextCanvasClick = false; }, 0);
@@ -1608,12 +1732,14 @@
     const viewEase = reducedMotionQuery.matches
       ? 1
       : 1 - Math.exp(-frameDelta / 115);
+    viewScale += (targetViewScale - viewScale)*viewEase;
     viewOffsetX += (targetViewOffsetX - viewOffsetX)*viewEase;
     viewOffsetY += (targetViewOffsetY - viewOffsetY)*viewEase;
 
     const { cx, cy, baseR, gap } = ringLayout();
     ctx.save();
     ctx.translate(cx + viewOffsetX, cy + viewOffsetY);
+    ctx.scale(viewScale, viewScale);
     ctx.translate(-cx, -cy);
 
     const motionEase = reducedMotionQuery.matches
@@ -2467,11 +2593,16 @@
     flashEvents = [];
     centerPulseStartedAt = null;
     exitingRingVisuals = [];
+    viewScale = 1;
+    targetViewScale = 1;
     viewOffsetX = 0;
     viewOffsetY = 0;
     targetViewOffsetX = 0;
     targetViewOffsetY = 0;
     dragGesture = null;
+    activeTouchPointers.clear();
+    pinchGesture = null;
+    pinchInteractionActive = false;
     suppressNextCanvasClick = false;
     if (pendingCanvasClick !== null){
       clearTimeout(pendingCanvasClick);

@@ -446,7 +446,7 @@
     <div class="stage">
       <canvas
         id="canvas"
-        aria-label="Rhythm rings. Drag outside the center plus to move, scroll to zoom, and double click outside the center plus to reset position and zoom. Left click the center plus to add a ring; right click it to remove the outermost ring. Left click a ring to increase its hit count; right click to decrease its hit count."
+        aria-label="Rhythm rings. Drag outside the center plus to move, scroll or pinch to zoom, and double click outside the center plus to reset position and zoom. Left click the center plus to add a ring; right click it to remove the outermost ring. Left click a ring to increase its hit count; right click to decrease its hit count."
       ></canvas>
     </div>
     <aside class="panel" id="controlPanel">
@@ -470,7 +470,7 @@
         <dl class="control-guide">
           <dt>Center +</dt><dd>Left Click: add ring · Right Click: remove outer ring</dd>
           <dt>Ring</dt><dd>Left Click: increase hit count · Right Click: decrease hit count</dd>
-          <dt>View</dt><dd>Drag: move · Double Click: reset view · Scroll: zoom</dd>
+          <dt>View</dt><dd>Drag: move · Scroll / Pinch: zoom · Double Click: reset view</dd>
           <dt>Sliders</dt><dd>Double Click: reset to default</dd>
           <dt>Space key</dt><dd>Play / Stop</dd>
           <dt>H key</dt><dd>Show / Hide Panel</dd>
@@ -1073,6 +1073,9 @@
   let targetViewOffsetX = 0;
   let targetViewOffsetY = 0;
   let dragGesture = null;
+  const activeTouchPointers = new Map();
+  let pinchGesture = null;
+  let pinchInteractionActive = false;
   let suppressNextCanvasClick = false;
   let pendingCanvasClick = null;
   const reducedMotionQuery = window.matchMedia
@@ -1434,7 +1437,83 @@
     }
   });
 
+  function canvasPositionFromClient(clientX, clientY){
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x:(clientX - rect.left) * W / Math.max(1, rect.width),
+      y:(clientY - rect.top) * H / Math.max(1, rect.height)
+    };
+  }
+
+  function beginPinchGesture(){
+    const points = Array.from(activeTouchPointers.values()).slice(0, 2);
+    if (points.length < 2) return;
+    const distance = Math.hypot(
+      points[1].clientX - points[0].clientX,
+      points[1].clientY - points[0].clientY
+    );
+    if (distance < 1) return;
+    const midpoint = canvasPositionFromClient(
+      (points[0].clientX + points[1].clientX) / 2,
+      (points[0].clientY + points[1].clientY) / 2
+    );
+    const startScale = Math.max(0.001, viewScale);
+    pinchGesture = {
+      startDistance:distance,
+      startScale,
+      worldX:W/2 + (midpoint.x - W/2 - viewOffsetX) / startScale,
+      worldY:H/2 + (midpoint.y - H/2 - viewOffsetY) / startScale
+    };
+    pinchInteractionActive = true;
+    dragGesture = null;
+    centerControlHovered = false;
+  }
+
+  function updatePinchGesture(){
+    if (!pinchGesture || activeTouchPointers.size < 2) return;
+    const points = Array.from(activeTouchPointers.values()).slice(0, 2);
+    const distance = Math.hypot(
+      points[1].clientX - points[0].clientX,
+      points[1].clientY - points[0].clientY
+    );
+    const midpoint = canvasPositionFromClient(
+      (points[0].clientX + points[1].clientX) / 2,
+      (points[0].clientY + points[1].clientY) / 2
+    );
+    const nextScale = Math.max(
+      MIN_VIEW_SCALE,
+      Math.min(
+        MAX_VIEW_SCALE,
+        pinchGesture.startScale * distance / pinchGesture.startDistance
+      )
+    );
+    const nextOffsetX =
+      midpoint.x - W/2 - nextScale * (pinchGesture.worldX - W/2);
+    const nextOffsetY =
+      midpoint.y - H/2 - nextScale * (pinchGesture.worldY - H/2);
+    targetViewScale = nextScale;
+    viewScale = nextScale;
+    targetViewOffsetX = nextOffsetX;
+    targetViewOffsetY = nextOffsetY;
+    viewOffsetX = nextOffsetX;
+    viewOffsetY = nextOffsetY;
+  }
+
   canvas.addEventListener('pointerdown', event=>{
+    if (event.pointerType === 'touch'){
+      activeTouchPointers.set(event.pointerId, {
+        clientX:event.clientX,
+        clientY:event.clientY
+      });
+      canvas.setPointerCapture(event.pointerId);
+      if (activeTouchPointers.size >= 2){
+        event.preventDefault();
+        beginPinchGesture();
+        updatePinchGesture();
+        return;
+      }
+      if (pinchInteractionActive) return;
+    }
     if (!event.isPrimary || event.button !== 0) return;
     if (centerControlAtPointer(event)) return;
     dragGesture = {
@@ -1445,10 +1524,25 @@
       startOffsetY:targetViewOffsetY,
       moved:false
     };
-    canvas.setPointerCapture(event.pointerId);
+    if (!canvas.hasPointerCapture(event.pointerId)){
+      canvas.setPointerCapture(event.pointerId);
+    }
   });
 
   canvas.addEventListener('pointermove', event=>{
+    if (event.pointerType === 'touch' && activeTouchPointers.has(event.pointerId)){
+      activeTouchPointers.set(event.pointerId, {
+        clientX:event.clientX,
+        clientY:event.clientY
+      });
+      if (activeTouchPointers.size >= 2){
+        event.preventDefault();
+        if (!pinchGesture) beginPinchGesture();
+        updatePinchGesture();
+        return;
+      }
+      if (pinchInteractionActive) return;
+    }
     if (dragGesture && event.pointerId === dragGesture.pointerId){
       const clientDeltaX = event.clientX - dragGesture.startClientX;
       const clientDeltaY = event.clientY - dragGesture.startClientY;
@@ -1473,7 +1567,30 @@
   });
 
   function finishCanvasDrag(event){
-    if (!dragGesture || event.pointerId !== dragGesture.pointerId) return;
+    if (event.pointerType === 'touch'){
+      activeTouchPointers.delete(event.pointerId);
+      if (pinchInteractionActive){
+        if (activeTouchPointers.size >= 2) beginPinchGesture();
+        else pinchGesture = null;
+        suppressNextCanvasClick = true;
+        if (activeTouchPointers.size === 0){
+          pinchInteractionActive = false;
+          setTimeout(()=>{ suppressNextCanvasClick = false; }, 400);
+        }
+        if (canvas.hasPointerCapture(event.pointerId)){
+          canvas.releasePointerCapture(event.pointerId);
+        }
+        dragGesture = null;
+        canvas.style.cursor = 'grab';
+        return;
+      }
+    }
+    if (!dragGesture || event.pointerId !== dragGesture.pointerId){
+      if (canvas.hasPointerCapture(event.pointerId)){
+        canvas.releasePointerCapture(event.pointerId);
+      }
+      return;
+    }
     if (dragGesture.moved && event.type === 'pointerup'){
       suppressNextCanvasClick = true;
       setTimeout(()=>{ suppressNextCanvasClick = false; }, 0);
@@ -2412,6 +2529,9 @@
     targetViewOffsetX = 0;
     targetViewOffsetY = 0;
     dragGesture = null;
+    activeTouchPointers.clear();
+    pinchGesture = null;
+    pinchInteractionActive = false;
     suppressNextCanvasClick = false;
     if (pendingCanvasClick !== null){
       clearTimeout(pendingCanvasClick);
