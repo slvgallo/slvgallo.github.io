@@ -1,5 +1,62 @@
 import { state } from './state.js';
-import { createFocusTrap } from './focus-trap.js';
+
+const STORAGE_KEY = 'preferredLanguage';
+const DEFAULT_LANGUAGE = 'en';
+const LANGUAGE_TRANSITION = Object.freeze({
+  enabled: true,
+  media:
+    '(min-width: 769px) and (prefers-reduced-motion: no-preference)'
+});
+
+function readPreferredLanguage() {
+  try {
+    return localStorage.getItem(STORAGE_KEY) === 'ja'
+      ? 'ja'
+      : DEFAULT_LANGUAGE;
+  } catch {
+    return DEFAULT_LANGUAGE;
+  }
+}
+
+function savePreferredLanguage(language) {
+  try {
+    localStorage.setItem(STORAGE_KEY, language);
+  } catch {
+    // Language switching remains functional when storage is unavailable.
+  }
+}
+
+function createTransitionLoader() {
+  let componentPromise = null;
+
+  return function loadTransitionComponent() {
+    if (
+      !LANGUAGE_TRANSITION.enabled ||
+      !window.matchMedia(LANGUAGE_TRANSITION.media).matches
+    ) {
+      return Promise.resolve(null);
+    }
+
+    if (!componentPromise) {
+      componentPromise = import('./language-transition.js')
+        .then(({ createLanguageTransition }) => createLanguageTransition())
+        .catch(error => {
+          console.warn('Language transition disabled:', error);
+          return null;
+        });
+    }
+
+    return componentPromise;
+  };
+}
+
+function languageFromTarget(target, container) {
+  const button = target instanceof Element
+    ? target.closest('#lang-en, #lang-ja')
+    : null;
+  if (!button || !container.contains(button)) return null;
+  return button.id === 'lang-ja' ? 'ja' : 'en';
+}
 
 export function initLangToggle() {
   if (state.init.langInitialized) return;
@@ -46,20 +103,12 @@ export function initLangToggle() {
     document.fonts.ready.then(scheduleTitleLayout);
   }
 
-  const focusTrap = createFocusTrap(langButtons, {
-    initialFocus: false,
-    restoreFocus: false
-  });
+  let currentLang = readPreferredLanguage();
+  let transitioning = false;
+  const loadTransitionComponent = createTransitionLoader();
 
-  // 初期言語の決定（localStorage または デフォルト 'en'）
-  let currentLang = localStorage.getItem('preferredLanguage') || 'en';
-
-  /**
-   * 言語を切り替える関数
-   * 💡 各要素をループで回すのではなく、ルート(html要素)のクラスを切り替える
-   * これにより、後から追加されたDOM（フィルタ後の作品など）にも自動でスタイルが適用されます
-   */
   function setLanguage(lang) {
+    currentLang = lang;
     document.documentElement.setAttribute('lang', lang);
     document.documentElement.classList.toggle('lang-en-active', lang === 'en');
     document.documentElement.classList.toggle('lang-ja-active', lang === 'ja');
@@ -67,6 +116,45 @@ export function initLangToggle() {
     // ボタンの状態更新
     langEnBtn.classList.toggle('active', lang === 'en');
     langJaBtn.classList.toggle('active', lang === 'ja');
+    langEnBtn.setAttribute('aria-pressed', String(lang === 'en'));
+    langJaBtn.setAttribute('aria-pressed', String(lang === 'ja'));
+  }
+
+  function commitLanguage(lang) {
+    setLanguage(lang);
+    savePreferredLanguage(lang);
+  }
+
+  function setTransitioning(isTransitioning) {
+    transitioning = isTransitioning;
+    langEnBtn.disabled = isTransitioning;
+    langJaBtn.disabled = isTransitioning;
+  }
+
+  async function switchLanguage(lang) {
+    if (transitioning || lang === currentLang) return;
+
+    const sourceLanguage = currentLang;
+    const commit = () => commitLanguage(lang);
+    setTransitioning(true);
+
+    try {
+      const transitionComponent = await loadTransitionComponent();
+      if (transitionComponent) {
+        await transitionComponent.run(
+          sourceLanguage,
+          lang,
+          commit
+        );
+      } else {
+        commit();
+      }
+    } catch (error) {
+      console.warn('Language transition failed:', error);
+      if (currentLang !== lang) commit();
+    } finally {
+      setTransitioning(false);
+    }
   }
 
   // 初期実行
@@ -74,30 +162,17 @@ export function initLangToggle() {
 
   // イベント委譲によるクリック制御
   document.addEventListener('click', (e) => {
-    const btnEn = e.target.closest('#lang-en');
-    const btnJa = e.target.closest('#lang-ja');
-
-    if (btnEn) {
-      setLanguage('en');
-      localStorage.setItem('preferredLanguage', 'en');
-    } else if (btnJa) {
-      setLanguage('ja');
-      localStorage.setItem('preferredLanguage', 'ja');
-    }
+    const language = languageFromTarget(e.target, langButtons);
+    if (language) void switchLanguage(language);
   });
 
   // キーボード操作の改善
   langButtons.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
+      const language = languageFromTarget(e.target, langButtons);
+      if (!language) return;
       e.preventDefault();
-      const target = e.target;
-      if (target.id === 'lang-en') {
-        setLanguage('en');
-        localStorage.setItem('preferredLanguage', 'en');
-      } else if (target.id === 'lang-ja') {
-        setLanguage('ja');
-        localStorage.setItem('preferredLanguage', 'ja');
-      }
+      void switchLanguage(language);
     }
   });
 }

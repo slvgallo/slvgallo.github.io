@@ -108,8 +108,8 @@
   margin: 0;
   font-size: 1.8em;
   font-weight: 400;
+  line-height: 1;
   color: var(--color-primary);
-  padding-bottom: 0.5em;
 }
 
 .profile-section p {
