@@ -969,6 +969,10 @@ html.lang-ja-active .project-desc-lang.lang-ja {
   #project-desc {
     font-size: 1em;
   }
+
+  html.lang-en-active #project-desc .project-desc-lang.lang-en {
+    text-align: left;
+  }
 }
 
 /* 言語切り替え */

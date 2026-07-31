@@ -187,6 +187,10 @@ html.lang-ja-active .profile-statement > .lang-ja {
     font-size: 1em;
   }
 
+  html.lang-en-active .profile-statement {
+    text-align: left;
+  }
+
   /* 英語テキストのみハイフネーションを有効化 */
   .lang-en {
     hyphens: auto;
