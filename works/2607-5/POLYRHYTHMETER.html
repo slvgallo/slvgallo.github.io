@@ -1,0 +1,2471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLYRHYTHMETER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #f2f2f2;
+    --bg2: rgba(255,255,255,0.62);
+    --panel: rgba(255,255,255,0.46);
+    --panel-line: rgba(40,104,215,0.28);
+    --text: #0c1a2b;
+    --text-dim: #35475b;
+    --brass: #2868d7;
+    --brass-hover: #1f57b8;
+    --brass-dim: #76a4ef;
+    --shadow: rgba(12,26,43,0.06);
+    --panel-width: min(calc(100vw - 32px), 340px);
+    --topbar-height: 54px;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--bg);
+    color: var(--text);
+    font-family:'Noto Sans', sans-serif;
+    overflow:hidden;
+  }
+  .app{
+    position:relative; height:100vh; height:100dvh; width:100vw;
+  }
+  .panel-topbar{
+    position:fixed; top:16px; left:16px; z-index:20;
+    width:var(--panel-width); height:var(--topbar-height);
+  }
+  #panelToggle{
+    width:100%; height:100%; padding:8px;
+    display:flex; align-items:center;
+    appearance:none; border:0; border-radius:0;
+    background:var(--panel);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    color:var(--brass); text-align:left;
+    transition:background-color .22s ease, color .22s ease;
+  }
+  #panelToggle:hover{ background:var(--panel); }
+  .menu-button-icon{
+    width:38px; height:38px; flex:0 0 38px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--brass-dim); background:transparent;
+    transition:background-color .18s ease, border-color .18s ease;
+  }
+  #panelToggle:hover .menu-button-icon{
+    background:var(--brass); border-color:var(--brass);
+  }
+  .page-title{
+    min-width:0; height:38px; display:flex; align-items:center;
+    padding:0 10px 0 14px;
+    color:var(--brass); font-size:15px; font-weight:700; letter-spacing:.06em;
+    text-shadow:0 1px 2px rgba(255,255,255,.95);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .menu-icon{
+    display:block; position:relative; width:15px; height:11px;
+  }
+  #panelToggle:hover .menu-icon{ color:#ffffff; }
+  .menu-icon span{
+    display:block; position:absolute; left:0;
+    width:15px; height:1px; border-radius:2px;
+    background:currentColor; transition:.3s;
+  }
+  .menu-icon span:nth-child(1){ top:0; }
+  .menu-icon span:nth-child(2){ top:5px; }
+  .menu-icon span:nth-child(3){ top:10px; }
+  #panelToggle[aria-expanded="true"] .menu-icon span:nth-child(1){
+    transform:translateY(5px) rotate(-45deg);
+  }
+  #panelToggle[aria-expanded="true"] .menu-icon span:nth-child(2){
+    opacity:0;
+  }
+  #panelToggle[aria-expanded="true"] .menu-icon span:nth-child(3){
+    transform:translateY(-5px) rotate(45deg);
+  }
+  main{
+    position:relative; width:100%; height:100%;
+  }
+  .stage{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:var(--bg);
+  }
+  canvas{ display:block; touch-action:none; cursor:grab; }
+  .panel{
+    position:fixed; top:calc(16px + var(--topbar-height)); left:16px; z-index:15;
+    width:var(--panel-width);
+    max-height:calc(100vh - 16px - var(--topbar-height));
+    max-height:calc(100dvh - 16px - var(--topbar-height));
+    background: var(--panel);
+    color: var(--text);
+    border:0;
+    padding: 16px;
+    overflow-y:auto;
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    scrollbar-color:var(--panel-line) transparent;
+    opacity:1; visibility:visible; pointer-events:auto;
+    transform:translateY(0);
+    transition:
+      opacity .24s ease,
+      transform .34s cubic-bezier(.22,1,.36,1),
+      visibility 0s linear 0s;
+  }
+  body.panel-hidden .panel{
+    opacity:0; visibility:hidden; pointer-events:none;
+    transform:translateY(-12px);
+    transition:
+      opacity .2s ease,
+      transform .28s cubic-bezier(.4,0,1,1),
+      visibility 0s linear .28s;
+  }
+  .panel::-webkit-scrollbar{ width:6px; }
+  .panel::-webkit-scrollbar-thumb{ background:var(--panel-line); border-radius:3px; }
+  .panel h2{
+    font-size: 12px; text-transform:uppercase; letter-spacing:0.14em;
+    color: var(--brass); margin: 0 0 10px 0; font-weight:600;
+  }
+  .status-count{
+    color:var(--brass); font-size:16px; font-weight:600; letter-spacing:.02em;
+  }
+  .status-timing{
+    margin-top:5px; color:var(--brass); font-size:11px; line-height:1.5;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .control-guide{
+    display:grid; grid-template-columns:58px 1fr; gap:5px 10px;
+    margin:0; font-size:10px; line-height:1.45;
+  }
+  .control-guide dt{
+    margin:0; color:var(--brass); font-weight:600; letter-spacing:.02em;
+  }
+  .control-guide dd{ margin:0; color:var(--brass); }
+  .section{ margin-bottom:16px; }
+  .section + .section{ border-top:1px solid var(--panel-line); padding-top:16px; }
+  .tempo-volume-section{ margin-bottom:30px; }
+  .transport{
+    display:flex; gap:8px; margin-bottom:16px;
+  }
+  .transport-section .transport{ margin-bottom:0; }
+  button{
+    font-family:'Noto Sans', sans-serif;
+    cursor:pointer;
+    border-radius: 4px;
+    border: 1px solid var(--brass-dim);
+    background: transparent;
+    color: var(--brass);
+    box-shadow:none;
+    transition: border-color 0.15s, color 0.15s, background 0.15s, box-shadow 0.15s;
+  }
+  button:hover{ border-color: var(--brass); color:var(--brass); background:rgba(40,104,215,0.1); box-shadow:none; }
+  button:focus-visible{ outline: 2px solid var(--brass); outline-offset:2px; }
+  #playBtn{
+    flex:1; padding: 10px 0; font-size:13px; font-weight:500; letter-spacing:0.03em;
+    background: var(--brass); color:#ffffff; border:none;
+  }
+  #playBtn:hover{ background:var(--brass-hover); color:#ffffff; }
+  #resetBtn, #resetSettingsBtn{
+    padding:10px 9px; font-size:11px; color:var(--brass); white-space:nowrap;
+  }
+
+  .row{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
+  .row label{ font-size:12px; color: var(--brass); }
+  .row .val{ font-family:'Noto Sans', sans-serif; font-size:12px; color: var(--brass); min-width:44px; text-align:right; }
+  .val-input{
+    font-family:'Noto Sans', sans-serif; font-size:12px; color: var(--brass);
+    background:rgba(40,104,215,0.09); border:0; border-radius:2px;
+    width:44px; text-align:right; padding:2px 4px; cursor:text;
+    transition:background-color .15s ease;
+  }
+  .val-input:hover{ background:rgba(40,104,215,0.14); }
+  .val-input:focus{
+    outline:none; background:rgba(40,104,215,0.2);
+  }
+  .value-with-unit{
+    display:inline-flex; align-items:center; gap:3px;
+    padding-right:5px; border-radius:2px;
+    background:rgba(40,104,215,0.09); color:var(--brass);
+    font-size:10px; line-height:1;
+  }
+  .value-with-unit:hover{ background:rgba(40,104,215,0.14); }
+  .value-with-unit:focus-within{ background:rgba(40,104,215,0.2); }
+  .value-with-unit .val-input{
+    width:38px; padding-right:0; background:transparent;
+  }
+  .value-with-unit .val-input:hover,
+  .value-with-unit .val-input:focus{ background:transparent; }
+  /* remove number spinner arrows for a cleaner instrument-panel look */
+  .val-input::-webkit-inner-spin-button, .val-input::-webkit-outer-spin-button{ -webkit-appearance:none; margin:0; }
+  .val-input{ -moz-appearance:textfield; }
+  input[type=range]{
+    flex:1; -webkit-appearance:none; appearance:none; height:2px; background: var(--panel-line);
+    border-radius:2px; outline:none;
+  }
+  .section > input[type=range]{
+    display:block; width:100%; margin:0;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none; width:12px; height:12px; border-radius:50%;
+    background: var(--brass); cursor:pointer; border: 2px solid var(--bg2);
+    box-shadow:0 1px 4px rgba(40,104,215,0.22);
+  }
+  input[type=range]::-moz-range-thumb{
+    width:12px; height:12px; border-radius:50%; background: var(--brass); border:2px solid var(--bg2); cursor:pointer;
+    box-shadow:0 1px 4px rgba(40,104,215,0.22);
+  }
+
+  select{
+    font-family:'Noto Sans', sans-serif; font-size:12px;
+    background: var(--bg2); color: var(--brass); border:1px solid var(--brass-dim);
+    border-radius:4px; padding: 6px 8px; cursor:pointer;
+    box-shadow:none;
+  }
+  select:focus-visible{ outline:2px solid var(--brass); outline-offset:1px; }
+  .sound-grid{
+    display:grid; grid-template-columns:minmax(88px,.7fr) minmax(0,1.3fr);
+    gap:8px 10px; margin-top:14px;
+  }
+  .sound-grid label{ display:block; font-size:11px; color: var(--brass); margin-bottom:4px; }
+  .sound-grid select{ width:100%; }
+  .delay-details{
+    margin:14px 0 2px 2px; padding:0 0 0 10px;
+    border-left:1px solid var(--panel-line);
+  }
+  .delay-details h3{
+    margin:0 0 10px; color:var(--brass);
+    font-size:10px; font-weight:600; letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  .delay-details > input[type=range]{
+    display:block; width:100%; margin:0;
+  }
+
+  .rings-list{ display:flex; flex-direction:column; gap:10px; }
+  .ring-row{
+    background:rgba(255,255,255,0.48);
+    border:1px solid var(--panel-line);
+    border-radius:4px; padding:10px;
+    box-shadow:none;
+  }
+  .ring-rhythm-row, .ring-sound-row, .ring-volume-row{ display:flex; align-items:center; gap:6px; }
+  .ring-rhythm-row{ min-width:0; }
+  .ring-sound-row{
+    margin-top:8px; padding-top:8px; border-top:1px solid var(--panel-line);
+  }
+  .ring-volume-row{ margin-top:7px; }
+  .ring-volume-row input[type=range]{ width:auto; min-width:0; }
+  .swatch{ width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  .ring-number-control{
+    display:flex; align-items:center; gap:3px; font-size:10px; color:var(--brass);
+    white-space:nowrap;
+  }
+  .ring-number-control .control-name{
+    font-size:10px; letter-spacing:0.02em;
+  }
+  .ring-number-stepper{
+    display:inline-flex; align-items:stretch; gap:3px;
+  }
+  .ring-step-buttons{
+    display:flex; flex-direction:column; justify-content:center; gap:1px;
+  }
+  .ring-step-btn{
+    width:14px; height:9px; min-height:0; padding:0; border:0; border-radius:2px;
+    background:transparent; color:var(--brass); box-shadow:none;
+    font-size:9px; font-weight:600; line-height:8px;
+  }
+  .ring-step-btn:hover{ background:rgba(40,104,215,0.14); color:var(--brass); }
+  .ring-row .ring-number-input{
+    width:26px; background:rgba(40,104,215,0.09); border:0; border-radius:2px;
+    color:var(--brass); font-family:'Noto Sans', sans-serif; font-size:13px; padding:1px 2px;
+    text-align:center; cursor:text;
+    transition:background-color .15s ease;
+  }
+  .ring-row .ring-number-input:hover{
+    background:rgba(40,104,215,0.14);
+  }
+  .ring-row .ring-number-input:focus{
+    outline:none; background:rgba(40,104,215,0.2);
+  }
+  .ring-number-input::-webkit-inner-spin-button,
+  .ring-number-input::-webkit-outer-spin-button{
+    -webkit-appearance:none; margin:0;
+  }
+  .ring-number-input{ -moz-appearance:textfield; }
+  .ring-rhythm-row .spacer{ flex:1; }
+  .sound-label{
+    font-family:'Noto Sans', sans-serif; font-size:9px; letter-spacing:0.08em;
+    color:var(--brass); width:34px;
+  }
+  .ring-volume-label{
+    font-size:9px; color:var(--brass); width:36px;
+  }
+  .ring-volume-value{
+    width:34px; text-align:right; font-family:'Noto Sans', sans-serif;
+    font-size:10px; color:var(--brass);
+  }
+  .wave-select{
+    font-family:'Noto Sans', sans-serif; font-size:11px; padding:4px 4px; flex:1; min-width:0;
+  }
+  .note-select{
+    font-family:'Noto Sans', sans-serif; font-size:11px; color:var(--brass);
+    padding:4px 4px; width:64px;
+  }
+  .auto-pitch-btn{
+    width:38px; flex-shrink:0; padding:5px 0;
+    font-family:'Noto Sans', sans-serif; font-size:9px;
+    color:var(--brass); box-shadow:none;
+  }
+  .auto-pitch-btn.active{
+    background:var(--brass); border-color:var(--brass); color:#ffffff;
+  }
+  .mute-btn, .remove-btn{
+    flex-shrink:0; padding:4px 6px; background:transparent; box-shadow:none;
+    font-size:9px; font-weight:600; letter-spacing:0.06em; color:var(--brass);
+  }
+  .mute-btn{ width:42px; }
+  .mute-btn.active{
+    background:var(--brass); border-color:var(--brass); color:#ffffff;
+  }
+  .remove-btn{ border-color:transparent; }
+  .mute-btn:hover, .remove-btn:hover{ color:var(--text); }
+
+  #addRingBtn{
+    width:100%; padding: 9px 0; margin-bottom:10px; font-size:12px;
+    color: var(--brass); border-style:solid; font-weight:600; letter-spacing:.01em;
+  }
+  #addRingBtn:hover{ color: var(--brass); }
+  #addRingBtn:disabled{ opacity:0.5; cursor:not-allowed; color:var(--text-dim); border-color:var(--panel-line); }
+  .profile-menu-link{
+    min-height:44px;
+    border-top:1px solid var(--panel-line);
+    padding-top:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .profile-menu-link img{
+    display:block;
+    width:44px;
+    height:auto;
+    opacity:.82;
+    transition:opacity .18s ease, transform .18s ease;
+  }
+  .profile-menu-link:hover img{
+    opacity:1;
+    transform:scale(1.06);
+  }
+  .profile-menu-link:focus-visible{
+    outline:2px solid var(--brass-dim);
+    outline-offset:2px;
+  }
+
+  @media (max-width: 760px){
+    .panel-topbar{
+      top:calc(16px + env(safe-area-inset-top));
+      right:calc(16px + env(safe-area-inset-right));
+      left:calc(16px + env(safe-area-inset-left));
+      width:auto;
+    }
+    .panel{
+      top:calc(16px + env(safe-area-inset-top) + var(--topbar-height));
+      right:calc(16px + env(safe-area-inset-right));
+      bottom:calc(16px + env(safe-area-inset-bottom));
+      left:calc(16px + env(safe-area-inset-left));
+      width:auto; max-height:none;
+      overscroll-behavior:contain;
+      -webkit-overflow-scrolling:touch;
+    }
+    .transport{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+    }
+    #playBtn{ grid-column:1 / -1; }
+    #playBtn, #resetBtn, #resetSettingsBtn, #addRingBtn{
+      min-height:44px;
+    }
+    select{
+      min-height:40px;
+      font-size:16px;
+    }
+    .val-input{
+      min-height:36px;
+      font-size:16px;
+    }
+    input[type=range]{
+      height:32px;
+      background:linear-gradient(var(--panel-line), var(--panel-line)) center / 100% 2px no-repeat;
+    }
+    .ring-rhythm-row{ flex-wrap:wrap; }
+    .ring-rhythm-row .spacer{ display:none; }
+    .ring-rhythm-row .remove-btn{
+      min-height:36px;
+      margin-left:auto;
+    }
+    .ring-row .ring-number-input{
+      width:36px;
+      min-height:36px;
+      font-size:16px;
+    }
+    .ring-step-btn{
+      width:24px;
+      height:17px;
+      font-size:12px;
+      line-height:16px;
+    }
+    .ring-sound-row{
+      display:grid;
+      grid-template-columns:34px 44px 68px minmax(0, 1fr);
+    }
+    .auto-pitch-btn, .mute-btn{
+      min-height:36px;
+    }
+    .note-select, .wave-select{
+      width:100%;
+      min-width:0;
+      font-size:16px;
+    }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .panel, .menu-icon span{ transition:none; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="panel-topbar">
+    <button id="panelToggle" type="button" aria-label="Hide controls" aria-keyshortcuts="H Escape" aria-expanded="true" aria-controls="controlPanel">
+      <span class="menu-button-icon" aria-hidden="true">
+        <span class="menu-icon"><span></span><span></span><span></span></span>
+      </span>
+      <span class="page-title">POLYRHYTHMETER</span>
+    </button>
+  </header>
+  <main>
+    <div class="stage">
+      <canvas
+        id="canvas"
+        aria-label="Rhythm rings. Drag outside the center plus to move, scroll to zoom, and double click outside the center plus to reset position and zoom. Left click the center plus to add a ring; right click it to remove the outermost ring. Left click a ring to increase its hit count; right click to decrease its hit count."
+      ></canvas>
+    </div>
+    <aside class="panel" id="controlPanel">
+
+      <div class="section transport-section">
+        <div class="transport">
+          <button id="playBtn" aria-keyshortcuts="Space" aria-pressed="false">Play</button>
+          <button id="resetBtn">Reset Phase</button>
+          <button id="resetSettingsBtn">Reset Settings</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Status</h2>
+        <div class="status-count" id="statusCount">2 RINGS</div>
+        <div class="status-timing" id="statusTiming">0.50 s/beat · 120 BPM · COMMON CYCLE 6 BEATS</div>
+      </div>
+
+      <div class="section">
+        <h2>Controls</h2>
+        <dl class="control-guide">
+          <dt>Center +</dt><dd>Left Click: add ring · Right Click: remove outer ring</dd>
+          <dt>Ring</dt><dd>Left Click: increase hit count · Right Click: decrease hit count</dd>
+          <dt>View</dt><dd>Drag: move · Double Click: reset view · Scroll: zoom</dd>
+          <dt>Sliders</dt><dd>Double Click: reset to default</dd>
+          <dt>Space key</dt><dd>Play / Stop</dd>
+          <dt>H key</dt><dd>Show / Hide Panel</dd>
+        </dl>
+      </div>
+
+      <div class="section tempo-volume-section">
+        <h2>Tempo &amp; Level</h2>
+        <div class="row">
+          <label for="bpm" id="bpmLabel">Tempo (BPM · Quarter Note)</label>
+          <input type="number" class="val-input" id="bpmVal" value="120" min="1" max="240" step="1" aria-label="Tempo in BPM">
+        </div>
+        <input type="range" id="bpm" min="1" max="240" value="120" step="1" data-default="120">
+        <div class="row" style="margin-top:12px;">
+          <label for="vol">Master Level</label>
+          <span class="value-with-unit">
+            <input type="number" class="val-input" id="volVal" value="70" min="0" max="100" step="1" aria-label="Master level percentage">
+            <span aria-hidden="true">%</span>
+          </span>
+        </div>
+        <input type="range" id="vol" min="0" max="100" value="70" step="1" data-default="70">
+      </div>
+
+      <div class="section">
+        <h2>Sound &amp; Pitch</h2>
+        <div class="row">
+          <label for="filterCutoff">Filter Cutoff</label>
+          <span class="value-with-unit">
+            <input type="number" class="val-input" id="filterVal" value="4.0" min="0.2" max="12" step="0.05" aria-label="Filter cutoff in kilohertz">
+            <span aria-hidden="true">kHz</span>
+          </span>
+        </div>
+        <input type="range" id="filterCutoff" min="200" max="12000" value="4000" step="50" data-default="4000">
+        <div class="row" style="margin-top:12px;">
+          <label for="filterResonance">Filter Resonance</label>
+          <input type="number" class="val-input" id="resonanceVal" value="0.6" min="0.5" max="8" step="0.1" aria-label="Filter resonance">
+        </div>
+        <input type="range" id="filterResonance" min="0.5" max="8" value="0.6" step="0.1" data-default="0.6">
+        <div class="row" style="margin-top:12px;">
+          <label for="decay">Decay</label>
+          <span class="value-with-unit">
+            <input type="number" class="val-input" id="decayVal" value="160" min="30" max="1500" step="10" aria-label="Decay in milliseconds">
+            <span aria-hidden="true">ms</span>
+          </span>
+        </div>
+        <input type="range" id="decay" min="30" max="1500" value="160" step="10" data-default="160">
+        <div class="row" style="margin-top:12px;">
+          <label for="reverbAmt">Reverb Level</label>
+          <span class="value-with-unit">
+            <input type="number" class="val-input" id="reverbVal" value="20" min="0" max="100" step="1" aria-label="Reverb level percentage">
+            <span aria-hidden="true">%</span>
+          </span>
+        </div>
+        <input type="range" id="reverbAmt" min="0" max="100" value="20" step="1" data-default="20">
+        <div class="row" style="margin-top:12px;">
+          <label for="delayAmt">Delay Level</label>
+          <span class="value-with-unit">
+            <input type="number" class="val-input" id="delayVal" value="0" min="0" max="100" step="1" aria-label="Delay level percentage">
+            <span aria-hidden="true">%</span>
+          </span>
+        </div>
+        <input type="range" id="delayAmt" min="0" max="100" value="0" step="1" data-default="0">
+        <div class="delay-details" id="delayDetails" hidden>
+          <h3>Delay</h3>
+          <div class="row">
+            <label for="delayDivision">Division</label>
+            <select id="delayDivision">
+              <option value="sixteenth">1/16</option>
+              <option value="eighth" selected>1/8</option>
+              <option value="dottedEighth">1/8D</option>
+              <option value="quarter">1/4</option>
+              <option value="quarterTriplet">1/4T</option>
+              <option value="half">1/2</option>
+            </select>
+          </div>
+          <div class="row">
+            <label for="delayFeedback">Feedback</label>
+            <span class="value-with-unit">
+              <input type="number" class="val-input" id="feedbackVal" value="25" min="0" max="80" step="1" aria-label="Delay feedback percentage">
+              <span aria-hidden="true">%</span>
+            </span>
+          </div>
+          <input type="range" id="delayFeedback" min="0" max="80" value="25" step="1" data-default="25">
+        </div>
+        <div class="row" style="margin-top:12px;">
+          <label for="stereoSpread">Stereo Spread</label>
+          <span class="value-with-unit">
+            <input type="number" class="val-input" id="spreadVal" value="0" min="0" max="100" step="1" aria-label="Stereo spread percentage">
+            <span aria-hidden="true">%</span>
+          </span>
+        </div>
+        <input type="range" id="stereoSpread" min="0" max="100" value="0" step="1" data-default="0">
+        <div class="sound-grid">
+          <div>
+            <label for="rootNote">Root</label>
+            <select id="rootNote"></select>
+          </div>
+          <div>
+            <label for="pitchSetType">Pitch Set</label>
+            <select id="pitchSetType"></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Rings</h2>
+        <button id="addRingBtn">+ Add Ring</button>
+        <div class="rings-list" id="ringsList"></div>
+      </div>
+
+      <a class="profile-menu-link" href="https://slvgallo.github.io/works/2607-5.html" aria-label="Open the POLYRHYTHMETER work page">
+        <img src="https://res.cloudinary.com/ddwxt9vnm/image/upload/v1770835387/slv_dvvrdo.svg" alt="">
+      </a>
+    </aside>
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- state ----------
+  const PALETTE = [
+    '#2868D7','#E05A47','#2D9D78','#8B5BD6',
+    '#E0A323','#27A7B8','#D4558C','#6673D8',
+    '#E2762E','#46A35C','#9B6CC1','#D5B33F',
+    '#277FB5','#C84C4C','#4F988D','#7C65B8',
+    '#B66A2C','#3186C4','#B34F85','#73923B',
+    '#BC4EBC','#57A33E'
+  ];
+  const WAVEFORMS = ['sine','triangle','square','sawtooth'];
+  const WAVE_LABELS = { sine:'Sine', triangle:'Triangle', square:'Square', sawtooth:'Sawtooth' };
+  const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  const MAX_RINGS = 22;
+  const MAX_BEATS_PER_RING = 64;
+  const MAX_HITS_PER_RING = 32;
+  const MAX_ACTIVE_VOICES = 768;
+  const MAX_DELAY_SECONDS = 120;
+  const MAX_CENTER_SOURCE_EVENTS = 1600;
+  const MAX_CENTER_DELAY_ECHOES = 5;
+  const MIN_VIEW_SCALE = 0.55;
+  const MAX_VIEW_SCALE = 3;
+  const NOTE_MIDI_MIN = 24;  // C1
+  const NOTE_MIDI_MAX = 131; // B9
+
+  const PITCH_SET_GROUPS = [
+    'Open / Structural',
+    'Chords',
+    'Modes / Scales',
+    'Pentatonic / Minimal',
+    'Symmetric / Experimental'
+  ];
+
+  // Pitch Sets contain pitch classes within one octave only. Octave placement
+  // belongs to the separate voicing calculation below.
+  const PITCH_SETS = {
+    octaves: {
+      group:'Open / Structural', label:'Octaves', degrees:[0]
+    },
+    openFifths: {
+      group:'Open / Structural', label:'Open Fifths', degrees:[0,7]
+    },
+    quartal: {
+      group:'Open / Structural', label:'Quartal', degrees:[0,5,10]
+    },
+    suspended2: {
+      group:'Open / Structural', label:'Suspended 2nd', degrees:[0,2,7]
+    },
+    suspended4: {
+      group:'Open / Structural', label:'Suspended 4th', degrees:[0,5,7]
+    },
+
+    majorTriad: {
+      group:'Chords', label:'Major Triad', degrees:[0,4,7]
+    },
+    minorTriad: {
+      group:'Chords', label:'Minor Triad', degrees:[0,3,7]
+    },
+    diminishedTriad: {
+      group:'Chords', label:'Diminished Triad', degrees:[0,3,6]
+    },
+    augmentedTriad: {
+      group:'Chords', label:'Augmented Triad', degrees:[0,4,8]
+    },
+    majorSeventh: {
+      group:'Chords', label:'Major Seventh', degrees:[0,4,7,11]
+    },
+    dominantSeventh: {
+      group:'Chords', label:'Dominant Seventh', degrees:[0,4,7,10]
+    },
+    minorSeventh: {
+      group:'Chords', label:'Minor Seventh', degrees:[0,3,7,10]
+    },
+    minorMajorSeventh: {
+      group:'Chords', label:'Minor-Major Seventh', degrees:[0,3,7,11]
+    },
+    add9: {
+      group:'Chords', label:'Add9', degrees:[0,2,4,7]
+    },
+
+    ionian: {
+      group:'Modes / Scales', label:'Major / Ionian', degrees:[0,2,4,5,7,9,11]
+    },
+    dorian: {
+      group:'Modes / Scales', label:'Dorian', degrees:[0,2,3,5,7,9,10]
+    },
+    phrygian: {
+      group:'Modes / Scales', label:'Phrygian', degrees:[0,1,3,5,7,8,10]
+    },
+    lydian: {
+      group:'Modes / Scales', label:'Lydian', degrees:[0,2,4,6,7,9,11]
+    },
+    mixolydian: {
+      group:'Modes / Scales', label:'Mixolydian', degrees:[0,2,4,5,7,9,10]
+    },
+    aeolian: {
+      group:'Modes / Scales', label:'Natural Minor / Aeolian', degrees:[0,2,3,5,7,8,10]
+    },
+    locrian: {
+      group:'Modes / Scales', label:'Locrian', degrees:[0,1,3,5,6,8,10]
+    },
+    harmonicMinor: {
+      group:'Modes / Scales', label:'Harmonic Minor', degrees:[0,2,3,5,7,8,11]
+    },
+    melodicMinor: {
+      group:'Modes / Scales', label:'Melodic Minor / Jazz', degrees:[0,2,3,5,7,9,11]
+    },
+
+    majorPentatonic: {
+      group:'Pentatonic / Minimal', label:'Major Pentatonic', degrees:[0,2,4,7,9]
+    },
+    minorPentatonic: {
+      group:'Pentatonic / Minimal', label:'Minor Pentatonic', degrees:[0,3,5,7,10]
+    },
+    suspendedPentatonic: {
+      group:'Pentatonic / Minimal', label:'Suspended Pentatonic', degrees:[0,2,5,7,10]
+    },
+    majorPentachord: {
+      group:'Pentatonic / Minimal', label:'Major Pentachord', degrees:[0,2,4,5,7]
+    },
+    minorPentachord: {
+      group:'Pentatonic / Minimal', label:'Minor Pentachord', degrees:[0,2,3,5,7]
+    },
+    minorBlues: {
+      group:'Pentatonic / Minimal', label:'Minor Blues', degrees:[0,3,5,6,7,10]
+    },
+
+    wholeTone: {
+      group:'Symmetric / Experimental', label:'Whole-Tone', degrees:[0,2,4,6,8,10]
+    },
+    augmentedScale: {
+      group:'Symmetric / Experimental', label:'Augmented Scale', degrees:[0,3,4,7,8,11]
+    },
+    diminishedWholeHalf: {
+      group:'Symmetric / Experimental', label:'Diminished / Whole–Half', degrees:[0,2,3,5,6,8,9,11]
+    },
+    diminishedHalfWhole: {
+      group:'Symmetric / Experimental', label:'Diminished / Half–Whole', degrees:[0,1,3,4,6,7,9,10]
+    },
+    chromatic: {
+      group:'Symmetric / Experimental', label:'Chromatic', degrees:[0,1,2,3,4,5,6,7,8,9,10,11]
+    }
+  };
+  const ROOTS = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+  let rootIndex = 9;      // A
+  let pitchSetName = 'majorPentatonic';
+  let filterCutoff = 4000;
+  let filterResonance = 0.6;
+  let decayTime = 0.16;
+  let reverbAmount = 0.2;
+  let delayAmount = 0;
+  let delayFeedback = 0.25;
+  let delayDivision = 'eighth';
+  let stereoSpread = 0;
+  let idCounter = 0;
+  function makeRing(beats, hits = 1){
+    const id = idCounter++;
+    return {
+      id,
+      beats,
+      hits,
+      color: PALETTE[id % PALETTE.length],
+      waveform: WAVEFORMS[id % WAVEFORMS.length],
+      pitchOverride: null, // MIDI note number; null follows the global pitch set
+      volume: 1,
+      muted: false,
+      nextTime: 0,   // audioCtx time of next scheduled hit
+      kCounter: 0,
+      visualRadius: null,
+      visualOpacity: 1,
+      hitMarkerVisuals: null
+    };
+  }
+
+  let rings = [makeRing(2), makeRing(3)];
+
+  let audioCtx = null;
+  let masterGain = null;
+  let filterNode = null;
+  let reverbConvolver = null;
+  let reverbWetGain = null;
+  let delayNode = null;
+  let delayFeedbackGain = null;
+  let delayWetGain = null;
+  let limiterNode = null;
+  let isPlaying = false;
+  let cycleStartTime = 0; // audioCtx time at phase 0
+  let bpm = 120; // quarter-note beats per minute
+  let volume = 0.7;
+  let schedulerTimer = null;
+  const scheduledVoices = new Set();
+  let flashEvents = []; // {time, ringId, k, accent, intensity}
+
+  // Standard BPM uses a quarter note as one beat. Each ring completes
+  // one lap in ring.beats beats and divides that lap into ring.hits sounds.
+  function beatDuration(){ return 60 / bpm; }
+  function delayDivisionMultiplier(){
+    return {
+      sixteenth:0.25,
+      eighth:0.5,
+      dottedEighth:0.75,
+      quarter:1,
+      quarterTriplet:2/3,
+      half:2
+    }[delayDivision] || 0.5;
+  }
+  function delayTimeSeconds(){
+    return Math.min(MAX_DELAY_SECONDS, beatDuration() * delayDivisionMultiplier());
+  }
+  function updateDelayTime(){
+    if (!delayNode || !audioCtx) return;
+    delayNode.delayTime.setTargetAtTime(delayTimeSeconds(), audioCtx.currentTime, 0.01);
+  }
+  function ringStepInterval(ring){
+    return ring.hits > 0 ? ringPeriod(ring) / ring.hits : Infinity;
+  }
+  function ringPeriod(ring){ return beatDuration() * ring.beats; }
+  function ringPan(ring){
+    if (rings.length <= 1) return 0;
+    const index = Math.max(0, rings.indexOf(ring));
+    return (-1 + (index / (rings.length - 1))*2) * stereoSpread;
+  }
+  function updateActiveVoicePans(){
+    if (!audioCtx) return;
+    scheduledVoices.forEach(voice=>{
+      if (!voice.panner) return;
+      const ring = rings.find(candidate=>candidate.id === voice.ringId);
+      if (!ring) return;
+      voice.panner.pan.setTargetAtTime(ringPan(ring), audioCtx.currentTime, 0.01);
+    });
+  }
+
+  function gcd(a,b){ return b ? gcd(b, a % b) : a; }
+  function lcm(a,b){ return a / gcd(a,b) * b; }
+  function lcmOfBeats(){
+    if (!rings.length) return 0;
+    return rings.map(r=>r.beats).reduce((a,b)=>lcm(a,b), 1);
+  }
+
+  function rootFreq(){ return 130.81 * Math.pow(2, rootIndex/12); } // 130.81Hz = C3
+  function ascendingVoicingSemitones(degrees, ringIndex){
+    const degreeIndex = ringIndex % degrees.length;
+    const octave = Math.floor(ringIndex / degrees.length);
+    return degrees[degreeIndex] + octave*12;
+  }
+  function automaticRingFrequency(ring){
+    const idx = rings.indexOf(ring);
+    const degrees = PITCH_SETS[pitchSetName].degrees;
+    const i = idx < 0 ? 0 : idx;
+    const semitones = ascendingVoicingSemitones(degrees, i);
+    return rootFreq() * Math.pow(2, semitones/12);
+  }
+  function midiToFrequency(midi){
+    return 440 * Math.pow(2, (midi - 69) / 12);
+  }
+  function ringFrequency(ring){
+    return ring.pitchOverride === null
+      ? automaticRingFrequency(ring)
+      : midiToFrequency(ring.pitchOverride);
+  }
+  function midiToNoteName(midi){
+    const octave = Math.floor(midi/12) - 1;
+    return NOTE_NAMES[((midi % 12) + 12) % 12] + octave;
+  }
+  function frequencyToMidi(freq){
+    return Math.round(69 + 12 * Math.log2(freq / 440));
+  }
+  function freqToNoteName(freq){
+    return midiToNoteName(frequencyToMidi(freq));
+  }
+
+  // ---------- audio ----------
+  function createReverbImpulse(ctx, duration, decay){
+    const rate = ctx.sampleRate;
+    const length = Math.floor(rate * duration);
+    const impulse = ctx.createBuffer(2, length, rate);
+    for (let ch = 0; ch < 2; ch++){
+      const data = impulse.getChannelData(ch);
+      for (let i = 0; i < length; i++){
+        data[i] = (Math.random()*2 - 1) * Math.pow(1 - i/length, decay);
+      }
+    }
+    return impulse;
+  }
+
+  function ensureAudio(){
+    if (!audioCtx){
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = volume;
+      limiterNode = audioCtx.createDynamicsCompressor();
+      limiterNode.threshold.value = -12;
+      limiterNode.knee.value = 12;
+      limiterNode.ratio.value = 12;
+      limiterNode.attack.value = 0.003;
+      limiterNode.release.value = 0.2;
+      limiterNode.connect(masterGain);
+      masterGain.connect(audioCtx.destination);
+
+      filterNode = audioCtx.createBiquadFilter();
+      filterNode.type = 'lowpass';
+      filterNode.frequency.value = filterCutoff;
+      filterNode.Q.value = filterResonance;
+      filterNode.connect(limiterNode);
+
+      reverbConvolver = audioCtx.createConvolver();
+      reverbConvolver.buffer = createReverbImpulse(audioCtx, 2.4, 2.6);
+      reverbWetGain = audioCtx.createGain();
+      reverbWetGain.gain.value = reverbAmount;
+      reverbConvolver.connect(reverbWetGain);
+      reverbWetGain.connect(limiterNode);
+
+      delayNode = audioCtx.createDelay(MAX_DELAY_SECONDS);
+      delayNode.delayTime.value = delayTimeSeconds();
+      delayFeedbackGain = audioCtx.createGain();
+      delayFeedbackGain.gain.value = delayFeedback;
+      delayWetGain = audioCtx.createGain();
+      delayWetGain.gain.value = delayAmount;
+      delayNode.connect(delayFeedbackGain);
+      delayFeedbackGain.connect(delayNode);
+      delayNode.connect(delayWetGain);
+      delayWetGain.connect(limiterNode);
+    }
+  }
+
+  function clickSound(ring, time, accent){
+    if (ring.muted || ring.volume <= 0) return false;
+    if (scheduledVoices.size >= MAX_ACTIVE_VOICES) return false;
+    const freq = ringFrequency(ring);
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const panner = audioCtx.createStereoPanner
+      ? audioCtx.createStereoPanner()
+      : null;
+    osc.type = ring.waveform;
+    osc.frequency.setValueAtTime(freq, time);
+    if (panner) panner.pan.setValueAtTime(ringPan(ring), time);
+    // softer envelope for buzzier waveforms (square/saw) so they don't dominate
+    let peak = ((ring.waveform === 'square' || ring.waveform === 'sawtooth') ? 0.55 : 1) * ring.volume;
+    if (accent) peak = Math.min(1, peak * 1.5); // emphasize the start of each lap
+    const tail = decayTime;
+    gain.gain.setValueAtTime(0.0001, time);
+    gain.gain.exponentialRampToValueAtTime(peak, time + 0.006);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + tail);
+    osc.connect(gain);
+    const output = panner || gain;
+    if (panner) gain.connect(panner);
+    output.connect(filterNode);
+    output.connect(reverbConvolver);
+    output.connect(delayNode);
+    const voice = { osc, gain, panner, ringId:ring.id };
+    scheduledVoices.add(voice);
+    osc.onended = ()=>{
+      scheduledVoices.delete(voice);
+      osc.disconnect();
+      gain.disconnect();
+      if (panner) panner.disconnect();
+    };
+    osc.start(time);
+    osc.stop(time + tail + 0.04);
+    return true;
+  }
+
+  function stopScheduledVoices(ringId = null){
+    if (!audioCtx) return;
+    const now = audioCtx.currentTime;
+    scheduledVoices.forEach(voice=>{
+      if (ringId !== null && voice.ringId !== ringId) return;
+      try{
+        voice.gain.gain.cancelScheduledValues(now);
+        voice.gain.gain.setValueAtTime(
+          Math.max(0.0001, voice.gain.gain.value),
+          now
+        );
+        voice.gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.015);
+        voice.osc.stop(now + 0.02);
+      } catch(error){
+        // A voice may already have ended between iteration and cancellation.
+      }
+      scheduledVoices.delete(voice);
+    });
+  }
+
+  // ---------- scheduler ----------
+  function schedulerTick(){
+    if (!isPlaying) return;
+    const now = audioCtx.currentTime;
+    const lookahead = 0.15;
+    rings.forEach(ring=>{
+      if (ring.hits <= 0) return;
+      while (ring.nextTime < now + lookahead){
+        const k = ring.kCounter % ring.hits;
+        const isLapStart = k === 0;
+        const sounded = clickSound(ring, ring.nextTime, isLapStart);
+        flashEvents.push({
+          time: ring.nextTime,
+          ringId: ring.id,
+          k,
+          accent: isLapStart,
+          intensity: sounded ? ring.volume : 0,
+          visual: {
+            decay: decayTime,
+            reverb: reverbAmount,
+            delay: delayAmount,
+            feedback: delayFeedback,
+            delayTime: delayTimeSeconds(),
+            pan: ringPan(ring)
+          }
+        });
+        ring.kCounter++;
+        ring.nextTime += ringStepInterval(ring);
+      }
+    });
+    // Keep source hits until their dry, reverb, and delay visuals have ended.
+    if (flashEvents.length > 400){
+      flashEvents = flashEvents.filter(
+        event=>centerEventEndTime(event) > now - 0.05
+      );
+      if (flashEvents.length > MAX_CENTER_SOURCE_EVENTS){
+        flashEvents = flashEvents.slice(-MAX_CENTER_SOURCE_EVENTS);
+      }
+    }
+  }
+
+  function startPlayback(){
+    ensureAudio();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const now = audioCtx.currentTime + 0.08;
+    cycleStartTime = now;
+    rings.forEach(r => { r.nextTime = now; r.kCounter = 0; });
+    isPlaying = true;
+    schedulerTimer = setInterval(schedulerTick, 25);
+    const playButton = document.getElementById('playBtn');
+    playButton.textContent = 'Stop';
+    playButton.setAttribute('aria-pressed', 'true');
+  }
+
+  function stopPlayback(){
+    isPlaying = false;
+    if (schedulerTimer){
+      clearInterval(schedulerTimer);
+      schedulerTimer = null;
+    }
+    stopScheduledVoices();
+    flashEvents = [];
+    const playButton = document.getElementById('playBtn');
+    playButton.textContent = 'Play';
+    playButton.setAttribute('aria-pressed', 'false');
+  }
+
+  function togglePlayback(){
+    if (isPlaying) stopPlayback();
+    else startPlayback();
+  }
+
+  function resetPhase(){
+    if (!audioCtx) return;
+    stopScheduledVoices();
+    const now = audioCtx.currentTime + 0.05;
+    cycleStartTime = now;
+    rings.forEach(r => { r.nextTime = now; r.kCounter = 0; });
+    flashEvents = [];
+  }
+
+  // ---------- canvas ----------
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const stage = document.querySelector('.stage');
+  let dpr = Math.max(1, window.devicePixelRatio || 1);
+  let W = 0, H = 0;
+  let centerControlHovered = false;
+  let centerPulseStartedAt = null;
+  let exitingRingVisuals = [];
+  let previousDrawAt = performance.now();
+  let viewScale = 1;
+  let targetViewScale = 1;
+  let viewOffsetX = 0;
+  let viewOffsetY = 0;
+  let targetViewOffsetX = 0;
+  let targetViewOffsetY = 0;
+  let dragGesture = null;
+  let suppressNextCanvasClick = false;
+  let pendingCanvasClick = null;
+  const reducedMotionQuery = window.matchMedia
+    ? window.matchMedia('(prefers-reduced-motion: reduce)')
+    : { matches:false };
+  const coarsePointerQuery = window.matchMedia
+    ? window.matchMedia('(pointer: coarse)')
+    : { matches:false };
+
+  function resize(){
+    const rect = stage.getBoundingClientRect();
+    W = Math.max(1, rect.width);
+    H = Math.max(1, rect.height);
+    canvas.width = Math.floor(W * dpr);
+    canvas.height = Math.floor(H * dpr);
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    rings.forEach(ring=>{ ring.visualRadius = null; });
+    exitingRingVisuals = [];
+  }
+  window.addEventListener('resize', resize);
+
+  function easeOutCubic(t){ return 1 - Math.pow(1-t, 3); }
+
+  function startCenterPulse(){
+    if (!reducedMotionQuery.matches) centerPulseStartedAt = performance.now();
+  }
+
+  function ensureHitMarkerVisuals(ring){
+    if (Array.isArray(ring.hitMarkerVisuals)) return;
+    ring.hitMarkerVisuals = Array.from({length:ring.hits}, (_, index)=>{
+      const phase = ring.hits > 0 ? index / ring.hits : 0;
+      return {
+        phase,
+        targetPhase:phase,
+        opacity:1,
+        targetOpacity:1,
+        pulseStartedAt:null
+      };
+    });
+  }
+
+  function retargetHitMarkerVisuals(ring, nextCount){
+    ensureHitMarkerVisuals(ring);
+    const animationNow = performance.now();
+    const active = ring.hitMarkerVisuals.filter(visual=>visual.targetOpacity > 0);
+    const inactive = ring.hitMarkerVisuals.filter(visual=>visual.targetOpacity <= 0);
+
+    if (active.length > nextCount){
+      active.splice(nextCount).forEach(visual=>{
+        visual.targetPhase = 0;
+        visual.targetOpacity = 0;
+        visual.pulseStartedAt = null;
+      });
+    }
+
+    while (active.length < nextCount){
+      const visual = inactive.shift() || {
+        phase:0,
+        targetPhase:0,
+        opacity:0,
+        targetOpacity:0,
+        pulseStartedAt:null
+      };
+      visual.targetOpacity = 1;
+      if (!ring.hitMarkerVisuals.includes(visual)) ring.hitMarkerVisuals.push(visual);
+      active.push(visual);
+    }
+
+    active.forEach((visual, index)=>{
+      visual.targetPhase = nextCount > 0 ? index / nextCount : 0;
+      visual.pulseStartedAt = animationNow;
+    });
+
+    if (reducedMotionQuery.matches){
+      ring.hitMarkerVisuals = active.map(visual=>({
+        phase:visual.targetPhase,
+        targetPhase:visual.targetPhase,
+        opacity:1,
+        targetOpacity:1,
+        pulseStartedAt:null
+      }));
+    }
+  }
+
+  function shortestPhaseDelta(from, to){
+    let delta = to - from;
+    while (delta > 0.5) delta -= 1;
+    while (delta < -0.5) delta += 1;
+    return delta;
+  }
+
+  function centerEventSettings(event){
+    return event.visual || {
+      decay:decayTime,
+      reverb:reverbAmount,
+      delay:delayAmount,
+      feedback:delayFeedback,
+      delayTime:delayTimeSeconds(),
+      pan:0
+    };
+  }
+
+  function centerDryDuration(settings){
+    return Math.max(0.42, Math.min(2.35, 0.32 + settings.decay*1.35));
+  }
+
+  function centerReverbDuration(settings){
+    return centerDryDuration(settings) + 0.3 + settings.reverb*1.9;
+  }
+
+  function centerDelayEchoCount(settings){
+    if (settings.delay <= 0) return 0;
+    let strength = settings.delay;
+    let count = 0;
+    while (count < MAX_CENTER_DELAY_ECHOES && strength >= 0.025){
+      count++;
+      strength *= settings.feedback;
+    }
+    return Math.max(1, count);
+  }
+
+  function centerEventEndTime(event){
+    const settings = centerEventSettings(event);
+    const delayEnd =
+      event.time +
+      centerDelayEchoCount(settings)*settings.delayTime +
+      centerDryDuration(settings);
+    return Math.max(
+      event.time + centerDryDuration(settings),
+      event.time + centerReverbDuration(settings),
+      delayEnd
+    );
+  }
+
+  function centerSoundLayers(now, baseR, gap){
+    if (!rings.length) return [];
+    const innerRing = rings[0];
+    const outerRing = rings[rings.length - 1];
+    const innerTargetRadius = baseR + gap;
+    const outerTargetRadius = baseR + gap*rings.length;
+    const innerRingRadius = innerRing.visualRadius === null
+      ? innerTargetRadius
+      : innerRing.visualRadius;
+    const outerRingRadius = outerRing.visualRadius === null
+      ? outerTargetRadius
+      : outerRing.visualRadius;
+    const centerRadiusLimit = Math.max(1, innerRingRadius*0.9);
+    const layers = [];
+
+    flashEvents.forEach(event=>{
+      if (event.intensity <= 0) return;
+      const ring = rings.find(candidate=>candidate.id === event.ringId);
+      if (!ring) return;
+      const settings = centerEventSettings(event);
+      const weight =
+        event.intensity *
+        volume *
+        (event.accent ? 1 : 0.78);
+      if (weight <= 0) return;
+      const ringIndex = rings.indexOf(ring);
+      const targetRingRadius = baseR + gap*(ringIndex + 1);
+      const ringRadius = ring.visualRadius === null
+        ? targetRingRadius
+        : ring.visualRadius;
+      const baseRadius = Math.min(
+        centerRadiusLimit,
+        Math.max(
+          10,
+          centerRadiusLimit * ringRadius / Math.max(1, outerRingRadius)
+        )
+      );
+      const maxStereoShift = Math.min(96, centerRadiusLimit*0.32);
+      const xOffset = settings.pan*maxStereoShift;
+
+      function addLayer(kind, time, duration, strength, radiusScale, panScale = 1){
+        const age = now - time;
+        if (age < 0 || age > duration || strength <= 0) return;
+        layers.push({
+          kind,
+          time,
+          duration,
+          color:ring.color,
+          strength:Math.min(1, strength),
+          maxRadius:Math.min(centerRadiusLimit, baseRadius*radiusScale),
+          xOffset:xOffset*panScale
+        });
+      }
+
+      const dryDuration = centerDryDuration(settings);
+      addLayer('dry', event.time, dryDuration, weight, 1);
+
+      if (settings.reverb > 0){
+        addLayer(
+          'reverb',
+          event.time,
+          centerReverbDuration(settings),
+          weight*settings.reverb*0.72,
+          1 + settings.reverb*0.28,
+          0.72
+        );
+      }
+
+      let echoStrength = settings.delay;
+      const echoDuration = dryDuration;
+      const echoCount = centerDelayEchoCount(settings);
+      for (let echo = 1; echo <= echoCount; echo++){
+        addLayer(
+          'delay',
+          event.time + settings.delayTime*echo,
+          echoDuration,
+          weight*echoStrength,
+          0.9 + Math.min(0.22, echo*0.04),
+          1
+        );
+        echoStrength *= settings.feedback;
+      }
+    });
+
+    return layers.sort((a,b)=>b.maxRadius - a.maxRadius || a.time - b.time);
+  }
+
+  function ringLayout(){
+    const maxR = Math.min(W,H)/2 - 46;
+    const baseR = maxR * 0.24;
+    const gap = rings.length > 0 ? (maxR - baseR) / rings.length : 0;
+    return { cx:W/2, cy:H/2, maxR, baseR, gap };
+  }
+
+  function canvasPointerPosition(event){
+    const rect = canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) return null;
+    const canvasX = (event.clientX - rect.left) * W / rect.width;
+    const canvasY = (event.clientY - rect.top) * H / rect.height;
+    const safeScale = Math.max(0.001, viewScale);
+    return {
+      x:W/2 + (canvasX - W/2 - viewOffsetX) / safeScale,
+      y:H/2 + (canvasY - H/2 - viewOffsetY) / safeScale
+    };
+  }
+
+  function centerControlAtPointer(event){
+    if (W < 10) return false;
+    const pointer = canvasPointerPosition(event);
+    if (!pointer) return false;
+    const layout = ringLayout();
+    const hitRadius = event.pointerType === 'touch' || coarsePointerQuery.matches
+      ? 28
+      : 20;
+    return Math.hypot(pointer.x - layout.cx, pointer.y - layout.cy) <= hitRadius;
+  }
+
+  function ringAtPointer(event){
+    if (!rings.length || W < 10) return null;
+    const pointer = canvasPointerPosition(event);
+    if (!pointer) return null;
+    const layout = ringLayout();
+    const pointerRadius = Math.hypot(pointer.x - layout.cx, pointer.y - layout.cy);
+    const coarsePointer = event.pointerType === 'touch' || coarsePointerQuery.matches;
+    const minimumTolerance = coarsePointer ? 12 : 6;
+    const maximumTolerance = coarsePointer ? 20 : 14;
+    const tolerance = Math.max(
+      minimumTolerance / viewScale,
+      Math.min(maximumTolerance / viewScale, layout.gap * 0.42)
+    );
+    let nearest = null;
+    let nearestDistance = Infinity;
+
+    rings.forEach((ring, index)=>{
+      const targetRadius = layout.baseR + layout.gap * (index + 1);
+      const radius = ring.visualRadius === null ? targetRadius : ring.visualRadius;
+      const distance = Math.abs(pointerRadius - radius);
+      if (distance < nearestDistance){
+        nearest = ring;
+        nearestDistance = distance;
+      }
+    });
+    return nearestDistance <= tolerance ? nearest : null;
+  }
+
+  function adjustRingHitsFromCanvas(ring, delta){
+    const next = Math.max(0, Math.min(MAX_HITS_PER_RING, ring.hits + delta));
+    if (!applyRingHits(ring, next)) return;
+    renderRingsList();
+  }
+
+  canvas.addEventListener('click', event=>{
+    if (event.button !== 0) return;
+    if (suppressNextCanvasClick){
+      suppressNextCanvasClick = false;
+      return;
+    }
+    const centerClicked = centerControlAtPointer(event);
+    if (centerClicked){
+      if (rings.length < MAX_RINGS) startCenterPulse();
+      addRing();
+      return;
+    }
+    if (event.detail > 1){
+      if (pendingCanvasClick !== null){
+        clearTimeout(pendingCanvasClick);
+        pendingCanvasClick = null;
+      }
+      return;
+    }
+
+    const clickedRing = ringAtPointer(event);
+    if (!clickedRing) return;
+    pendingCanvasClick = setTimeout(()=>{
+      pendingCanvasClick = null;
+      if (rings.includes(clickedRing)){
+        adjustRingHitsFromCanvas(clickedRing, 1);
+      }
+    }, 280);
+  });
+
+  canvas.addEventListener('contextmenu', event=>{
+    if (centerControlAtPointer(event)){
+      event.preventDefault();
+      if (rings.length > 0) startCenterPulse();
+      removeOuterRing();
+      return;
+    }
+    const ring = ringAtPointer(event);
+    if (!ring) return;
+    event.preventDefault();
+    adjustRingHitsFromCanvas(ring, -1);
+  });
+
+  canvas.addEventListener('wheel', event=>{
+    event.preventDefault();
+    const deltaScale =
+      event.deltaMode === 1
+        ? 16
+        : (event.deltaMode === 2 ? H : 1);
+    const zoomFactor = Math.exp(-event.deltaY*deltaScale*0.0012);
+    targetViewScale = Math.max(
+      MIN_VIEW_SCALE,
+      Math.min(MAX_VIEW_SCALE, targetViewScale*zoomFactor)
+    );
+    if (reducedMotionQuery.matches) viewScale = targetViewScale;
+  }, { passive:false });
+
+  canvas.addEventListener('dblclick', event=>{
+    if (centerControlAtPointer(event)) return;
+    event.preventDefault();
+    if (pendingCanvasClick !== null){
+      clearTimeout(pendingCanvasClick);
+      pendingCanvasClick = null;
+    }
+    targetViewOffsetX = 0;
+    targetViewOffsetY = 0;
+    targetViewScale = 1;
+    if (reducedMotionQuery.matches){
+      viewOffsetX = 0;
+      viewOffsetY = 0;
+      viewScale = 1;
+    }
+  });
+
+  canvas.addEventListener('pointerdown', event=>{
+    if (!event.isPrimary || event.button !== 0) return;
+    if (centerControlAtPointer(event)) return;
+    dragGesture = {
+      pointerId:event.pointerId,
+      startClientX:event.clientX,
+      startClientY:event.clientY,
+      startOffsetX:targetViewOffsetX,
+      startOffsetY:targetViewOffsetY,
+      moved:false
+    };
+    canvas.setPointerCapture(event.pointerId);
+  });
+
+  canvas.addEventListener('pointermove', event=>{
+    if (dragGesture && event.pointerId === dragGesture.pointerId){
+      const clientDeltaX = event.clientX - dragGesture.startClientX;
+      const clientDeltaY = event.clientY - dragGesture.startClientY;
+      if (!dragGesture.moved && Math.hypot(clientDeltaX, clientDeltaY) >= 4){
+        dragGesture.moved = true;
+      }
+      if (dragGesture.moved){
+        const rect = canvas.getBoundingClientRect();
+        const deltaX = clientDeltaX * W / Math.max(1, rect.width);
+        const deltaY = clientDeltaY * H / Math.max(1, rect.height);
+        targetViewOffsetX = dragGesture.startOffsetX + deltaX;
+        targetViewOffsetY = dragGesture.startOffsetY + deltaY;
+        viewOffsetX = targetViewOffsetX;
+        viewOffsetY = targetViewOffsetY;
+        centerControlHovered = false;
+        canvas.style.cursor = 'grabbing';
+        return;
+      }
+    }
+    centerControlHovered = centerControlAtPointer(event);
+    canvas.style.cursor = centerControlHovered || ringAtPointer(event) ? 'pointer' : 'grab';
+  });
+
+  function finishCanvasDrag(event){
+    if (!dragGesture || event.pointerId !== dragGesture.pointerId) return;
+    if (dragGesture.moved && event.type === 'pointerup'){
+      suppressNextCanvasClick = true;
+      setTimeout(()=>{ suppressNextCanvasClick = false; }, 0);
+    }
+    if (canvas.hasPointerCapture(event.pointerId)){
+      canvas.releasePointerCapture(event.pointerId);
+    }
+    dragGesture = null;
+    canvas.style.cursor = 'grab';
+  }
+
+  canvas.addEventListener('pointerup', finishCanvasDrag);
+  canvas.addEventListener('pointercancel', finishCanvasDrag);
+
+  canvas.addEventListener('pointerleave', ()=>{
+    if (dragGesture) return;
+    centerControlHovered = false;
+    canvas.style.cursor = 'grab';
+  });
+
+  function drawExitingRing(visual, cx, cy, animationNow){
+    const duration = 420;
+    const progress = (animationNow - visual.startedAt) / duration;
+    if (progress >= 1) return false;
+    const eased = easeOutCubic(Math.max(0, progress));
+    const opacity = visual.opacity * Math.pow(1 - Math.max(0, progress), 1.2);
+    const r = visual.radius + eased * 10;
+    const ring = visual.ring;
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI*2);
+    ctx.strokeStyle = hexAlpha(ring.color, (ring.muted ? 0.08 : 0.16) * opacity);
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+
+    for (let k=0; k<ring.beats; k++){
+      const a = -Math.PI/2 + (k/ring.beats)*Math.PI*2;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(a)*(r - 5), cy + Math.sin(a)*(r - 5));
+      ctx.lineTo(cx + Math.cos(a)*(r + 5), cy + Math.sin(a)*(r + 5));
+      ctx.strokeStyle = hexAlpha(ring.color, (ring.muted ? 0.14 : 0.32) * opacity);
+      ctx.lineWidth = k===0 ? 2 : 1.15;
+      ctx.stroke();
+    }
+
+    for (let k=0; k<ring.hits; k++){
+      const a = -Math.PI/2 + (k/ring.hits)*Math.PI*2;
+      ctx.beginPath();
+      ctx.arc(cx + Math.cos(a)*r, cy + Math.sin(a)*r, 2.6, 0, Math.PI*2);
+      ctx.fillStyle = hexAlpha(ring.color, (ring.muted ? 0.22 : 0.72) * opacity);
+      ctx.fill();
+    }
+    return true;
+  }
+
+  function draw(){
+    requestAnimationFrame(draw);
+    ctx.clearRect(0,0,W,H);
+    if (W < 10) return;
+
+    const t = audioCtx ? audioCtx.currentTime : 0;
+    const animationNow = performance.now();
+    const frameDelta = Math.min(50, Math.max(0, animationNow - previousDrawAt));
+    previousDrawAt = animationNow;
+    const zoomEase = reducedMotionQuery.matches
+      ? 1
+      : 1 - Math.exp(-frameDelta / 115);
+    viewScale += (targetViewScale - viewScale)*zoomEase;
+    viewOffsetX += (targetViewOffsetX - viewOffsetX)*zoomEase;
+    viewOffsetY += (targetViewOffsetY - viewOffsetY)*zoomEase;
+
+    const { cx, cy, baseR, gap } = ringLayout();
+    ctx.save();
+    ctx.translate(cx + viewOffsetX, cy + viewOffsetY);
+    ctx.scale(viewScale, viewScale);
+    ctx.translate(-cx, -cy);
+
+    const motionEase = reducedMotionQuery.matches
+      ? 1
+      : 1 - Math.exp(-frameDelta / 105);
+    const hitMotionEase = reducedMotionQuery.matches
+      ? 1
+      : 1 - Math.exp(-frameDelta / 62);
+    exitingRingVisuals = exitingRingVisuals.filter(
+      visual=>drawExitingRing(visual, cx, cy, animationNow)
+    );
+
+    // Ring guides, beat markers, sound positions, and independent playheads.
+    rings.forEach((ring, i)=>{
+      const targetRadius = baseR + gap*(i+1);
+      if (ring.visualRadius === null) ring.visualRadius = targetRadius;
+      ring.visualRadius += (targetRadius - ring.visualRadius) * motionEase;
+      ring.visualOpacity += (1 - ring.visualOpacity) * motionEase;
+      const r = ring.visualRadius;
+      const visualOpacity = ring.visualOpacity;
+
+      // ring circle (very faint)
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI*2);
+      ctx.strokeStyle = hexAlpha(ring.color, (ring.muted ? 0.08 : 0.16) * visualOpacity);
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      // Beat markers show how long the ring's meter is.
+      for (let k=0; k<ring.beats; k++){
+        const a = -Math.PI/2 + (k/ring.beats)*Math.PI*2;
+        const inner = r - 5, outer = r + 5;
+        ctx.beginPath();
+        ctx.moveTo(cx + Math.cos(a)*inner, cy + Math.sin(a)*inner);
+        ctx.lineTo(cx + Math.cos(a)*outer, cy + Math.sin(a)*outer);
+        ctx.strokeStyle = hexAlpha(ring.color, (ring.muted ? 0.14 : 0.32) * visualOpacity);
+        ctx.lineWidth = k===0 ? 2 : 1.15;
+        ctx.stroke();
+      }
+
+      // HIT markers fly toward their new equal subdivisions and fade in or out.
+      ensureHitMarkerVisuals(ring);
+      ring.hitMarkerVisuals.forEach(visual=>{
+        visual.phase += shortestPhaseDelta(visual.phase, visual.targetPhase) * hitMotionEase;
+        visual.phase = ((visual.phase % 1) + 1) % 1;
+        visual.opacity += (visual.targetOpacity - visual.opacity) * hitMotionEase;
+
+        let markerScale = 1;
+        if (visual.pulseStartedAt !== null){
+          const elapsed = animationNow - visual.pulseStartedAt;
+          const arrivalDuration = 300;
+          const settleDuration = 180;
+          if (elapsed < arrivalDuration){
+            const arrivalProgress = Math.max(0, elapsed / arrivalDuration);
+            markerScale += easeOutCubic(arrivalProgress) * 0.7;
+          } else if (elapsed < arrivalDuration + settleDuration){
+            const settleProgress = (elapsed - arrivalDuration) / settleDuration;
+            markerScale += (1 - easeOutCubic(settleProgress)) * 0.7;
+          } else {
+            visual.pulseStartedAt = null;
+          }
+        }
+
+        const a = -Math.PI/2 + visual.phase*Math.PI*2;
+        const x = cx + Math.cos(a)*r;
+        const y = cy + Math.sin(a)*r;
+        ctx.beginPath();
+        ctx.arc(x, y, 2.6 * markerScale, 0, Math.PI*2);
+        ctx.fillStyle = hexAlpha(
+          ring.color,
+          (ring.muted ? 0.22 : 0.72) * visualOpacity * visual.opacity
+        );
+        ctx.fill();
+      });
+      ring.hitMarkerVisuals = ring.hitMarkerVisuals.filter(
+        visual=>visual.targetOpacity > 0 || visual.opacity > 0.01
+      );
+
+      const period = ringPeriod(ring);
+      const ringPhase = isPlaying ? (((t - cycleStartTime) / period) % 1 + 1) % 1 : 0;
+      const playheadAngle = -Math.PI/2 + ringPhase * Math.PI*2;
+      const playheadX = cx + Math.cos(playheadAngle)*r;
+      const playheadY = cy + Math.sin(playheadAngle)*r;
+      ctx.beginPath();
+      ctx.arc(playheadX, playheadY, 5, 0, Math.PI*2);
+      ctx.fillStyle = hexAlpha(
+        ring.color,
+        (ring.muted ? 0.3 : (isPlaying ? 0.95 : 0.4)) * visualOpacity
+      );
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(playheadX, playheadY, 9, 0, Math.PI*2);
+      ctx.strokeStyle = hexAlpha(
+        ring.color,
+        (ring.muted ? 0.08 : (isPlaying ? 0.28 : 0.12)) * visualOpacity
+      );
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+
+    // flashes
+    const now = t;
+    flashEvents.forEach(f=>{
+      const ring = rings.find(r=>r.id===f.ringId);
+      if (!ring) return;
+      const idx = rings.indexOf(ring);
+      const targetRadius = baseR + gap*(idx+1);
+      const r = ring.visualRadius === null ? targetRadius : ring.visualRadius;
+      const age = now - f.time;
+      const dur = 0.72;
+      if (age < 0 || age > dur) return;
+      const progress = age/dur;
+      const p = easeOutCubic(progress);
+      const fade = Math.pow(1 - progress, 1.35);
+
+      // A feathered radial gradient diffuses from the ring toward both the
+      // center and the outside, so the pulse reads as light rather than lines.
+      if (f.intensity > 0){
+        const pulseStrength = f.intensity * (f.accent ? 1 : 0.72);
+        const glowSpread = 7 + p * 30;
+        const innerRadius = Math.max(0, r - glowSpread);
+        const outerRadius = r + glowSpread;
+        const ringStop = (r - innerRadius) / (outerRadius - innerRadius);
+        const glowAlpha = fade * 0.3 * pulseStrength;
+        const glow = ctx.createRadialGradient(
+          cx, cy, innerRadius,
+          cx, cy, outerRadius
+        );
+        glow.addColorStop(0, hexAlpha(ring.color, 0));
+        glow.addColorStop(Math.max(0, ringStop - 0.3), hexAlpha(ring.color, glowAlpha * 0.12));
+        glow.addColorStop(ringStop, hexAlpha(ring.color, glowAlpha));
+        glow.addColorStop(Math.min(1, ringStop + 0.3), hexAlpha(ring.color, glowAlpha * 0.12));
+        glow.addColorStop(1, hexAlpha(ring.color, 0));
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, outerRadius, 0, Math.PI*2);
+        ctx.fillStyle = glow;
+        ctx.fill();
+
+        ctx.save();
+        ctx.shadowColor = hexAlpha(ring.color, fade * 0.7 * pulseStrength);
+        ctx.shadowBlur = 10 + p * 16;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI*2);
+        ctx.strokeStyle = hexAlpha(ring.color, fade * 0.2 * pulseStrength);
+        ctx.lineWidth = 2 + p * 5;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      if (ring.hits <= 0) return;
+      const a = -Math.PI/2 + (f.k/ring.hits)*Math.PI*2;
+      const x = cx + Math.cos(a)*r, y = cy + Math.sin(a)*r;
+      const radius = 4 + p*10;
+      const alpha = fade * (ring.muted ? 0.3 : 1);
+      ctx.beginPath();
+      ctx.arc(x,y,radius,0,Math.PI*2);
+      ctx.fillStyle = hexAlpha('#0c1a2b', alpha*0.12);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x,y,radius*0.55,0,Math.PI*2);
+      ctx.fillStyle = hexAlpha(ring.color, alpha);
+      ctx.fill();
+    });
+
+    // Center layers follow the sound envelope: decay controls the dry pulse,
+    // reverb adds a softer tail, delay repeats it, and pan shifts it sideways.
+    // Larger outer layers draw first so smaller inner layers remain legible.
+    centerSoundLayers(now, baseR, gap).forEach(layer=>{
+      const progress = (now - layer.time)/layer.duration;
+      const eased = easeOutCubic(Math.min(1, progress*1.6));
+      const isReverb = layer.kind === 'reverb';
+      const isDelay = layer.kind === 'delay';
+      const fadePower = isReverb ? 0.95 : (isDelay ? 1.15 : 1.25);
+      const fade = Math.pow(1 - progress, fadePower);
+      const startScale = isReverb ? 0.55 : (isDelay ? 0.42 : 0.48);
+      const radius = layer.maxRadius*(startScale + eased*(1 - startScale));
+      const alphaScale = isReverb ? 0.29 : (isDelay ? 0.38 : 0.48);
+      const alpha = fade*alphaScale*layer.strength;
+      const coreAlpha = Math.min(
+        0.68,
+        alpha*(isReverb ? 1.2 : 1.35)
+      );
+      const coreStop = isReverb ? 0.2 : 0.24;
+      const shoulderStop = isReverb ? 0.36 : 0.4;
+      const bloomX = cx + layer.xOffset;
+      const bloom = ctx.createRadialGradient(
+        bloomX, cy, 0,
+        bloomX, cy, radius
+      );
+      bloom.addColorStop(0, hexAlpha(layer.color, coreAlpha));
+      bloom.addColorStop(coreStop, hexAlpha(layer.color, coreAlpha*0.88));
+      bloom.addColorStop(
+        shoulderStop,
+        hexAlpha(layer.color, alpha*(isReverb ? 0.58 : 0.76))
+      );
+      bloom.addColorStop(0.58, hexAlpha(layer.color, alpha*(isReverb ? 0.28 : 0.36)));
+      bloom.addColorStop(0.82, hexAlpha(layer.color, alpha*(isReverb ? 0.1 : 0.16)));
+      bloom.addColorStop(0.94, hexAlpha(layer.color, alpha*0.03));
+      bloom.addColorStop(1, hexAlpha(layer.color, 0));
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(bloomX, cy, radius, 0, Math.PI*2);
+      ctx.fillStyle = bloom;
+      ctx.fill();
+      ctx.restore();
+    });
+
+    // Center control changes the ring count and pulses after either click.
+    const canAddRing = rings.length < MAX_RINGS;
+    const pulseDuration = 300;
+    let plusScale = 1;
+    if (centerPulseStartedAt !== null){
+      const pulseProgress = (performance.now() - centerPulseStartedAt) / pulseDuration;
+      if (pulseProgress < 1){
+        plusScale += Math.sin(pulseProgress * Math.PI) * 0.4;
+      } else {
+        centerPulseStartedAt = null;
+      }
+    }
+    const plusArm = 8 * plusScale;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(cx - plusArm, cy);
+    ctx.lineTo(cx + plusArm, cy);
+    ctx.moveTo(cx, cy - plusArm);
+    ctx.lineTo(cx, cy + plusArm);
+    ctx.strokeStyle = hexAlpha('#58616B', canAddRing ? (centerControlHovered ? 1 : 0.82) : 0.4);
+    ctx.lineWidth = centerControlHovered ? 2 : 1.5;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.restore();
+  }
+
+  function hexRgb(hex){
+    const c = hex.replace('#','');
+    return {
+      r:parseInt(c.substring(0,2),16),
+      g:parseInt(c.substring(2,4),16),
+      b:parseInt(c.substring(4,6),16)
+    };
+  }
+
+  function hexAlpha(hex, alpha){
+    const { r, g, b } = hexRgb(hex);
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+
+  // ---------- UI wiring ----------
+  const ringsListEl = document.getElementById('ringsList');
+  const addRingBtn = document.getElementById('addRingBtn');
+  const panelToggle = document.getElementById('panelToggle');
+  const controlPanel = document.getElementById('controlPanel');
+  const statusCount = document.getElementById('statusCount');
+  const statusTiming = document.getElementById('statusTiming');
+
+  function updateStatus(){
+    statusCount.textContent = rings.length + (rings.length === 1 ? ' RING' : ' RINGS');
+    const cycleBeats = lcmOfBeats();
+    const timingText =
+      beatDuration().toFixed(2) + ' s/beat · ' +
+      bpm + ' BPM · COMMON CYCLE ' + cycleBeats + (cycleBeats === 1 ? ' BEAT' : ' BEATS');
+    statusTiming.textContent = timingText;
+    statusTiming.title = timingText;
+  }
+
+  function applyRingHits(ring, value){
+    const next = Math.max(0, Math.min(MAX_HITS_PER_RING, value));
+    if (next === ring.hits) return false;
+    retargetHitMarkerVisuals(ring, next);
+    ring.hits = next;
+    flashEvents = flashEvents.filter(event=>event.ringId !== ring.id);
+    resyncRing(ring);
+    updateStatus();
+    return true;
+  }
+
+  function setPanelOpen(open){
+    document.body.classList.toggle('panel-hidden', !open);
+    panelToggle.setAttribute('aria-expanded', String(open));
+    panelToggle.setAttribute('aria-label', open ? 'Hide controls' : 'Show controls');
+    controlPanel.setAttribute('aria-hidden', String(!open));
+    controlPanel.inert = !open;
+  }
+
+  panelToggle.addEventListener('click', ()=>{
+    setPanelOpen(panelToggle.getAttribute('aria-expanded') !== 'true');
+  });
+  document.addEventListener('keydown', event=>{
+    if (event.key === 'Escape' && panelToggle.getAttribute('aria-expanded') === 'true'){
+      setPanelOpen(false);
+      panelToggle.focus();
+      return;
+    }
+
+    const target = event.target;
+    const isEditing = target instanceof HTMLElement && (
+      target.isContentEditable ||
+      Boolean(target.closest('input, select, textarea'))
+    );
+    if (
+      isEditing ||
+      event.defaultPrevented ||
+      event.repeat ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.metaKey
+    ) return;
+
+    if (event.code === 'Space'){
+      event.preventDefault();
+      togglePlayback();
+    } else if (event.code === 'KeyH'){
+      event.preventDefault();
+      setPanelOpen(panelToggle.getAttribute('aria-expanded') !== 'true');
+    }
+  });
+  if (window.matchMedia('(max-width: 760px)').matches){
+    setPanelOpen(false);
+  }
+
+  document.addEventListener('dblclick', event=>{
+    const slider = event.target.closest
+      ? event.target.closest('input[type="range"][data-default]')
+      : null;
+    if (!slider) return;
+    event.preventDefault();
+    slider.value = slider.dataset.default;
+    slider.dispatchEvent(new Event('input', { bubbles:true }));
+    slider.dispatchEvent(new Event('change', { bubbles:true }));
+  });
+
+  function appendRingStepper(container, input, name, ringIndex){
+    const stepper = document.createElement('span');
+    stepper.className = 'ring-number-stepper';
+    stepper.appendChild(input);
+
+    const buttons = document.createElement('span');
+    buttons.className = 'ring-step-buttons';
+    [
+      { text: '+', delta: 1, action: 'Increase' },
+      { text: '−', delta: -1, action: 'Decrease' }
+    ].forEach(config=>{
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'ring-step-btn';
+      button.textContent = config.text;
+      button.setAttribute('aria-label', config.action + ' ' + name + ' for ring ' + (ringIndex + 1));
+      button.addEventListener('click', ()=>{
+        const min = parseInt(input.min, 10);
+        const max = parseInt(input.max, 10);
+        const current = parseInt(input.value, 10);
+        const base = isNaN(current) ? min : current;
+        const next = Math.min(max, Math.max(min, base + config.delta));
+        if (next === current) return;
+        input.value = String(next);
+        input.dispatchEvent(new Event('change', { bubbles:true }));
+      });
+      buttons.appendChild(button);
+    });
+    stepper.appendChild(buttons);
+    container.appendChild(stepper);
+  }
+
+  function renderRingsList(){
+    ringsListEl.innerHTML = '';
+    rings.forEach((ring, ringIndex)=>{
+      const row = document.createElement('div');
+      row.className = 'ring-row';
+
+      const rhythmRow = document.createElement('div');
+      rhythmRow.className = 'ring-rhythm-row';
+
+      const sw = document.createElement('div');
+      sw.className = 'swatch';
+      sw.style.background = ring.color;
+      rhythmRow.appendChild(sw);
+
+      const cycleControl = document.createElement('div');
+      cycleControl.className = 'ring-number-control';
+      const cycleName = document.createElement('span');
+      cycleName.className = 'control-name';
+      cycleName.textContent = 'CYCLE';
+      const beatsInput = document.createElement('input');
+      beatsInput.type = 'number';
+      beatsInput.min = '1';
+      beatsInput.max = String(MAX_BEATS_PER_RING);
+      beatsInput.className = 'ring-number-input';
+      beatsInput.value = ring.beats;
+      beatsInput.setAttribute('aria-label', 'Ring ' + (ringIndex + 1) + ' cycle length in beats');
+      beatsInput.addEventListener('change', ()=>{
+        let v = parseInt(beatsInput.value,10);
+        if (isNaN(v) || v < 1) v = 1;
+        if (v > MAX_BEATS_PER_RING) v = MAX_BEATS_PER_RING;
+        ring.beats = v;
+        beatsInput.value = v;
+        resyncRing(ring);
+        updateStatus();
+      });
+      cycleControl.appendChild(cycleName);
+      appendRingStepper(cycleControl, beatsInput, 'beats', ringIndex);
+      rhythmRow.appendChild(cycleControl);
+
+      const hitControl = document.createElement('div');
+      hitControl.className = 'ring-number-control';
+      const hitName = document.createElement('span');
+      hitName.className = 'control-name';
+      hitName.textContent = 'HITS';
+      const hitsInput = document.createElement('input');
+      hitsInput.type = 'number';
+      hitsInput.min = '0';
+      hitsInput.max = String(MAX_HITS_PER_RING);
+      hitsInput.className = 'ring-number-input';
+      hitsInput.value = ring.hits;
+      hitsInput.setAttribute('aria-label', 'Ring ' + (ringIndex + 1) + ' hits per cycle');
+      hitsInput.addEventListener('change', ()=>{
+        let v = parseInt(hitsInput.value,10);
+        if (isNaN(v) || v < 0) v = 0;
+        if (v > MAX_HITS_PER_RING) v = MAX_HITS_PER_RING;
+        applyRingHits(ring, v);
+        hitsInput.value = ring.hits;
+      });
+      hitControl.appendChild(hitName);
+      appendRingStepper(hitControl, hitsInput, 'hits', ringIndex);
+      rhythmRow.appendChild(hitControl);
+
+      const spacer = document.createElement('div');
+      spacer.className = 'spacer';
+      rhythmRow.appendChild(spacer);
+
+      const delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'remove-btn';
+      delBtn.textContent = 'REMOVE';
+      delBtn.setAttribute('aria-label', 'Remove ring ' + (ringIndex + 1));
+      delBtn.addEventListener('click', ()=>{
+        removeRing(ring);
+      });
+      rhythmRow.appendChild(delBtn);
+      row.appendChild(rhythmRow);
+
+      const soundRow = document.createElement('div');
+      soundRow.className = 'ring-sound-row';
+      const soundLabel = document.createElement('span');
+      soundLabel.className = 'sound-label';
+      soundLabel.textContent = 'PITCH';
+      soundRow.appendChild(soundLabel);
+
+      const autoPitchBtn = document.createElement('button');
+      autoPitchBtn.type = 'button';
+      autoPitchBtn.className = 'auto-pitch-btn' + (ring.pitchOverride === null ? ' active' : '');
+      autoPitchBtn.textContent = 'AUTO';
+      autoPitchBtn.title = 'Follow the root and selected pitch set';
+      autoPitchBtn.setAttribute('aria-label', 'Automatically tune ring ' + (ringIndex + 1));
+      autoPitchBtn.setAttribute('aria-pressed', String(ring.pitchOverride === null));
+      autoPitchBtn.addEventListener('click', ()=>{
+        if (ring.pitchOverride === null){
+          const currentMidi = frequencyToMidi(automaticRingFrequency(ring));
+          ring.pitchOverride = Math.min(NOTE_MIDI_MAX, Math.max(NOTE_MIDI_MIN, currentMidi));
+        } else {
+          ring.pitchOverride = null;
+        }
+        renderRingsList();
+      });
+      soundRow.appendChild(autoPitchBtn);
+
+      const noteSel = document.createElement('select');
+      noteSel.className = 'note-select';
+      noteSel.title = 'Select pitch (disables Auto)';
+      noteSel.setAttribute('aria-label', 'Pitch for ring ' + (ringIndex + 1));
+      const displayedMidi = ring.pitchOverride === null
+        ? Math.min(NOTE_MIDI_MAX, Math.max(NOTE_MIDI_MIN, frequencyToMidi(automaticRingFrequency(ring))))
+        : ring.pitchOverride;
+
+      // C1–B9 covers the useful range of the built-in synth while keeping
+      // every ring independently tunable to an exact chromatic pitch.
+      for (let midi = NOTE_MIDI_MIN; midi <= NOTE_MIDI_MAX; midi++){
+        const opt = document.createElement('option');
+        opt.value = String(midi);
+        opt.textContent = midiToNoteName(midi);
+        if (displayedMidi === midi) opt.selected = true;
+        noteSel.appendChild(opt);
+      }
+      noteSel.addEventListener('change', ()=>{
+        ring.pitchOverride = parseInt(noteSel.value, 10);
+        renderRingsList();
+      });
+      soundRow.appendChild(noteSel);
+
+      const waveSel = document.createElement('select');
+      waveSel.className = 'wave-select';
+      waveSel.title = 'Tone waveform';
+      WAVEFORMS.forEach(w=>{
+        const opt = document.createElement('option');
+        opt.value = w;
+        opt.textContent = WAVE_LABELS[w];
+        if (w === ring.waveform) opt.selected = true;
+        waveSel.appendChild(opt);
+      });
+      waveSel.addEventListener('change', ()=>{ ring.waveform = waveSel.value; });
+      soundRow.appendChild(waveSel);
+      row.appendChild(soundRow);
+
+      const volumeRow = document.createElement('div');
+      volumeRow.className = 'ring-volume-row';
+      const volumeLabel = document.createElement('label');
+      volumeLabel.className = 'ring-volume-label';
+      volumeLabel.textContent = 'LEVEL';
+      const muteBtn = document.createElement('button');
+      muteBtn.type = 'button';
+      muteBtn.className = 'mute-btn' + (ring.muted ? ' active' : '');
+      muteBtn.textContent = 'MUTE';
+      muteBtn.setAttribute('aria-label', 'Mute ring ' + (ringIndex + 1));
+      muteBtn.setAttribute('aria-pressed', String(ring.muted));
+      muteBtn.addEventListener('click', ()=>{
+        ring.muted = !ring.muted;
+        if (ring.muted) stopScheduledVoices(ring.id);
+        muteBtn.classList.toggle('active', ring.muted);
+        muteBtn.setAttribute('aria-pressed', String(ring.muted));
+      });
+      const volumeSlider = document.createElement('input');
+      volumeSlider.type = 'range';
+      volumeSlider.min = '0';
+      volumeSlider.max = '100';
+      volumeSlider.step = '1';
+      volumeSlider.dataset.default = '100';
+      volumeSlider.value = String(Math.round(ring.volume * 100));
+      volumeSlider.setAttribute('aria-label', 'Level for ring ' + (ringIndex + 1));
+      const volumeValue = document.createElement('span');
+      volumeValue.className = 'ring-volume-value';
+      volumeValue.textContent = Math.round(ring.volume * 100) + '%';
+      volumeSlider.addEventListener('input', ()=>{
+        ring.volume = parseInt(volumeSlider.value, 10) / 100;
+        volumeValue.textContent = Math.round(ring.volume * 100) + '%';
+      });
+      volumeRow.appendChild(volumeLabel);
+      volumeRow.appendChild(muteBtn);
+      volumeRow.appendChild(volumeSlider);
+      volumeRow.appendChild(volumeValue);
+      row.appendChild(volumeRow);
+
+      ringsListEl.appendChild(row);
+    });
+    addRingBtn.disabled = rings.length >= MAX_RINGS;
+    addRingBtn.textContent = rings.length >= MAX_RINGS
+      ? 'Ring Limit (' + MAX_RINGS + ')'
+      : '+ Add Ring (' + rings.length + ' / ' + MAX_RINGS + ')';
+    updateStatus();
+  }
+
+  function resyncRing(ring){
+    if (!isPlaying || !audioCtx) return;
+    stopScheduledVoices(ring.id);
+    if (ring.hits <= 0){
+      ring.kCounter = 0;
+      ring.nextTime = Infinity;
+      return;
+    }
+    // Realign this ring's subdivisions to the shared playback origin.
+    const now = audioCtx.currentTime;
+    const step = ringStepInterval(ring);
+    const elapsed = Math.max(0, now - cycleStartTime);
+    const stepIndex = Math.max(0, Math.ceil(elapsed/step - 1e-8));
+    ring.kCounter = stepIndex % ring.hits;
+    ring.nextTime = cycleStartTime + stepIndex*step;
+    if (ring.nextTime < now - 1e-8){
+      ring.nextTime += step;
+      ring.kCounter = (ring.kCounter + 1) % ring.hits;
+    }
+  }
+
+  function addRing(){
+    if (rings.length >= MAX_RINGS) return;
+    const newRing = makeRing(rings.length ? rings[rings.length-1].beats + 1 : 3);
+    if (isPlaying && audioCtx){
+      const now = audioCtx.currentTime;
+      const period = ringPeriod(newRing);
+      const nextLap = Math.floor((now-cycleStartTime)/period) + 1;
+      newRing.nextTime = cycleStartTime + nextLap*period;
+      newRing.kCounter = 0;
+    }
+    rings.push(newRing);
+    updateActiveVoicePans();
+    const layout = ringLayout();
+    const targetRadius = layout.baseR + layout.gap*rings.length;
+    if (reducedMotionQuery.matches){
+      newRing.visualRadius = targetRadius;
+      newRing.visualOpacity = 1;
+    } else {
+      newRing.visualRadius = targetRadius + 12;
+      newRing.visualOpacity = 0;
+    }
+    if (rings.length >= MAX_RINGS){
+      centerControlHovered = false;
+    }
+    renderRingsList();
+  }
+
+  function removeRing(ring){
+    const index = rings.indexOf(ring);
+    if (index < 0) return;
+    stopScheduledVoices(ring.id);
+    const layout = ringLayout();
+    const targetRadius = layout.baseR + layout.gap*(index + 1);
+    const radius = ring.visualRadius === null ? targetRadius : ring.visualRadius;
+    if (!reducedMotionQuery.matches){
+      exitingRingVisuals.push({
+        ring,
+        radius,
+        opacity:ring.visualOpacity,
+        startedAt:performance.now()
+      });
+    }
+    rings.splice(index, 1);
+    updateActiveVoicePans();
+    flashEvents = flashEvents.filter(event=>event.ringId !== ring.id);
+    renderRingsList();
+  }
+
+  function removeOuterRing(){
+    if (rings.length) removeRing(rings[rings.length - 1]);
+  }
+
+  addRingBtn.addEventListener('click', addRing);
+
+  const bpmSlider = document.getElementById('bpm');
+  const bpmVal = document.getElementById('bpmVal');
+  bpmSlider.addEventListener('input', ()=>{
+    bpm = parseInt(bpmSlider.value,10);
+    bpmVal.value = bpm;
+    updateDelayTime();
+    updateStatus();
+  });
+  bpmSlider.addEventListener('change', ()=>{
+    if (isPlaying) resetPhase();
+  });
+  bpmVal.addEventListener('change', ()=>{
+    let v = Math.round(parseFloat(bpmVal.value));
+    if (isNaN(v) || v < 1) v = 1;
+    if (v > 240) v = 240;
+    bpm = v;
+    bpmVal.value = v;
+    bpmSlider.value = v;
+    updateDelayTime();
+    updateStatus();
+    if (isPlaying) resetPhase();
+  });
+
+  const volSlider = document.getElementById('vol');
+  const volVal = document.getElementById('volVal');
+  volSlider.addEventListener('input', ()=>{
+    volume = parseInt(volSlider.value,10)/100;
+    volVal.value = Math.round(volume*100);
+    if (masterGain) masterGain.gain.value = volume;
+  });
+  volVal.addEventListener('change', ()=>{
+    let v = parseFloat(volVal.value);
+    if (isNaN(v)) v = 0;
+    if (v < 0) v = 0;
+    if (v > 100) v = 100; // volume is a percentage, so this bound is meaningful
+    volVal.value = v;
+    volume = v/100;
+    volSlider.value = v;
+    if (masterGain) masterGain.gain.value = volume;
+  });
+
+  document.getElementById('playBtn').addEventListener('click', togglePlayback);
+  document.getElementById('resetBtn').addEventListener('click', resetPhase);
+
+  const rootSelect = document.getElementById('rootNote');
+  ROOTS.forEach((name, i)=>{
+    const opt = document.createElement('option');
+    opt.value = i; opt.textContent = name;
+    if (i === rootIndex) opt.selected = true;
+    rootSelect.appendChild(opt);
+  });
+  rootSelect.addEventListener('change', ()=>{
+    rootIndex = parseInt(rootSelect.value, 10);
+    renderRingsList();
+  });
+
+  const pitchSetSelect = document.getElementById('pitchSetType');
+  PITCH_SET_GROUPS.forEach(groupName=>{
+    const group = document.createElement('optgroup');
+    group.label = groupName;
+    Object.keys(PITCH_SETS).forEach(key=>{
+      const pitchSet = PITCH_SETS[key];
+      if (pitchSet.group !== groupName) return;
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = pitchSet.label;
+      if (key === pitchSetName) opt.selected = true;
+      group.appendChild(opt);
+    });
+    pitchSetSelect.appendChild(group);
+  });
+  pitchSetSelect.addEventListener('change', ()=>{
+    pitchSetName = pitchSetSelect.value;
+    renderRingsList();
+  });
+
+  const filterSlider = document.getElementById('filterCutoff');
+  const filterValInput = document.getElementById('filterVal');
+  function formatKilohertz(hz){
+    return (hz / 1000).toFixed(2).replace(/0$/, '');
+  }
+  filterSlider.addEventListener('input', ()=>{
+    filterCutoff = parseInt(filterSlider.value, 10);
+    filterValInput.value = formatKilohertz(filterCutoff);
+    if (filterNode) filterNode.frequency.setTargetAtTime(filterCutoff, audioCtx.currentTime, 0.01);
+  });
+  filterValInput.addEventListener('change', ()=>{
+    let v = parseFloat(filterValInput.value);
+    if (isNaN(v) || v < 0.2) v = 0.2;
+    if (v > 12) v = 12;
+    filterCutoff = Math.round(v * 1000 / 50) * 50;
+    filterValInput.value = formatKilohertz(filterCutoff);
+    filterSlider.value = filterCutoff;
+    if (filterNode) filterNode.frequency.setTargetAtTime(filterCutoff, audioCtx.currentTime, 0.01);
+  });
+
+  const resonanceSlider = document.getElementById('filterResonance');
+  const resonanceValInput = document.getElementById('resonanceVal');
+  function setFilterResonance(value){
+    let next = parseFloat(value);
+    if (isNaN(next) || next < 0.5) next = 0.5;
+    if (next > 8) next = 8;
+    next = Math.round(next*10)/10;
+    filterResonance = next;
+    resonanceSlider.value = next;
+    resonanceValInput.value = next.toFixed(1);
+    if (filterNode) filterNode.Q.setTargetAtTime(filterResonance, audioCtx.currentTime, 0.01);
+  }
+  resonanceSlider.addEventListener('input', ()=>{
+    setFilterResonance(resonanceSlider.value);
+  });
+  resonanceValInput.addEventListener('change', ()=>{
+    setFilterResonance(resonanceValInput.value);
+  });
+
+  const decaySlider = document.getElementById('decay');
+  const decayValInput = document.getElementById('decayVal');
+  function setDecayMilliseconds(value){
+    let next = Math.round(parseFloat(value) / 10) * 10;
+    if (isNaN(next) || next < 30) next = 30;
+    if (next > 1500) next = 1500;
+    decayTime = next/1000;
+    decaySlider.value = next;
+    decayValInput.value = next;
+  }
+  decaySlider.addEventListener('input', ()=>{
+    setDecayMilliseconds(decaySlider.value);
+  });
+  decayValInput.addEventListener('change', ()=>{
+    setDecayMilliseconds(decayValInput.value);
+  });
+
+  const reverbSlider = document.getElementById('reverbAmt');
+  const reverbValInput = document.getElementById('reverbVal');
+  reverbSlider.addEventListener('input', ()=>{
+    reverbAmount = parseInt(reverbSlider.value, 10) / 100;
+    reverbValInput.value = Math.round(reverbAmount*100);
+    if (reverbWetGain) reverbWetGain.gain.setTargetAtTime(reverbAmount, audioCtx.currentTime, 0.01);
+  });
+  reverbValInput.addEventListener('change', ()=>{
+    let v = parseFloat(reverbValInput.value);
+    if (isNaN(v) || v < 0) v = 0;
+    if (v > 100) v = 100;
+    reverbValInput.value = v;
+    reverbAmount = v/100;
+    reverbSlider.value = v;
+    if (reverbWetGain) reverbWetGain.gain.setTargetAtTime(reverbAmount, audioCtx.currentTime, 0.01);
+  });
+
+  const delaySlider = document.getElementById('delayAmt');
+  const delayValInput = document.getElementById('delayVal');
+  const delayDetails = document.getElementById('delayDetails');
+  function setDelayLevel(value){
+    let next = Math.round(parseFloat(value));
+    if (isNaN(next) || next < 0) next = 0;
+    if (next > 100) next = 100;
+    delayAmount = next/100;
+    delaySlider.value = next;
+    delayValInput.value = next;
+    delayDetails.hidden = next === 0;
+    if (delayWetGain) delayWetGain.gain.setTargetAtTime(delayAmount, audioCtx.currentTime, 0.01);
+  }
+  delaySlider.addEventListener('input', ()=>{
+    setDelayLevel(delaySlider.value);
+  });
+  delayValInput.addEventListener('change', ()=>{
+    setDelayLevel(delayValInput.value);
+  });
+
+  const delayDivisionSelect = document.getElementById('delayDivision');
+  delayDivisionSelect.addEventListener('change', ()=>{
+    delayDivision = delayDivisionSelect.value;
+    updateDelayTime();
+  });
+
+  const feedbackSlider = document.getElementById('delayFeedback');
+  const feedbackValInput = document.getElementById('feedbackVal');
+  function setDelayFeedback(value){
+    let next = Math.round(parseFloat(value));
+    if (isNaN(next) || next < 0) next = 0;
+    if (next > 80) next = 80;
+    delayFeedback = next/100;
+    feedbackSlider.value = next;
+    feedbackValInput.value = next;
+    if (delayFeedbackGain) delayFeedbackGain.gain.setTargetAtTime(delayFeedback, audioCtx.currentTime, 0.01);
+  }
+  feedbackSlider.addEventListener('input', ()=>{
+    setDelayFeedback(feedbackSlider.value);
+  });
+  feedbackValInput.addEventListener('change', ()=>{
+    setDelayFeedback(feedbackValInput.value);
+  });
+
+  const spreadSlider = document.getElementById('stereoSpread');
+  const spreadValInput = document.getElementById('spreadVal');
+  function setStereoSpread(value){
+    let next = Math.round(parseFloat(value));
+    if (isNaN(next) || next < 0) next = 0;
+    if (next > 100) next = 100;
+    stereoSpread = next/100;
+    spreadSlider.value = next;
+    spreadValInput.value = next;
+    updateActiveVoicePans();
+  }
+  spreadSlider.addEventListener('input', ()=>{
+    setStereoSpread(spreadSlider.value);
+  });
+  spreadValInput.addEventListener('change', ()=>{
+    setStereoSpread(spreadValInput.value);
+  });
+
+  function resetSettings(){
+    bpm = 120;
+    volume = 0.7;
+    rootIndex = 9;
+    pitchSetName = 'majorPentatonic';
+    filterCutoff = 4000;
+    filterResonance = 0.6;
+    decayTime = 0.16;
+    reverbAmount = 0.2;
+    delayAmount = 0;
+    delayFeedback = 0.25;
+    delayDivision = 'eighth';
+    stereoSpread = 0;
+    idCounter = 0;
+    rings = [makeRing(2), makeRing(3)];
+    flashEvents = [];
+    centerPulseStartedAt = null;
+    exitingRingVisuals = [];
+    viewScale = 1;
+    targetViewScale = 1;
+    viewOffsetX = 0;
+    viewOffsetY = 0;
+    targetViewOffsetX = 0;
+    targetViewOffsetY = 0;
+    dragGesture = null;
+    suppressNextCanvasClick = false;
+    if (pendingCanvasClick !== null){
+      clearTimeout(pendingCanvasClick);
+      pendingCanvasClick = null;
+    }
+    previousDrawAt = performance.now();
+
+    bpmSlider.min = '1';
+    bpmSlider.max = '240';
+    bpmSlider.value = '120';
+    bpmVal.value = '120';
+    volSlider.value = '70';
+    volVal.value = '70';
+    rootSelect.value = '9';
+    pitchSetSelect.value = 'majorPentatonic';
+    filterSlider.min = '200';
+    filterSlider.max = '12000';
+    filterSlider.value = '4000';
+    filterValInput.value = '4.0';
+    resonanceSlider.value = '0.6';
+    resonanceValInput.value = '0.6';
+    decaySlider.value = '160';
+    decayValInput.value = '160';
+    reverbSlider.value = '20';
+    reverbValInput.value = '20';
+    delaySlider.value = '0';
+    delayValInput.value = '0';
+    delayDetails.hidden = true;
+    delayDivisionSelect.value = 'eighth';
+    feedbackSlider.value = '25';
+    feedbackValInput.value = '25';
+    spreadSlider.value = '0';
+    spreadValInput.value = '0';
+
+    if (masterGain) masterGain.gain.setTargetAtTime(volume, audioCtx.currentTime, 0.01);
+    if (filterNode) filterNode.frequency.setTargetAtTime(filterCutoff, audioCtx.currentTime, 0.01);
+    if (filterNode) filterNode.Q.setTargetAtTime(filterResonance, audioCtx.currentTime, 0.01);
+    if (reverbWetGain) reverbWetGain.gain.setTargetAtTime(reverbAmount, audioCtx.currentTime, 0.01);
+    if (delayWetGain) delayWetGain.gain.setTargetAtTime(delayAmount, audioCtx.currentTime, 0.01);
+    if (delayFeedbackGain) delayFeedbackGain.gain.setTargetAtTime(delayFeedback, audioCtx.currentTime, 0.01);
+    updateDelayTime();
+    updateActiveVoicePans();
+
+    renderRingsList();
+    if (isPlaying) resetPhase();
+  }
+
+  document.getElementById('resetSettingsBtn').addEventListener('click', resetSettings);
+
+  // ---------- init ----------
+  renderRingsList();
+  resize();
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>

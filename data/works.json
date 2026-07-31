@@ -1,5 +1,31 @@
 [
   {
+    "id": "2607-5",
+    "title": "POLYRHYTHMETER",
+    "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1785435812/POLYRHYTHMETER_bfrrns.png",
+    "tags": [
+      "sound",
+      "geometry",
+      "code"
+    ],
+    "desc": "<p>複数の周期を同心円として重ね、ポリリズムとポリメーターを視覚と聴覚の両方から操作するシーケンサー。</p><p>各リングには、一周の長さを示すBeatsと、その中で発音する回数を示すHitsが設定される。Beatsを変えるとリング同士の周期比が変化し、Hitsを変えると各周期内部の発音間隔が変化する。この二つを独立して操作することで、異なる長さの拍節が並行するポリメーターと、異なる時間分割が重なるポリリズムを、同じ構造のなかで組み合わせることができる。</p><p>リングは独立した速度で回転し、互いにずれながら進み、やがて再び始点で一致する。周期の比率、位相のずれ、回帰の瞬間が、円環の運動として可視化される。</p><p>選択したPitch Setの構成音は、それぞれのリングに割り当てられる。リングを加えることは、新しい周期とリズムを加えると同時に、響きを構成する音を加えることでもある。</p><p>POLYRHYTHMETERは、複雑なリズムを理解するための図と、それを音楽として演奏するための楽器を一つにする。リズムの可視化、音楽理論の理解、作曲、演奏を分離せず、一つの直接的なWebインタラクションとして統合する試みである。</p>",
+    "desc_en": "<p>A sequencer that layers multiple cycles as concentric rings, allowing polyrhythm and polymeter to be manipulated through both sight and sound.</p><p>Each ring has two parameters: Beats, which determines the length of one cycle, and Hits, which determines the number of sounds triggered within it. Changing Beats alters the ratio between the cycle lengths of the rings, while changing Hits alters the spacing of sounds within each cycle. By controlling these two parameters independently, polymeter and polyrhythm can be combined within a single structure. Polymeter emerges from meters of different lengths running in parallel, while polyrhythm emerges from different divisions of time layered together.</p><p>The rings rotate at different speeds, gradually moving out of phase before eventually returning to alignment. The ratios between cycles, shifts in phase, and moments of recurrence are made visible through their motion.</p><p>A note from the selected Pitch Set is assigned to each ring. Adding a ring therefore introduces a new cycle and rhythmic layer, as well as a new note that contributes to the overall harmony.</p><p>POLYRHYTHMETER brings together a diagram for understanding complex rhythmic structures and an instrument for performing them as music. It integrates rhythmic visualization, music theory, composition, and performance within a single, direct web interaction.</p>",
+    "media": [
+      {
+        "type": "html",
+        "src": "/works/2607-5/PLTM.html",
+        "aspectRatio": "1 / 1"
+      },
+      {
+        "type": "link-card",
+        "src": "/works/2607-5/POLYRHYTHMETER.html",
+        "title": "POLYRHYTHMETER",
+        "label": "Open Full Version",
+        "placement": "full"
+      }
+    ]
+  },
+  {
     "id": "2607-4",
     "title": "Peirce Quincuncial Projection",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1785266133/PeirceQuincuncialProjection_qlbs81.png",
