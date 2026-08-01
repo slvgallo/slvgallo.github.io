@@ -54,11 +54,17 @@
     transform:scale(1.08);
   }
   #panelToggle:active{ transform:scale(.96); }
-  .stage-play-button{
+  .stage-transport{
     position:fixed;
     left:calc(18px + env(safe-area-inset-left, 0px));
     bottom:calc(18px + env(safe-area-inset-bottom, 0px));
     z-index:20;
+    display:flex;
+    gap:8px;
+  }
+  .stage-play-button,
+  .stage-reset-button{
+    position:relative;
     display:block;
     width:38px;
     height:38px;
@@ -97,8 +103,29 @@
     );
     clip-path:none;
   }
+  .reset-icon{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:28px;
+    height:28px;
+    margin:-14px 0 0 -14px;
+    transform:rotate(0deg);
+    transform-origin:50% 50%;
+    overflow:visible;
+    will-change:transform;
+  }
+  .stage-reset-button.is-resetting .reset-icon{
+    animation:reset-icon-spin 480ms cubic-bezier(.22,.7,.3,1);
+  }
+  @keyframes reset-icon-spin{
+    from{ transform:rotate(0deg); }
+    to{ transform:rotate(-360deg); }
+  }
   .stage-play-button:hover,
-  .stage-play-button:focus-visible{
+  .stage-play-button:focus-visible,
+  .stage-reset-button:hover,
+  .stage-reset-button:focus-visible{
     border-color:var(--brass);
     background:rgba(40,104,215,.08);
     opacity:1;
@@ -143,8 +170,8 @@
   .panel{
     position:fixed; bottom:66px; left:50%; z-index:15;
     width:var(--panel-width);
-    max-height:calc(100vh - 98px);
-    max-height:calc(100dvh - 98px);
+    max-height:calc(100vh - 82px);
+    max-height:calc(100dvh - 82px);
     background: var(--panel);
     color: var(--text);
     border:0;
@@ -156,7 +183,8 @@
     overflow-y:auto;
     backdrop-filter:blur(8px);
     -webkit-backdrop-filter:blur(8px);
-    scrollbar-color:var(--panel-line) transparent;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
     opacity:1; visibility:visible; pointer-events:auto;
     transform:translateX(-50%);
     transition:
@@ -172,8 +200,7 @@
       transform .28s cubic-bezier(.4,0,1,1),
       visibility 0s linear .28s;
   }
-  .panel::-webkit-scrollbar{ width:6px; }
-  .panel::-webkit-scrollbar-thumb{ background:var(--panel-line); border-radius:3px; }
+  .panel::-webkit-scrollbar{ display:none; }
   .panel-column{ min-width:0; }
   .panel-column + .panel-column{
     border-left:1px solid var(--panel-line);
@@ -206,7 +233,7 @@
     border-radius:3px;
   }
   .panel h2{
-    font-size: 12px; text-transform:uppercase; letter-spacing:0.14em;
+    font-size: 12px; text-transform:uppercase; letter-spacing:0.05em;
     color: var(--brass); margin: 0 0 10px 0; font-weight:500;
     font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
   }
@@ -228,10 +255,6 @@
   .section{ margin-bottom:16px; }
   .section + .section{ border-top:1px solid var(--panel-line); padding-top:16px; }
   .tempo-volume-section{ margin-bottom:30px; }
-  .transport{
-    display:flex; gap:8px; margin-bottom:16px;
-  }
-  .transport-section .transport{ margin-bottom:0; }
   button{
     font-family:inherit;
     cursor:pointer;
@@ -244,15 +267,6 @@
   }
   button:hover{ border-color: var(--brass); color:var(--brass); background:rgba(40,104,215,0.1); box-shadow:none; }
   button:focus-visible{ outline: 2px solid var(--brass); outline-offset:2px; }
-  #playBtn{
-    flex:1; padding: 10px 0; font-size:13px; font-weight:500; letter-spacing:0.03em;
-    background: var(--brass); color:#ffffff; border:none;
-  }
-  #playBtn:hover{ background:var(--brass-hover); color:#ffffff; }
-  #resetBtn, #resetSettingsBtn{
-    padding:10px 9px; font-size:11px; color:var(--brass); white-space:nowrap;
-  }
-
   .row{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
   .row label{ font-size:12px; color: var(--brass); }
   .row .val{ font-family:inherit; font-size:12px; color: var(--brass); min-width:44px; text-align:right; }
@@ -318,7 +332,7 @@
   }
   .delay-details h3{
     margin:0 0 10px; color:var(--brass);
-    font-size:10px; font-weight:500; letter-spacing:.12em;
+    font-size:10px; font-weight:500; letter-spacing:.04em;
     font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
     text-transform:uppercase;
   }
@@ -379,7 +393,7 @@
   .ring-number-input{ -moz-appearance:textfield; }
   .ring-rhythm-row .spacer{ flex:1; }
   .sound-label{
-    font-family:inherit; font-size:9px; letter-spacing:0.08em;
+    font-family:inherit; font-size:9px; letter-spacing:0.02em;
     color:var(--brass); width:34px;
   }
   .ring-volume-label{
@@ -406,7 +420,7 @@
   }
   .mute-btn, .remove-btn{
     flex-shrink:0; padding:4px 6px; background:transparent; box-shadow:none;
-    font-size:9px; font-weight:500; letter-spacing:0.06em; color:var(--brass);
+    font-size:9px; font-weight:500; letter-spacing:0.02em; color:var(--brass);
   }
   .mute-btn{ width:42px; }
   .mute-btn.active{
@@ -436,12 +450,7 @@
       overscroll-behavior:contain;
       -webkit-overflow-scrolling:touch;
     }
-    .transport{
-      display:grid;
-      grid-template-columns:repeat(2, minmax(0, 1fr));
-    }
-    #playBtn{ grid-column:1 / -1; }
-    #playBtn, #resetBtn, #resetSettingsBtn, #addRingBtn{
+    #addRingBtn{
       min-height:44px;
     }
     select{
@@ -505,6 +514,7 @@
   }
   @media (prefers-reduced-motion:reduce){
     .panel, .menu-icon span{ transition:none; }
+    .stage-reset-button.is-resetting .reset-icon{ animation:none; }
   }
 </style>
 </head>
@@ -518,14 +528,27 @@
       <span class="page-title">POLYRHYTHMETER</span>
     </button>
   </header>
-  <button
-    id="stagePlayBtn"
-    class="stage-play-button"
-    type="button"
-    aria-label="Play"
-    aria-keyshortcuts="Space"
-    aria-pressed="false"
-  ></button>
+  <div class="stage-transport">
+    <button
+      id="stagePlayBtn"
+      class="stage-play-button"
+      type="button"
+      aria-label="Play"
+      aria-keyshortcuts="Space"
+      aria-pressed="false"
+    ></button>
+    <button
+      id="resetSettingsBtn"
+      class="stage-reset-button"
+      type="button"
+      aria-label="Reset settings"
+      title="Reset settings"
+    >
+      <svg class="reset-icon" viewBox="1 0 24 24" aria-hidden="true">
+        <path d="M13 3a9 9 0 0 0-9 9H1l4 4 4-4H6a7 7 0 1 1 2.05 4.95l-1.42 1.42A9 9 0 1 0 13 3z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
   <main>
     <div class="stage">
       <canvas
@@ -535,14 +558,6 @@
     </div>
     <aside class="panel" id="controlPanel" aria-hidden="true" inert>
       <div class="panel-column">
-
-      <div class="section transport-section">
-        <div class="transport">
-          <button id="playBtn" aria-keyshortcuts="Space" aria-pressed="false">Play</button>
-          <button id="resetBtn">Reset Phase</button>
-          <button id="resetSettingsBtn">Reset Settings</button>
-        </div>
-      </div>
 
       <div class="section">
         <h2>Status</h2>
@@ -1109,10 +1124,7 @@
     rings.forEach(r => { r.nextTime = now; r.kCounter = 0; });
     isPlaying = true;
     schedulerTimer = setInterval(schedulerTick, 25);
-    const playButton = document.getElementById('playBtn');
     const stagePlayButton = document.getElementById('stagePlayBtn');
-    playButton.textContent = 'Stop';
-    playButton.setAttribute('aria-pressed', 'true');
     stagePlayButton.setAttribute('aria-label', 'Stop');
     stagePlayButton.setAttribute('aria-pressed', 'true');
   }
@@ -1125,10 +1137,7 @@
     }
     stopScheduledVoices();
     flashEvents = [];
-    const playButton = document.getElementById('playBtn');
     const stagePlayButton = document.getElementById('stagePlayBtn');
-    playButton.textContent = 'Play';
-    playButton.setAttribute('aria-pressed', 'false');
     stagePlayButton.setAttribute('aria-label', 'Play');
     stagePlayButton.setAttribute('aria-pressed', 'false');
   }
@@ -2407,9 +2416,7 @@
     if (masterGain) masterGain.gain.value = volume;
   });
 
-  document.getElementById('playBtn').addEventListener('click', togglePlayback);
   document.getElementById('stagePlayBtn').addEventListener('click', togglePlayback);
-  document.getElementById('resetBtn').addEventListener('click', resetPhase);
 
   const rootSelect = document.getElementById('rootNote');
   ROOTS.forEach((name, i)=>{
@@ -2579,6 +2586,7 @@
   });
 
   function resetSettings(){
+    if (isPlaying) stopPlayback();
     bpm = 120;
     volume = 0.7;
     rootIndex = 9;
@@ -2650,10 +2658,18 @@
     updateActiveVoicePans();
 
     renderRingsList();
-    if (isPlaying) resetPhase();
   }
 
-  document.getElementById('resetSettingsBtn').addEventListener('click', resetSettings);
+  const resetSettingsButton = document.getElementById('resetSettingsBtn');
+  resetSettingsButton.addEventListener('click', ()=>{
+    resetSettingsButton.classList.remove('is-resetting');
+    void resetSettingsButton.offsetWidth;
+    resetSettingsButton.classList.add('is-resetting');
+    resetSettings();
+  });
+  resetSettingsButton.addEventListener('animationend', ()=>{
+    resetSettingsButton.classList.remove('is-resetting');
+  });
 
   // ---------- init ----------
   renderRingsList();
