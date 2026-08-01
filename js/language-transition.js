@@ -362,10 +362,17 @@ function animate(update) {
 }
 
 export function createLanguageTransition() {
-  const pairs = collectLanguagePairs();
-  if (!pairs.length) return null;
+  if (!collectLanguagePairs().length) return null;
 
   async function run(sourceLanguage, targetLanguage, commitLanguage) {
+    // DESCRIPTION replaces its text nodes after every language change.
+    // Recollect the current DOM so repeated transitions never use stale nodes.
+    const pairs = collectLanguagePairs();
+    if (!pairs.length) {
+      commitLanguage();
+      return;
+    }
+
     const { transitions, activePairs } = prepareTransitions(
       pairs,
       sourceLanguage,

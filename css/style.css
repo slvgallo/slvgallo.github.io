@@ -492,6 +492,12 @@ a img {
       animation-timeline: scroll(root block);
       animation-range: 0px 200px;
     }
+
+    .header.header-scroll-fallback .menu-toggle,
+    .header.header-scroll-fallback .header-box-title,
+    .header.header-scroll-fallback .header-title a {
+      animation: none;
+    }
   }
 
   .header-title img,

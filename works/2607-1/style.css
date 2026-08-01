@@ -11,6 +11,7 @@
       margin: 0;
       overflow: hidden;
       background: #050505;
+      font-family: YakuHanJP, "Noto Sans", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
     }
 
     .background-output {
@@ -140,9 +141,12 @@
       width: max-content;
       color: var(--runtime-color);
       font-family:
+        YakuHanJP,
         "Noto Sans",
+        "Hiragino Sans",
+        "Hiragino Kaku Gothic ProN",
         "Noto Sans JP",
-        "Noto Sans CJK JP",
+        Meiryo,
         sans-serif;
       font-size: var(--runtime-text-size);
       font-variant-numeric: tabular-nums;

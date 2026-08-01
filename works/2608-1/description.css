@@ -1,9 +1,3 @@
-body.work-description-active #project-title,
-body.work-description-active .title-measure,
-body.work-description-active #project-desc {
-  font-family: Arial, "Helvetica Neue", "Hiragino Sans", "Yu Gothic", YuGothic, sans-serif;
-}
-
 body.work-description-active .title-measure {
   position: absolute;
   visibility: hidden;

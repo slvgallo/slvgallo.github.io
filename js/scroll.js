@@ -26,12 +26,23 @@ export function initScroll() {
     return mobileMediaQuery.matches;
   }
 
+  function shouldForceMobileFallback() {
+    return (
+      isMobileLayout() &&
+      document.body.classList.contains('work-description-active')
+    );
+  }
+
+  function shouldUseFallbackHeaderMotion() {
+    return !supportsNativeScrollAnimation || shouldForceMobileFallback();
+  }
+
   function checkMenuState() {
     state.ui.shouldAutoHide = !isMobileLayout();
   }
 
   function applyFallbackHeaderMotion(scrollY) {
-    if (supportsNativeScrollAnimation) return;
+    if (!shouldUseFallbackHeaderMotion()) return;
 
     const progress = Math.max(0, Math.min(scrollY / SCROLL_RANGE, 1));
 
@@ -133,11 +144,16 @@ export function initScroll() {
   }
 
   function shouldTrackScroll() {
-    return !supportsNativeScrollAnimation || !isMobileLayout();
+    return shouldUseFallbackHeaderMotion() || !isMobileLayout();
   }
 
   function syncScrollListener() {
     const shouldAttach = shouldTrackScroll();
+
+    header.classList.toggle(
+      'header-scroll-fallback',
+      shouldForceMobileFallback()
+    );
 
     if (shouldAttach && !scrollListenerAttached) {
       window.addEventListener('scroll', requestTick);
