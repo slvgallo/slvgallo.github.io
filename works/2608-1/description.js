@@ -720,6 +720,9 @@
     async function typeText(element, text) {
       const graphemes = splitGraphemes(text);
       let visible = "";
+      const mistakeIndex = graphemes.length >= 8 && Math.random() < 0.36
+        ? 3 + Math.floor(Math.random() * (graphemes.length - 6))
+        : -1;
 
       for (let index = 0; index < graphemes.length; index++) {
         visible += graphemes[index];
@@ -736,16 +739,8 @@
           8 + Math.random() * 18 + punctuationPause + whitespacePause + burstPause
         );
 
-        if (
-          index > 2 &&
-          index < graphemes.length - 2 &&
-          Math.random() < 0.018
-        ) {
-          visible = await maybeTypeCorrection(
-            element,
-            visible,
-            graphemes.slice(index + 1).join("")
-          );
+        if (index === mistakeIndex) {
+          await typeMistakeAndCorrection(element, visible);
         }
       }
     }
@@ -982,18 +977,29 @@
       };
     }
 
-    async function maybeTypeCorrection(element, visible, remainingText) {
-      if (!remainingText || Math.random() >= 0.08) return visible;
-      const wrong = choose(
+    async function typeMistakeAndCorrection(element, visible) {
+      const mistake = splitGraphemes(choose(
         isJapanese
-          ? ["の", "を", "に", "と", "は", "が"]
-          : ["a", "e", "i", "o", "s", "t"]
-      );
-      setEditorText(element, visible + wrong, true);
-      await wait(70 + Math.random() * 105);
-      setEditorText(element, visible, true);
-      await wait(55 + Math.random() * 90);
-      return visible;
+          ? ["の", "を", "に", "とは", "から", "して"]
+          : ["the", "and", "ing", "ed", "tion", "s"]
+      ));
+      let draft = visible;
+
+      for (const character of mistake) {
+        draft += character;
+        setEditorText(element, draft, true);
+        await wait(28 + Math.random() * 48);
+      }
+
+      await wait(180 + Math.random() * 220);
+
+      for (let length = mistake.length - 1; length >= 0; length--) {
+        draft = `${visible}${mistake.slice(0, length).join("")}`;
+        setEditorText(element, draft, true);
+        await wait(42 + Math.random() * 58);
+      }
+
+      await wait(85 + Math.random() * 125);
     }
 
     async function backspaceAndType(element, previousText, nextText) {
