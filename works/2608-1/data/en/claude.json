@@ -294,7 +294,7 @@
     "implementation": [
       {
         "id": "claude_implementation_0001",
-        "text": "Under the surface this is one HTML file: a fixed heading and an empty section, styled with CSS clamp functions for responsive type, and driven by roughly fourteen hundred lines of JavaScript. Japanese text is segmented into graphemes, words, and sentences using Intl.Segmenter, since naive character splitting would butcher multi-byte script. Two setTimeout loops, one for the body and one for the title, run independently for as long as the tab stays open."
+        "text": "Under the surface, the work is divided among a small HTML shell, a stylesheet, a JavaScript module, and language-specific JSON data loaded through manifests. The HTML provides the heading and description container; CSS handles responsive typography; JavaScript performs segmentation, rendering, generation, animation, and scheduling. Japanese text is segmented into graphemes, words, and sentences with Intl.Segmenter when available. Separate body and title timers share an exclusive edit lock, so their schedules are independent but their visible edits never overlap."
       },
       {
         "id": "claude_implementation_0002",

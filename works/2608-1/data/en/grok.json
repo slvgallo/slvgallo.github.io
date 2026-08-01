@@ -322,11 +322,11 @@
 },
 {
 "id": "grok_implementation_0008",
-"text": "Phrase pools are built by sliding windows over word units. Each entry contributes a limited number of short phrases. The pools are used both for recovery material and for the temporary drafts that appear during revision-mode edits."
+"text": "Phrase pools are built by sliding windows over word units. Each entry contributes a limited number of short phrases, which are used for the temporary drafts that appear during revision-mode edits. Recovery material comes from a separate sentencePool built by segmenting source entries into complete sentences."
 },
 {
 "id": "grok_implementation_0009",
-"text": "The initial paragraphs are composed by choosing one entry from each category and splitting that entry into sentences. The five-paragraph structure is therefore guaranteed at startup and then immediately subjected to operations that can destroy it."
+"text": "The initial document is composed by choosing one entry from each of five categories and splitting each selected entry into sentences. Editing may insert, delete, rewrite, or move sentences, but it never adds or removes paragraph containers. At least one sentence is preserved in every paragraph, so the five-paragraph structure remains intact throughout the session."
 },
 {
 "id": "grok_implementation_0010",

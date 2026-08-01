@@ -17,8 +17,8 @@
       }
     }
 
-    const currentLanguage = readLanguage();
-    const isJapanese = currentLanguage === "ja";
+    let currentLanguage = readLanguage();
+    let isJapanese = currentLanguage === "ja";
     document.documentElement.lang = currentLanguage;
 
     const titleElement = integratedMode
@@ -27,7 +27,7 @@
     const descriptionRoot = integratedMode
       ? document.querySelector("#project-desc")
       : document.querySelector("#description");
-    const description = integratedMode
+    let description = integratedMode
       ? descriptionRoot?.querySelector(`.project-desc-lang.lang-${currentLanguage}`)
       : descriptionRoot;
 
@@ -48,10 +48,6 @@
     }
 
     const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
-    const SOURCES_MANIFEST_URL = new URL(
-      `./data/${currentLanguage}/manifest.json`,
-      import.meta.url
-    );
     const LOAD_ERROR_MESSAGE = "DESCRIPTION DATA COULD NOT BE LOADED.";
     const TITLE_DATABASE_PROBABILITY = 0.7;
     const TITLE_CORPUS_SEPARATOR = "\u0002";
@@ -75,15 +71,31 @@
       "viewing"
     ];
 
-    const graphemeSegmenter = "Segmenter" in Intl
-      ? new Intl.Segmenter(currentLanguage, { granularity: "grapheme" })
-      : null;
-    const wordSegmenter = "Segmenter" in Intl
-      ? new Intl.Segmenter(currentLanguage, { granularity: "word" })
-      : null;
-    const sentenceSegmenter = "Segmenter" in Intl
-      ? new Intl.Segmenter(currentLanguage, { granularity: "sentence" })
-      : null;
+    let graphemeSegmenter = null;
+    let wordSegmenter = null;
+    let sentenceSegmenter = null;
+
+    function configureLanguageTools() {
+      isJapanese = currentLanguage === "ja";
+      graphemeSegmenter = "Segmenter" in Intl
+        ? new Intl.Segmenter(currentLanguage, { granularity: "grapheme" })
+        : null;
+      wordSegmenter = "Segmenter" in Intl
+        ? new Intl.Segmenter(currentLanguage, { granularity: "word" })
+        : null;
+      sentenceSegmenter = "Segmenter" in Intl
+        ? new Intl.Segmenter(currentLanguage, { granularity: "sentence" })
+        : null;
+    }
+
+    function sourcesManifestUrl() {
+      return new URL(
+        `./data/${currentLanguage}/manifest.json`,
+        import.meta.url
+      );
+    }
+
+    configureLanguageTools();
 
     let paragraphs = [];
     let sentencePool = [];
@@ -101,14 +113,65 @@
     let lastBodyDraftPhrase = null;
     let lastTitleDraftPhrase = null;
     let activeEdit = null;
+    let runtimeController = new AbortController();
+    const scheduledTimers = new Set();
 
     // Shared utilities
     function choose(array) {
       return array[Math.floor(Math.random() * array.length)];
     }
 
+    function isAbortError(error) {
+      return error?.name === "AbortError";
+    }
+
     function wait(milliseconds) {
-      return new Promise(resolve => setTimeout(resolve, milliseconds));
+      const signal = runtimeController.signal;
+      return new Promise((resolve, reject) => {
+        if (signal.aborted) {
+          reject(new DOMException("DESCRIPTION run was cancelled.", "AbortError"));
+          return;
+        }
+
+        const timer = setTimeout(() => {
+          scheduledTimers.delete(timer);
+          signal.removeEventListener("abort", handleAbort);
+          resolve();
+        }, milliseconds);
+
+        function handleAbort() {
+          clearTimeout(timer);
+          scheduledTimers.delete(timer);
+          reject(new DOMException("DESCRIPTION run was cancelled.", "AbortError"));
+        }
+
+        scheduledTimers.add(timer);
+        signal.addEventListener("abort", handleAbort, { once: true });
+      });
+    }
+
+    function scheduleTimer(callback, delay) {
+      const signal = runtimeController.signal;
+      const timer = setTimeout(async () => {
+        scheduledTimers.delete(timer);
+        if (signal.aborted) return;
+        try {
+          await callback(signal);
+        } catch (error) {
+          if (!isAbortError(error)) {
+            console.error("DESCRIPTION scheduled task failed.", error);
+          }
+        }
+      }, delay);
+      scheduledTimers.add(timer);
+      return timer;
+    }
+
+    function cancelCurrentRun() {
+      runtimeController.abort();
+      for (const timer of scheduledTimers) clearTimeout(timer);
+      scheduledTimers.clear();
+      runtimeController = new AbortController();
     }
 
     function isNonEmptyString(value) {
@@ -138,11 +201,12 @@
       if (document.hidden) return "hidden";
       if (activeEdit) return "busy";
 
-      activeEdit = context;
+      const editToken = { context, signal: runtimeController.signal };
+      activeEdit = editToken;
       try {
         return await edit();
       } finally {
-        activeEdit = null;
+        if (activeEdit === editToken) activeEdit = null;
       }
     }
 
@@ -307,35 +371,37 @@
       }
     }
 
-    async function fetchJson(url, label) {
-      const response = await fetch(url, { cache: "no-cache" });
+    async function fetchJson(url, label, signal) {
+      const response = await fetch(url, { cache: "no-cache", signal });
       if (!response.ok) {
         throw new Error(`${label} request failed: ${response.status}`);
       }
       return response.json();
     }
 
-    async function loadContentSource(sourceUrl) {
-      const content = await fetchJson(sourceUrl, "Content");
+    async function loadContentSource(sourceUrl, signal) {
+      const content = await fetchJson(sourceUrl, "Content", signal);
       validateContent(content);
       return content;
     }
 
-    async function loadContent() {
-      const manifestUrl = SOURCES_MANIFEST_URL;
-      const manifest = await fetchJson(manifestUrl, "Sources manifest");
+    async function loadContent(signal) {
+      const manifestUrl = sourcesManifestUrl();
+      const manifest = await fetchJson(manifestUrl, "Sources manifest", signal);
       validateManifest(manifest);
       const sourceUrls = manifest.sources.map(source =>
         new URL(source, manifestUrl)
       );
       const results = await Promise.allSettled(
-        sourceUrls.map(loadContentSource)
+        sourceUrls.map(sourceUrl => loadContentSource(sourceUrl, signal))
       );
       const contents = [];
 
       results.forEach((result, index) => {
         if (result.status === "fulfilled") {
           contents.push(result.value);
+        } else if (isAbortError(result.reason)) {
+          return;
         } else {
           console.error(
             `Content source could not be loaded: ${sourceUrls[index]}`,
@@ -344,6 +410,9 @@
         }
       });
 
+      if (signal.aborted) {
+        throw new DOMException("DESCRIPTION run was cancelled.", "AbortError");
+      }
       if (!contents.length) {
         throw new Error("No content source could be loaded.");
       }
@@ -1283,7 +1352,9 @@
       if (!parent) return titleElement.offsetHeight || 0;
 
       const probe = document.createElement("h1");
-      probe.className = `title-measure ${titleLengthClass(text)}`;
+      probe.className = integratedMode
+        ? `entry-title title-measure ${titleLengthClass(text)}`
+        : `title-measure ${titleLengthClass(text)}`;
       probe.textContent = text;
       probe.setAttribute("aria-hidden", "true");
       parent.append(probe);
@@ -1382,6 +1453,7 @@
           titleUpdateCount += 1;
           return "completed";
         } catch (error) {
+          if (isAbortError(error)) return "cancelled";
           console.error("Title edit failed.", error);
           setCurrentTitleEntry(nextEntry);
           titleUpdateCount += 1;
@@ -1437,6 +1509,7 @@
           await rewriteSentence(sentenceId, material);
           return "completed";
         } catch (error) {
+          if (isAbortError(error)) return "cancelled";
           console.error("Body edit failed.", error);
           renderDocument();
           return "failed";
@@ -1466,8 +1539,9 @@
     }
 
     function scheduleRewrite(performRewrite, getNextDelay, delay) {
-      setTimeout(async () => {
+      scheduleTimer(async signal => {
         const result = await performRewrite();
+        if (signal.aborted || result === "cancelled") return;
         const nextDelay = result === "busy" ? retryDelay() : getNextDelay();
         scheduleRewrite(performRewrite, getNextDelay, nextDelay);
       }, delay);
@@ -1482,8 +1556,9 @@
     }
 
     function scheduleFirstTitleRewrite(delay = nextFirstTitleDelay()) {
-      setTimeout(async () => {
+      scheduleTimer(async signal => {
         const result = await performTitleRewrite();
+        if (signal.aborted || result === "cancelled") return;
         if (result === "completed" || result === "failed") {
           scheduleTitleRewrite();
         } else {
@@ -1492,9 +1567,29 @@
       }, delay);
     }
 
-    async function start() {
+    function resetRuntimeState() {
+      paragraphs = [];
+      sentencePool = [];
+      phrasePool = [];
+      titlePool = [];
+      titlePhrasePool = [];
+      staticCorpus = "";
+      staticTitleCorpus = "";
+      currentTitleEntry = { ...INITIAL_TITLE_ENTRY };
+      rewriteCount = 0;
+      sentenceSequence = 0;
+      titleSequence = 0;
+      titleUpdateCount = 0;
+      lastSentenceId = null;
+      lastBodyDraftPhrase = null;
+      lastTitleDraftPhrase = null;
+      activeEdit = null;
+    }
+
+    async function start(signal = runtimeController.signal) {
       try {
-        const contents = await loadContent();
+        const contents = await loadContent(signal);
+        if (signal.aborted) return;
         initializeContent(contents);
         if (
           paragraphs.length !== CATEGORY_ORDER.length ||
@@ -1511,6 +1606,7 @@
         scheduleFirstTitleRewrite();
         scheduleBodyRewrite(2600);
       } catch (error) {
+        if (isAbortError(error) || signal.aborted) return;
         console.error("Description data could not be loaded.", error);
         titleElement.textContent = "";
         syncTitleDataset(null);
@@ -1518,14 +1614,30 @@
       }
     }
 
+    async function switchDescriptionLanguage(language) {
+      if (language === currentLanguage) return;
+
+      cancelCurrentRun();
+      currentLanguage = language === "ja" ? "ja" : "en";
+      configureLanguageTools();
+      description = descriptionRoot.querySelector(
+        `.project-desc-lang.lang-${currentLanguage}`
+      );
+      if (!description) {
+        console.error("DESCRIPTION language container is missing.");
+        return;
+      }
+
+      resetRuntimeState();
+      titleElement.style.removeProperty("min-height");
+      description.style.removeProperty("min-height");
+      setCurrentTitleEntry(currentTitleEntry);
+      await start(runtimeController.signal);
+    }
+
     if (integratedMode) {
-      const languageObserver = new MutationObserver(() => {
-        const nextLanguage = document.documentElement.lang === "ja" ? "ja" : "en";
-        if (nextLanguage !== currentLanguage) location.reload();
-      });
-      languageObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ["lang"]
+      document.addEventListener("site:languagechange", event => {
+        void switchDescriptionLanguage(event.detail?.language);
       });
     }
 

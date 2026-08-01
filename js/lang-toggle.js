@@ -154,6 +154,11 @@ export function initLangToggle() {
       if (currentLang !== lang) commit();
     } finally {
       setTransitioning(false);
+      if (currentLang !== sourceLanguage) {
+        document.dispatchEvent(new CustomEvent('site:languagechange', {
+          detail: { language: currentLang }
+        }));
+      }
     }
   }
 

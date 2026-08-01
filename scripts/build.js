@@ -219,9 +219,11 @@ class SiteBuilder {
     const mainRatioMatch = typeof mainAspectRatio === 'string'
       ? mainAspectRatio.match(/^(\d+(?:\.\d+)?)\s*[/:]\s*(\d+(?:\.\d+)?)$/)
       : null;
-    const squarePageClass = mainRatioMatch
+    const squarePageClass = work.layout === 'compact' || (
+      mainRatioMatch
       && Number(mainRatioMatch[1]) > 0
       && Number(mainRatioMatch[1]) === Number(mainRatioMatch[2])
+    )
       ? ' page-permalink--square'
       : '';
 
