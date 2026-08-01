@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "sources": [
+    "./chatgpt.json",
+    "./grok.json",
+    "./claude.json",
+    "./gemini.json"
+  ]
+}

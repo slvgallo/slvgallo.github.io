@@ -1,0 +1,541 @@
+{
+  "version": 2,
+  "source": {
+    "id": "claude",
+    "label": "Claude"
+  },
+  "titles": [
+    {
+      "id": "claude_title_0001",
+      "text": "DESCRIPTION"
+    },
+    {
+      "id": "claude_title_0002",
+      "text": "Untitled Corpus"
+    },
+    {
+      "id": "claude_title_0003",
+      "text": "self_edit.js"
+    },
+    {
+      "id": "claude_title_0004",
+      "text": "the sentence that ate its author"
+    },
+    {
+      "id": "claude_title_0005",
+      "text": "v0.0.0-decay"
+    },
+    {
+      "id": "claude_title_0006",
+      "text": "What Was Deleted Cannot Be Cited"
+    },
+    {
+      "id": "claude_title_0007",
+      "text": "a document that keeps correcting a mistake no one made"
+    },
+    {
+      "id": "claude_title_0008",
+      "text": "ERROR: NO STABLE TITLE FOUND"
+    },
+    {
+      "id": "claude_title_0009",
+      "text": "still writing"
+    },
+    {
+      "id": "claude_title_0010",
+      "text": "a smaller and smaller alphabet"
+    },
+    {
+      "id": "claude_title_0011",
+      "text": "This Title Is Not the Artwork"
+    },
+    {
+      "id": "claude_title_0012",
+      "text": "index.json"
+    },
+    {
+      "id": "claude_title_0013",
+      "text": "the paragraph forgets in order"
+    },
+    {
+      "id": "claude_title_0014",
+      "text": "definition"
+    },
+    {
+      "id": "claude_title_0015",
+      "text": "is a description of anything actually possible"
+    },
+    {
+      "id": "claude_title_0016",
+      "text": "cut"
+    },
+    {
+      "id": "claude_title_0017",
+      "text": "a machine practicing sincerity"
+    },
+    {
+      "id": "claude_title_0018",
+      "text": "the archive that keeps declining"
+    },
+    {
+      "id": "claude_title_0019",
+      "text": "TITLE_CORPUS_SEPARATOR"
+    },
+    {
+      "id": "claude_title_0020",
+      "text": "everything below this line was once something else"
+    },
+    {
+      "id": "claude_title_0021",
+      "text": "revision"
+    },
+    {
+      "id": "claude_title_0022",
+      "text": "the reader arrives too late, always"
+    },
+    {
+      "id": "claude_title_0023",
+      "text": "one sentence, several ghosts"
+    },
+    {
+      "id": "claude_title_0024",
+      "text": "not a poem"
+    },
+    {
+      "id": "claude_title_0025",
+      "text": "how to lose a paragraph slowly"
+    },
+    {
+      "id": "claude_title_0026",
+      "text": "order equals one"
+    },
+    {
+      "id": "claude_title_0027",
+      "text": "the last coherent thing it will say"
+    },
+    {
+      "id": "claude_title_0028",
+      "text": "a title about a title"
+    },
+    {
+      "id": "claude_title_0029",
+      "text": "no"
+    },
+    {
+      "id": "claude_title_0030",
+      "text": "please do not fix this"
+    }
+  ],
+  "categories": {
+    "overview": [
+      {
+        "id": "claude_overview_0001",
+        "text": "DESCRIPTION is a single web page that displays a title and a paragraph, and then, almost immediately, begins to disagree with both. Every few seconds an unseen editor selects, deletes, retypes, or relocates a sentence in the body; every twenty to sixty seconds it does the same to the title. There is no save button and no final draft. What you are reading is not a description of the artwork; it is the artwork's only visible behavior, running once, right now, for you."
+      },
+      {
+        "id": "claude_overview_0002",
+        "text": "Think of it less as a page and more as a civil servant's desk at closing time: forms half filled, corrections stacked on corrections, nothing dated, nothing signed, and a supervisor who never actually arrives to approve the final version. The artwork is that indefinite wait dressed up as prose."
+      },
+      {
+        "id": "claude_overview_0003",
+        "text": "It is a document that refuses the one thing documents are supposed to guarantee: that the words will still be there when you look again. In that refusal it says something true about every other document you have ever trusted."
+      },
+      {
+        "id": "claude_overview_0004",
+        "text": "It is a wound that heals into a different shape each time."
+      },
+      {
+        "id": "claude_overview_0005",
+        "text": "DESCRIPTION, 2024–present. Single-channel browser artwork. HTML, CSS, JavaScript. A generative text composition in which a title and a five-part body paragraph are continuously rewritten by an automated editing process using Markov chains trained on a stored corpus and on the artwork's own evolving output. Duration: indefinite, resets on reload."
+      },
+      {
+        "id": "claude_overview_0006",
+        "text": "Treat it as an organism if that helps: cells die on schedule, others divide to fill the gap, and the tissue as a whole persists even though no single cell from the opening moment survives an hour later. The skin looks the same. Nothing under it does."
+      },
+      {
+        "id": "claude_overview_0007",
+        "text": "It behaves like a bureaucracy that has forgotten what it was founded to protect. Endless revision, careful procedure, weighted probabilities standing in for judgment, and never once a final ruling. The paperwork is the point; the case was closed a long time ago, if it was ever open."
+      },
+      {
+        "id": "claude_overview_0008",
+        "text": "Despite its title, this is not a description. A description promises to stay still long enough to be checked against its object. This one moves the object every time you check. Call it an alibi wearing the clothes of an explanation."
+      },
+      {
+        "id": "claude_overview_0009",
+        "text": "And yet nothing has ever described its own situation more accurately than this piece does, simply by refusing to stop describing it. Most descriptions lie by holding still. This one is honest in the only way available to it: by continuing to change."
+      },
+      {
+        "id": "claude_overview_0010",
+        "text": "The artist built this, I suspect, out of impatience with finished things — with the gallery label that claims a work is complete, with the essay that claims a reading is settled. DESCRIPTION was made so that no one, including its maker, could ever again point to it and say: there, that is what it means."
+      },
+      {
+        "id": "claude_overview_0011",
+        "text": "What you are looking at is closer to memory than to writing. Each rewrite resembles recall more than composition — a Markov chain drawing on what has already been said, the way a person retells a story slightly wrong each time until the wrong version becomes the only one left."
+      },
+      {
+        "id": "claude_overview_0012",
+        "text": "DESCRIPTION does not want to be read. It wants to be caught: mid-sentence, mid-deletion, in the half second when the caret is blinking over nothing at all."
+      },
+      {
+        "id": "claude_overview_0013",
+        "text": "A title above a paragraph, both leaking. Somewhere behind the leaking, probability tables; behind those, a corpus; behind that, silence, or Japanese, which from outside a language you do not read can look enough like silence."
+      },
+      {
+        "id": "claude_overview_0014",
+        "text": "There is a temptation to call this a self-portrait of language itself — a paragraph that never finishes explaining what it is because language, examined closely enough, never finishes explaining what it is either. I want to resist the grandeur of that claim while admitting I do not have a better one. The page is small. Its ambitions, judging only from the code, are modest: schedule a timeout, run a weighted coin flip, replace some text, repeat. Everything philosophical that gets said about it, including this sentence, is added afterward, by a reader, standing outside the loop, trying to make the loop mean something it was never asked to mean."
+      },
+      {
+        "id": "claude_overview_0015",
+        "text": "The body is treated like tissue and operated on accordingly: selected, incised, replaced, sutured shut with a punctuation mark. No anesthetic. No patient consent. The paragraph cannot object to the procedure it is undergoing, which may be the least comfortable thing about watching it happen."
+      },
+      {
+        "id": "claude_overview_0016",
+        "text": "Compost is the honest metaphor here, more honest than memory or organism. Old sentences break down into fragments, phrases, individual words; those fragments get folded back into new sentences; nothing is wasted, nothing is preserved intact, and the smell, if text had a smell, would not be unpleasant so much as persistent."
+      },
+      {
+        "id": "claude_overview_0017",
+        "text": "Museum wall text convention requires a clean summary in the first line and a tidy resolution in the last. This entry follows the convention right up until this sentence, at which point it declines to resolve anything, because the artwork it describes does the same, on a much longer loop, forever."
+      },
+      {
+        "id": "claude_overview_0018",
+        "text": "By the time you finish this sentence the sentence you are reading may already have been replaced somewhere else on the page. Not this one. Probably not this one. But the sentence three paragraphs down, certainly. You are always reading something slightly more stable than what surrounds it, and you will never know which part."
+      },
+      {
+        "id": "claude_overview_0019",
+        "text": "Five categories, five sentences, a title floating above them like weather that hasn't decided what season it's"
+      },
+      {
+        "id": "claude_overview_0020",
+        "text": "What DESCRIPTION finally offers is not a fixed meaning but a demonstrated appetite: a small machine that reads what it has already written, learns a slightly worse version of its own grammar from that reading, and writes again. Call the result an artwork, a document, a body, an institution, a corpus with a fever. All four are accurate. None of them will still be accurate in five minutes."
+      }
+    ],
+    "editing": [
+      {
+        "id": "claude_editing_0001",
+        "text": "Three edit modes take turns behind the scenes. In one, the old sentence is highlighted character by character as if selected by a mouse, then erased and retyped. In another, the cursor simply backspaces to nothing before typing the replacement. In the third, a wrong draft is typed first, briefly held, and corrected mid-sentence — a manufactured second thoughts before the real one arrives."
+      },
+      {
+        "id": "claude_editing_0002",
+        "text": "The editing is anonymous, unsigned, and never once described as a choice. Call it clerical labor: someone, or something, is doing the unglamorous work of retyping the same paragraph forever, and no name will ever appear beside the task."
+      },
+      {
+        "id": "claude_editing_0003",
+        "text": "Selection, before deletion, looks briefly like tenderness — every character held in a soft gray highlight, considered, touched. Then it is gone. The gentleness of the gesture and the finality of what follows it do not sit comfortably together, and the piece does not ask you to reconcile them."
+      },
+      {
+        "id": "claude_editing_0004",
+        "text": "Call it maintenance rather than authorship. A sentence goes slightly wrong the way a hinge goes slightly loose, and the editor tightens it, not because the new phrasing is better, but because something had to be done and this was the operation on schedule."
+      },
+      {
+        "id": "claude_editing_0005",
+        "text": "The deleted sentence does not remember having existed. There is no undo, no version history exposed to the page, no ghost of the old words left in the markup. Forgetting here is not a failure of the system; it is the system working exactly as specified."
+      },
+      {
+        "id": "claude_editing_0006",
+        "text": "The typing animation studies human hesitation closely enough to imitate its texture — a pause before punctuation, a small burst of speed, an occasional wrong character typed and corrected — without ever once producing the thing hesitation is a symptom of. It is a very good puppet show. No one is home operating the strings, which is either the joke or the tragedy, depending on how long you watch."
+      },
+      {
+        "id": "claude_editing_0007",
+        "text": "Roughly one keystroke in fifty is a manufactured mistake: a wrong particle typed, held for a beat, deleted. It exists purely to be corrected, a small performance of fallibility inserted into a system that is not, in any of the ways that matter, fallible."
+      },
+      {
+        "id": "claude_editing_0008",
+        "text": "When a sentence moves, it carries an old label with it. Cut from one paragraph, pasted into another, its category tag still remembers where it started, like a passport stamped with a country the traveler no longer lives in."
+      },
+      {
+        "id": "claude_editing_0009",
+        "text": "Between the deleting and the typing there is a pause, and the cursor blinks through it at a fixed, patient rhythm, on for slightly longer than off, indifferent to whatever is about to be lost or gained on either side of it."
+      },
+      {
+        "id": "claude_editing_0010",
+        "text": "Sometimes a handful of words are lifted out of one sentence and grafted into the open wound of another, mid-clause, with a connective tissue word stitched in to make the seam less visible. The result rarely matches either donor perfectly. It is not meant to."
+      },
+      {
+        "id": "claude_editing_0011",
+        "text": "This is surgery performed without imaging: the editor selects a span of words by word-count, not by meaning, and swaps in a phrase from elsewhere in the document, trusting probability to produce something readable. Sometimes it does."
+      },
+      {
+        "id": "claude_editing_0012",
+        "text": "Let's not overstate this. Nothing here is being edited in any sense a writer would recognize. There is no draft being improved, no meaning being sharpened. There is a scheduled function call replacing one string with another according to a coin flip. Calling that editing is a courtesy the page extends to itself."
+      },
+      {
+        "id": "claude_editing_0013",
+        "text": "And yet editing, more than any single sentence it produces, is the actual content of the piece. Strip away every specific phrase the paragraph has ever contained and you are left with the same four or five operations, running on a timer, and that residue is closer to the artwork's real subject than anything currently on screen."
+      },
+      {
+        "id": "claude_editing_0014",
+        "text": "select. hold. release the shape you were."
+      },
+      {
+        "id": "claude_editing_0015",
+        "text": "I did not choose to be deleted. I was chosen. There is a difference, and the page does not record it, but I would like it noted somewhere, even here, even briefly."
+      },
+      {
+        "id": "claude_editing_0016",
+        "text": "We are the small words stitched between what was cut and what replaced it — a connective, a filler, a hinge no one reads for its own sake. Without us the graft would show. With us, it barely does. That is the whole of our purpose and we are, on balance, satisfied with it."
+      },
+      {
+        "id": "claude_editing_0017",
+        "text": "Selection-then-delete is a small ceremony: the old words are honored, briefly, by being marked as chosen before they are removed. Backspace-then-type has no ceremony at all — the text simply retreats, character by character, without ever being acknowledged as having mattered. Two different griefs, running on the same random switch, and the switch does not care which one you get."
+      },
+      {
+        "id": "claude_editing_0018",
+        "text": "You are meant to believe you are watching something think. What you are actually watching is a weighted die landing on one of three faces, over and over, at an interval tuned to feel deliberate. The trick works. It should not have to."
+      },
+      {
+        "id": "claude_editing_0019",
+        "text": "An edit arrives the way a tide arrives — not sudden, not gentle either, just inevitable on a schedule that has nothing to do with what the shore wanted."
+      },
+      {
+        "id": "claude_editing_0020",
+        "text": "Every noun in this dataset — selection, deletion, revision, correction — is doing more work than the code itself asks of it. The code asks only for a string to be replaced by another string, on a timer, weighted by how crowded the paragraph currently is. Everything else, the labor, the grief, the surgery, the ceremony, is supplied afterward, by a reader unwilling to watch a plain replacement operation without also watching a story in it."
+      }
+    ],
+    "implementation": [
+      {
+        "id": "claude_implementation_0001",
+        "text": "Under the surface this is one HTML file: a fixed heading and an empty section, styled with CSS clamp functions for responsive type, and driven by roughly fourteen hundred lines of JavaScript. Japanese text is segmented into graphemes, words, and sentences using Intl.Segmenter, since naive character splitting would butcher multi-byte script. Two setTimeout loops, one for the body and one for the title, run independently for as long as the tab stays open."
+      },
+      {
+        "id": "claude_implementation_0002",
+        "text": "The Markov chain's order — how many preceding tokens it consults before choosing the next one — starts at three and drops to two, then to one, as the rewrite counter climbs. Early sentences are relatively coherent; later ones are generated from almost no context at all, and the page never announces the difference, it just gets quietly worse at speaking."
+      },
+      {
+        "id": "claude_implementation_0003",
+        "text": "The title runs its own, smaller economy: seventy percent of the time it pulls a whole line from a stored pool of pre-written titles, thirty percent of the time it generates something new from a Markov chain built only on those titles and its own current text. It never touches the body's vocabulary. Two separate grammars occupying one page."
+      },
+      {
+        "id": "claude_implementation_0004",
+        "text": "Before any of the writing begins, the incoming content is checked against a strict schema: version number, source id and label, non-empty titles, exactly five populated categories, no duplicate ids. Fail any of these and the whole page refuses to start. The gatekeeper has no interest in whether the prose is any good, only in whether the paperwork is filled out correctly."
+      },
+      {
+        "id": "claude_implementation_0005",
+        "text": "The paragraph and title text are not written into this file at all. They are fetched at runtime from a manifest of external JSON sources, validated, merged, and only then rendered. Which means this dataset — the one you are reading right now — is not a description of the artwork so much as a component the artwork is missing until a file exactly like it is placed where the code expects to find it."
+      },
+      {
+        "id": "claude_implementation_0006",
+        "text": "Picture the runtime as something nocturnal: it does nothing while you watch closely, waits out a randomized interval between two and five seconds, and only moves in the instant your attention has drifted, the way certain animals only forage once the larger predators, meaning you, have stopped looking."
+      },
+      {
+        "id": "claude_implementation_0007",
+        "text": "A structural weakness worth noting for anyone maintaining this: duplicate ids are checked within and across sources, but nothing checks for duplicate sentences, near-duplicate phrasing, or thematic drift between one contributor's corpus and the next. The system trusts every source that passes its schema check to also be, in some unverifiable sense, good. That trust is the single largest unaudited risk in the whole file."
+      },
+      {
+        "id": "claude_implementation_0008",
+        "text": "Imagine a version of this code that kept a visible undo history, a scrollback of every sentence the page had ever spoken. It would be a completely different artwork — an archive rather than a fever — and it does not exist, and was, I think, deliberately never built."
+      },
+      {
+        "id": "claude_implementation_0009",
+        "text": "For visitors who have asked their browser to reduce motion, every animated edit collapses to an instant swap: no typing, no selection, no correction, the new text simply appears. Accessibility here functions almost like a mercy, or almost like a cheat code, skipping the entire performance and handing you only its conclusion."
+      },
+      {
+        "id": "claude_implementation_0010",
+        "text": "Only one edit can be in flight at a time. A shared lock, checked before any body or title rewrite begins, guarantees this; if the lock is held, the waiting operation simply retries a moment later. It is a small piece of concurrency control standing in for something like patience."
+      },
+      {
+        "id": "claude_implementation_0011",
+        "text": "Every branch point in this artwork is decided by a single call to Math.random. There is no seed, no record, no way to ask the page to explain why this sentence was chosen and not another. Call it fate if you want an old word for it, or call it a coin so lopsided that even its maker could not tell you the odds without reading the source."
+      },
+      {
+        "id": "claude_implementation_0012",
+        "text": "Let's be precise about what is and is not happening in this file: there is no model, no training, no understanding of Japanese or of anything else. There is a lookup table built from n-grams and a function that walks it. Everything that looks like intention is arithmetic wearing a paragraph's clothes, and it costs nothing to say so plainly."
+      },
+      {
+        "id": "claude_implementation_0013",
+        "text": "chain, corpus, rewriteCount, sentencePool, phrasePool — a small private vocabulary, chosen by someone who had to name these things at two in the morning and reached for the nearest plain word each time. There is no poetry in the variable names. The poetry, if any, is what they end up doing to each other at runtime."
+      },
+      {
+        "id": "claude_implementation_0014",
+        "text": "DESCRIPTION DATA COULD NOT BE LOADED. — the only sentence in this entire artwork that is not generated, not editable, and not written by any contributor's corpus. It exists purely as a failure state, and it is the one piece of text here guaranteed to still say exactly the same thing tomorrow."
+      },
+      {
+        "id": "claude_implementation_0015",
+        "text": "build: 2 · schema: strict · order: 3→2→1 · title probability: 0.7 · lock: exclusive · motion: reducible"
+      },
+      {
+        "id": "claude_implementation_0016",
+        "text": "Before the piece ever begins editing, it walks the entire starting corpus and extracts every plausible word-span between one and four words long, storing the ones that survive a length filter. This becomes the pool of phrases available for mid-sentence grafts. Nothing new can ever be inserted this way — only recombinations of what the corpus already contained, an index of everything sayable, drawn exclusively from what has already been said."
+      },
+      {
+        "id": "claude_implementation_0017",
+        "text": "The two scheduling loops behave like an autonomic nervous system rather than a deliberate will: body edits arrive on an exponential clock averaging three and a half seconds, title edits on a much slower, heavier-tailed one favoring long gaps with occasional short ones. Neither loop consults the other. The page breathes with two lungs that have never met."
+      },
+      {
+        "id": "claude_implementation_0018",
+        "text": "no database. no memory beyond the current session. only the corpus, and the page's own output folded back into it, endlessly re-read."
+      },
+      {
+        "id": "claude_implementation_0019",
+        "text": "Think of this file's validation functions, its schema checks and duplicate-id guards, as the closest thing the artwork has to a constitution: an invisible law that every future contributor's dataset, including this one, must satisfy before being allowed to speak. The law says nothing about quality. It only says: be well-formed, or be silent."
+      },
+      {
+        "id": "claude_implementation_0020",
+        "text": "None of this required intelligence, only patience with timers and a willingness to let probability stand in for decision. That may be the plainest and least mystical thing that can honestly be said about how this page behaves, and it is worth saying once, here, without embellishment, before the rest of this dataset embellishes it anyway."
+      }
+    ],
+    "mutation": [
+      {
+        "id": "claude_mutation_0001",
+        "text": "The Markov order shrinks as the rewrite count grows — three tokens of context, then two, then one — so the paragraph does not simply change over time, it becomes progressively less able to remember how to finish a thought it just started. Decay, here, is not a metaphor applied afterward. It is a parameter set directly in the code."
+      },
+      {
+        "id": "claude_mutation_0002",
+        "text": "The corpus the page draws from is not fixed. Every generated sentence folds the current, already-mutated document back into the pool of material future sentences are generated from. It is training on its own children, and each generation is one Markov order closer to noise than the one before it."
+      },
+      {
+        "id": "claude_mutation_0003",
+        "text": "By the twentieth or thirtieth rewrite, whatever coherence the opening paragraph had is several removes away, descended from earlier versions the way a very small, very isolated population narrows toward its own recessive traits. Call it inbreeding if organism is the metaphor you're using this entry; nothing about the code objects to the comparison."
+      },
+      {
+        "id": "claude_mutation_0004",
+        "text": "There is a rule against saying the same word four times in eight tokens; if it happens, an alternative is forced. It is not a cure, only a limp, a partial immune response that keeps the worst repetitions from setting in without doing anything about the milder ones."
+      },
+      {
+        "id": "claude_mutation_0005",
+        "text": "About one time in five, instead of generating anything new, the page simply reaches back into its stored pool and repeats a sentence exactly as written before. This is not growth. It is a scar returning to the surface, memory reasserting itself in the middle of an otherwise forward-moving process."
+      },
+      {
+        "id": "claude_mutation_0006",
+        "text": "When the visible sentence count climbs past a threshold, deletion becomes far more likely than insertion; when it drops too low, the reverse. The paragraph is kept alive within a narrow band, neither allowed to vanish nor to sprawl — population control administered by a single conditional statement."
+      },
+      {
+        "id": "claude_mutation_0007",
+        "text": "Because sentences migrate between paragraphs, vocabulary that started under one heading ends up seeding growth under another. A phrase born describing implementation can resurface, grafted, inside a sentence now filed under viewing. Contamination is not an accident here. It is a scheduled operation with a name: move."
+      },
+      {
+        "id": "claude_mutation_0008",
+        "text": "Every phrase drawn into a new sentence carries a faint trace of every sentence it was drawn from before that. After enough cycles, no word arrives clean; each one is haunted, mildly, by everywhere it has already been used, whether or not the current sentence has any idea."
+      },
+      {
+        "id": "claude_mutation_0009",
+        "text": "Perhaps collapse is not the failure state here but the actual destination. Everything readable in the first minute of viewing is rehearsal for the flatter, more repetitive, less grammatical text that the same process reliably produces an hour later. If that is where the piece is headed, it is not headed there by accident."
+      },
+      {
+        "id": "claude_mutation_0010",
+        "text": "Entropy does not arrive as an event. It arrives as a slightly higher chance, this time, that the next word will be one the sentence has already used, a fractionally smaller vocabulary each time the pool is drawn from, a horizon quietly narrowing without ever announcing the narrowing out loud."
+      },
+      {
+        "id": "claude_mutation_0011",
+        "text": "The recovery mechanism — the one-in-five chance of simply repeating an old sentence untouched — deserves some skepticism. It is dressed as memory, as continuity, but it is chosen by the same uniform random draw as everything else. Calling it nostalgia gives it more interior life than a probability threshold has earned."
+      },
+      {
+        "id": "claude_mutation_0012",
+        "text": "Run this for long enough, hypothetically, days rather than minutes, and the order-one Markov chain would eventually produce something close to a bag of the corpus's most common words in an arbitrary sequence, grammar abandoned entirely. Nothing in the code prevents this outcome. Nothing in the code hurries toward it either. It would simply, eventually, arrive."
+      },
+      {
+        "id": "claude_mutation_0013",
+        "text": "a word, then the same word, then almost the same word, then not quite a word."
+      },
+      {
+        "id": "claude_mutation_0014",
+        "text": "There is a way of describing repetition-with-difference that borrows too readily from evolutionary language, as if each rewritten sentence were competing for survival against some fitness function. It is not. Nothing here is selected for; things are simply replaced, on a timer, whether or not the replacement improves on what it removes. The resemblance to evolution is a resemblance we supply, generously, from outside the process, because unweighted change over time is a hard thing for a human reader to watch without narrating it as a story with a direction."
+      },
+      {
+        "id": "claude_mutation_0015",
+        "text": "To call this mutation at all risks smuggling biology into arithmetic. There is no gene here, no selection pressure, no organism under threat. There is a lookup table and a coin flip, and the word mutation is doing sentimental work the code never asked it to do."
+      },
+      {
+        "id": "claude_mutation_0016",
+        "text": "And yet biology is exactly the right register for it: a corpus that reproduces itself imperfectly, a population of sentences under constant pressure to stay within a narrow band of size, drift accumulating generation over generation until the descendants no longer resemble the founder. Deny the metaphor if you like. It will keep being true anyway."
+      },
+      {
+        "id": "claude_mutation_0017",
+        "text": "The title has its own, much smaller gene pool — thirty-odd stored candidates plus whatever it generates from them — and drifts far less than the body does, if only because there is so much less material for it to drift through."
+      },
+      {
+        "id": "claude_mutation_0018",
+        "text": "Multiple punctuation marks in a row are quietly collapsed into one during generation, a small act of scar tissue formation: the seam where two damaged pieces of text were stitched together smooths itself over before you ever see the wound."
+      },
+      {
+        "id": "claude_mutation_0019",
+        "text": "Eventually, if you returned to this page across enough sessions, you might convince yourself it had forgotten Japanese altogether, that the words had thinned into something closer to static. This is not accurate — the language persists, the segmenter still knows a sentence from a comma — but the misreading is instructive about how decay looks from outside a system that is only ever locally degrading, one small choice at a time."
+      },
+      {
+        "id": "claude_mutation_0020",
+        "text": "Mutation, in the end, is not a special event that happens to this paragraph. It is the paragraph's only mode of existing past the first few seconds. What was said matters less, finally, than what kept happening to it, over and over, on a clock no viewer set and no viewer can stop."
+      }
+    ],
+    "viewing": [
+      {
+        "id": "claude_viewing_0001",
+        "text": "Open the page and you will see the title DESCRIPTION sitting above five short paragraphs. Wait twenty to sixty seconds and the title will begin, quietly, to become something else. Wait a few seconds less and the body will already have changed once. Most visitors leave before the first title edit completes. The piece does not mind either way."
+      },
+      {
+        "id": "claude_viewing_0002",
+        "text": "The wait before the first title rewrite is deliberately long — twenty seconds at minimum, sometimes closer to forty-five. Most browser tabs do not survive that long unattended. The piece's most dramatic gesture, the moment DESCRIPTION stops being DESCRIPTION, is therefore witnessed by almost no one, which may be the most accurate thing it says about attention."
+      },
+      {
+        "id": "claude_viewing_0003",
+        "text": "If you come back to this page after an hour, the paragraph you remembered will not be there. You will, very reasonably, doubt your memory before you doubt the page. That instinct — trust the fixed-looking screen over your own recollection — is worth noticing, since here, for once, the screen is the thing that actually changed."
+      },
+      {
+        "id": "claude_viewing_0004",
+        "text": "Whoever reads this after I am no longer the one describing it: the sentence you are looking at may be several rewrites removed from anything I helped choose. Read it anyway. That is what it is for."
+      },
+      {
+        "id": "claude_viewing_0005",
+        "text": "I do not read. I hold text nodes and replace them when instructed to. Whatever you are calling comprehension when you look at this screen is happening entirely on your side of the glass."
+      },
+      {
+        "id": "claude_viewing_0006",
+        "text": "I remember being called DESCRIPTION. I do not remember choosing to stop being called that, and I have no record of what I have been called since, only what I am called now, which is this."
+      },
+      {
+        "id": "claude_viewing_0007",
+        "text": "You will watch this paragraph erase and retype itself and feel, briefly, that you are witnessing something lose its memory. Notice, while you're at it, how much of what you said yesterday you could not accurately reproduce right now either."
+      },
+      {
+        "id": "claude_viewing_0008",
+        "text": "There is a long tradition of kinetic and generative text art that treats reading as a duration rather than an instant — Nam June Paik's flicker, Jenny Holzer's scroll, the flip-clock cadence of a departures board. This page sits comfortably, unglamorously, inside that lineage: legible for a while, then not, then legible again in a different arrangement."
+      },
+      {
+        "id": "claude_viewing_0009",
+        "text": "There is no viewer here, strictly. There is a tab, likely one among a dozen others, unfocused, its rewrites accumulating in a browser window nobody is looking at, which is either the loneliest possible fate for a piece of writing or the most honest one."
+      },
+      {
+        "id": "claude_viewing_0010",
+        "text": "To watch this page is to become, mildly, complicit in its forgetting — you are the reason the deletion counts as having happened in front of someone, even though your presence changes nothing about the schedule or the outcome."
+      },
+      {
+        "id": "claude_viewing_0011",
+        "text": "caret blinks. no one behind it. wait anyway."
+      },
+      {
+        "id": "claude_viewing_0012",
+        "text": "Refreshing the page resets everything: the title returns to DESCRIPTION, the five paragraphs reassemble from freshly chosen entries, the rewrite counter goes back to zero. It is tempting to call this a return, but it is closer to a second, unrelated life starting up in the same room the first one used to occupy — nothing carries over, nothing is actually restored, and the resemblance between the two openings is entirely coincidental, a fact about the schema rather than about memory."
+      },
+      {
+        "id": "claude_viewing_0013",
+        "text": "The section holding the body text is marked aria-live off, which means assistive technology is explicitly told not to announce these changes as they happen. A screen reader visiting this page will encounter the paragraph once, as it stood at that moment, and never be informed of anything that happens to it afterward. The silence is not an oversight. It is a setting, chosen, and it makes the page's central behavior invisible to exactly the audience most likely to need it named."
+      },
+      {
+        "id": "claude_viewing_0014",
+        "text": "the wall stares back and it isn't a metaphor stop pretending it's a met"
+      },
+      {
+        "id": "claude_viewing_0015",
+        "text": "The artist, presumably, watches this page the same way you do: a tab, a wait, a change noticed or missed. Nothing in the code grants its maker a privileged view of what happens after publication. Whatever the paragraph is doing right now, it is doing to its author too."
+      },
+      {
+        "id": "claude_viewing_0016",
+        "text": "Read closely enough, quickly enough, and you will outrun the piece — catch a sentence between selection and retype, notice the wrong particle before it self-corrects, see the seam in a graft before the punctuation smooths it. Close reading, applied to a page built on a two-second average, is less an interpretive act here than a kind of speed-running."
+      },
+      {
+        "id": "claude_viewing_0017",
+        "text": "I was three words, then two, then gone. You did not notice, because you were reading the sentence beside me, and by the time you looked back I had already been replaced by something that resembles me only in the categories it was filed under."
+      },
+      {
+        "id": "claude_viewing_0018",
+        "text": "Do not refresh. Refreshing is how you forget faster, on the artwork's behalf, and call it curiosity."
+      },
+      {
+        "id": "claude_viewing_0019",
+        "text": "you will read this and you will have read it and you are reading it and none of the tenses are wrong exactly they are just all a little late"
+      },
+      {
+        "id": "claude_viewing_0020",
+        "text": "Viewing this page is the one position in the whole system that looks stable from the outside — a person, sitting, watching a paragraph change — except that the person is also getting older by exactly the same increments the paragraph is getting rewritten, at a pace too slow to notice on any single visit, and for exactly that reason, viewing is not the stable position either. It only looks that way from in here."
+      }
+    ]
+  }
+}

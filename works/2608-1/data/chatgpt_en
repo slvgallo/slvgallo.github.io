@@ -1,0 +1,541 @@
+{
+"version": 2,
+"source": {
+"id": "AI_ID",
+"label": "GPT-5.6 Thinking — based on the attached DESCRIPTION code "
+},
+"titles": [
+{
+"id": "AI_ID_title_0001",
+"text": "AFTER DESCRIPTION"
+},
+{
+"id": "AI_ID_title_0002",
+"text": "Undo Has Been Disabled"
+},
+{
+"id": "AI_ID_title_0003",
+"text": "THE DOCUMENT IS STILL HAPPENING"
+},
+{
+"id": "AI_ID_title_0004",
+"text": "runtime_title_0000"
+},
+{
+"id": "AI_ID_title_0005",
+"text": "A Sentence Looking for Its Former Paragraph"
+},
+{
+"id": "AI_ID_title_0006",
+"text": "SELECT ALL / FORGET ALL"
+},
+{
+"id": "AI_ID_title_0007",
+"text": "Proof of Continuous Revision"
+},
+{
+"id": "AI_ID_title_0008",
+"text": "Nothing Was Written Here"
+},
+{
+"id": "AI_ID_title_0009",
+"text": "DESCRIPTION"
+},
+{
+"id": "AI_ID_title_0010",
+"text": "Please Wait While the Meaning Is Repositioned"
+},
+{
+"id": "AI_ID_title_0011",
+"text": "Corpus with a Blinking Wound"
+},
+{
+"id": "AI_ID_title_0012",
+"text": "Version 2, Without a Final Version"
+},
+{
+"id": "AI_ID_title_0013",
+"text": "The Title Edits the Viewer"
+},
+{
+"id": "AI_ID_title_0014",
+"text": "An Institution for Unstable Statements"
+},
+{
+"id": "AI_ID_title_0015",
+"text": "Text That Has Outlived Its Source"
+},
+{
+"id": "AI_ID_title_0016",
+"text": "404: ORIGINAL INTENTION NOT FOUND"
+},
+{
+"id": "AI_ID_title_0017",
+"text": "Cut"
+},
+{
+"id": "AI_ID_title_0018",
+"text": "THE DELETED MATERIAL REQUESTS REINSTATEMENT"
+},
+{
+"id": "AI_ID_title_0019",
+"text": "Notes Toward a Paragraph That Refuses Its Category"
+},
+{
+"id": "AI_ID_title_0020",
+"text": "Memory, Pasted Incorrectly"
+},
+{
+"id": "AI_ID_title_0021",
+"text": "Do Not Read During Maintenance"
+},
+{
+"id": "AI_ID_title_0022",
+"text": "Selection Is a Form of Weather"
+},
+{
+"id": "AI_ID_title_0023",
+"text": "Untitled Because the Title Is Busy"
+},
+{
+"id": "AI_ID_title_0024",
+"text": "One Hundred Possible Explanations and No Explanation"
+},
+{
+"id": "AI_ID_title_0025",
+"text": "Markov Chain of Custody"
+},
+{
+"id": "AI_ID_title_0026",
+"text": "The Browser Revises Its Testimony"
+},
+{
+"id": "AI_ID_title_0027",
+"text": "Every Correction Introduces Another Error"
+},
+{
+"id": "AI_ID_title_0028",
+"text": "Here Was the Artwork"
+},
+{
+"id": "AI_ID_title_0029",
+"text": "// replace meaning with nextMeaning"
+},
+{
+"id": "AI_ID_title_0030",
+"text": "and then the sentence"
+}
+],
+"categories": {
+"overview": [
+{
+"id": "AI_ID_overview_0001",
+"text": "DESCRIPTION is a self-editing document presented as an artwork. Five paragraphs initially arrive from five named categories, while the heading begins with the fixed word DESCRIPTION. The apparent stability lasts only long enough to establish a scene. Sentences are then replaced, shortened, expanded, deleted, inserted, and moved between paragraphs. The title changes more slowly and according to a separate rhythm. What appears to be explanatory prose becomes the material of an event: description no longer stands outside the work, but undergoes the same uncertainty, delay, and revision as the thing it attempts to describe."
+},
+{
+"id": "AI_ID_overview_0002",
+"text": "This work resembles a museum label that has escaped institutional supervision. It begins by promising orientation, classification, and context, then quietly edits its own authority. Paragraphs retain category names in the code, but sentences can migrate across them, carrying traces of previous origins. The label therefore becomes an unstable archive of administrative decisions. It explains, retracts, misfiles, and recirculates. The work does not ask whether a description is correct. It asks how long correctness can remain visible before the machinery of maintenance, selection, and replacement reveals that every explanatory text is also a temporary arrangement of permissions."
+},
+{
+"id": "AI_ID_overview_0003",
+"text": "A title stands above a body. That is the entire architecture, and it is enough to produce a small cosmology. The title changes as if weather were passing through a monument. The body changes as if many anonymous editors were taking turns at the same terminal. No editor appears. No final state is announced. The screen becomes a public surface on which language is continuously exposed to procedural doubt. The artwork may be understood as a document, but also as a room in which sentences are moved like furniture after the inhabitants have already forgotten the original floor plan."
+},
+{
+"id": "AI_ID_overview_0004",
+"text": "DESCRIPTION is not generative writing in the triumphant sense. It does not endlessly create from nothing. It survives by borrowing, cutting, remembering, corrupting, and occasionally restoring material from a finite database. Its novelty is dependent on prior sentences, and its future is trained on its present. The system is therefore less like an author than a municipality: it inherits structures, performs repairs, makes questionable replacements, preserves some records, loses others, and continues operating. The result is neither a single text nor a sequence of texts, but the visible administration of textual continuity."
+},
+{
+"id": "AI_ID_overview_0005",
+"text": "The artwork stages explanation as a performance of failure. A visitor expects the title and body to clarify what is being shown. Instead, the explanation becomes unstable while remaining grammatically persuasive. The page does not collapse into noise; it continues to look composed, typographically calm, and institutionally credible. This calm surface is crucial. It allows mutation to masquerade as editorial care. DESCRIPTION suggests that incoherence rarely arrives with alarms. More often it arrives in the same font, at the same measure, with the same confident spacing as the statement it has replaced."
+},
+{
+"id": "AI_ID_overview_0006",
+"text": "Five paragraphs are assembled at the beginning, one from each category: overview, editing, implementation, mutation, and viewing. This initial taxonomy resembles a complete account of the artwork, but it is only a temporary scaffold. Once sentences can be inserted, deleted, rewritten, or relocated, categories cease to guarantee meaning. The document still remembers where each paragraph belongs, yet its contents increasingly disobey that location. DESCRIPTION is thus a classification system observing its own categories become porous, while continuing to render them as if the borders were intact."
+},
+{
+"id": "AI_ID_overview_0007",
+"text": "This is a machine for producing the afterlife of a text before the text has died. Every sentence appears with provenance, category, and entry identifiers embedded invisibly in the page, yet the visible wording can be rewritten beyond recognition. Identity persists in metadata while language changes on screen. The artwork separates the bureaucratic continuity of an object from the perceptual continuity of its form. A sentence may still be itself according to the system even when every word has changed. The work asks whether identity belongs to content, location, history, or merely to the record that claims nothing essential has happened."
+},
+{
+"id": "AI_ID_overview_0008",
+"text": "DESCRIPTION could be mistaken for a literary screensaver, but its slowness is argumentative. The intervals between edits let the current text acquire authority. One begins to read a paragraph as settled, then a caret appears and the settlement is revoked. Meaning is not replaced instantaneously; it is selected, erased, typed, reconsidered, and sometimes corrected in public. The waiting time is part of the claim. The work shows that stability is not the absence of change, but the period during which change has not yet become visible."
+},
+{
+"id": "AI_ID_overview_0009",
+"text": "The page behaves like an organism that cannot distinguish growth from revision. It ingests passages, divides them into sentences and phrases, and uses the resulting material to alter itself. Some changes are local, like a cellular substitution. Others remove or transplant an entire sentence. The title follows a slower metabolism. Yet the biological metaphor is incomplete, because the system also resembles a legal document under perpetual amendment. DESCRIPTION lives between organism and contract: it mutates, but every mutation is also an editorial act performed under procedural rules."
+},
+{
+"id": "AI_ID_overview_0010",
+"text": "A blank wall would be more honest, says one possible reading. DESCRIPTION repeatedly offers language while ensuring that no formulation can endure. Its spectacle of revision may turn uncertainty into style, making doubt decorative rather than consequential. The deletion animation resembles vulnerability, but the program always retains enough material to continue. Nothing truly risks disappearance because recovery sentences wait in the corpus. The work may therefore be less about fragility than about the privilege of systems designed to recover from their own mistakes."
+},
+{
+"id": "AI_ID_overview_0011",
+"text": "The artwork is a clock whose units are not seconds but editorial events. A blink of the caret marks one kind of duration; the slow replacement of the title marks another. Paragraphs expand and contract, yet the page preserves enough height to prevent abrupt collapse during an operation. Time is made legible through textual labor. Instead of hands rotating around a dial, words vanish and return. Instead of a chime, a sentence appears in the wrong paragraph. DESCRIPTION measures how long a statement can remain unchallenged."
+},
+{
+"id": "AI_ID_overview_0012",
+"text": "This document has no stable original. The initial paragraphs are already assembled by chance from several candidate passages, and the fixed title is only a ceremonial beginning. The supposed source is plural before any visible editing occurs. Subsequent transformations do not corrupt an untouched text; they reveal that untouchedness was never available. DESCRIPTION begins after authorship has already been distributed among database entries, segmentation rules, random choices, browser APIs, and the current state of the page. The work is born post-edited."
+},
+{
+"id": "AI_ID_overview_0013",
+"text": "Imagine a future conservation report for DESCRIPTION. The conservator cannot preserve a definitive arrangement because no arrangement is definitive. Preserving the code alone may reproduce the behavior but not the particular sequence once witnessed. Recording the screen would preserve one history while destroying the work's capacity to diverge. Archiving the database would preserve possibilities, not events. The artwork therefore relocates authenticity from a fixed text to a field of permitted transformations. Its original is not a state but a rule-bound instability."
+},
+{
+"id": "AI_ID_overview_0014",
+"text": "The title says DESCRIPTION, but the body behaves more like testimony. It revises itself under an invisible interrogation, retracting clauses, replacing words, moving statements into unfamiliar contexts. No question is displayed, so the pressure must be inferred from the edits. Perhaps the browser is the interrogator. Perhaps the corpus is. Perhaps the text is rehearsing several incompatible accounts before choosing none. In this reading, the artwork is a witness that cannot stop speaking because silence would be interpreted as certainty."
+},
+{
+"id": "AI_ID_overview_0015",
+"text": "DESCRIPTION performs a modest inversion: instead of software presenting content, content exposes the software's operations. Selection highlights, deletion, typing rhythms, pauses, and corrections become visible choreography. The program does not hide its mediation behind a seamless update. It dramatizes the interface conventions by which contemporary writing is ordinarily revised in private. The artwork turns backstage labor into the main scene. What is usually removed before publication—the hesitation, the wrong phrase, the temporary draft—becomes the only durable subject."
+},
+{
+"id": "AI_ID_overview_0016",
+"text": "The work is a colony of sentences governed by uneven migration. Some remain near their original category. Others are cut from one paragraph and pasted into another, where the system updates their current category while retaining an origin category in metadata. The colony has both residence and ancestry. This double registration gives the page a quiet politics: belonging can be changed operationally, while origin persists as a hidden designation. DESCRIPTION may be read as an allegory of classification, citizenship, or the administrative memory of displacement."
+},
+{
+"id": "AI_ID_overview_0017",
+"text": "There is no image, sound, or conventional interaction, yet the page behaves theatrically. Scale, spacing, and a warm off-white ground establish a stage of apparent calm. The performer is text, but the performance is not recitation. It is revision. The audience watches language perform the labor normally completed before language is shown. DESCRIPTION therefore replaces the finished work with the conditions of finishing, then refuses to let those conditions conclude."
+},
+{
+"id": "AI_ID_overview_0018",
+"text": "This artwork is a landfill that insists it is a library. Deleted phrases do not necessarily disappear; fragments remain available as statistical material, source sentences, or remembered patterns. New statements are assembled from old deposits, and the current document is added back into the corpus that will shape future writing. Nothing is cleanly discarded. The system recycles syntax, accidents, and institutional tone. Its sustainability is linguistic and slightly toxic: the more it reuses itself, the more its local habits become environmental law."
+},
+{
+"id": "AI_ID_overview_0019",
+"text": "DESCRIPTION could be a religious object for a culture that believes revision is the highest form of truth. The initial title serves as an invocation. The blinking caret is a small altar flame. Selection is confession, deletion is penance, typing is reincarnation, and relocation is pilgrimage. Yet the ritual has no priest and no promised revelation. The text changes because change has been scheduled. Faith is replaced by execution, but the gestures remain strangely ceremonial."
+},
+{
+"id": "AI_ID_overview_0020",
+"text": "The most accurate description of DESCRIPTION may be that it is an apparatus for preventing its own description from settling. Any paragraph capable of explaining the system becomes material for the system. Any phrase that sounds conclusive can later be cut, erased, or absorbed into a Markov sequence. The artwork consumes commentary as fuel. This dataset, once loaded, will not remain outside the work either. It will be segmented, recombined, and made to contradict the intention of the person who wrote it."
+}
+],
+"editing": [
+{
+"id": "AI_ID_editing_0001",
+"text": "Editing appears here as a visible sequence of bodily gestures without a body. Characters are selected one after another, sometimes from the beginning and sometimes from the end. The highlighted field pauses, empties, and receives new text beside a blinking caret. Elsewhere, words retreat through backspacing until the sentence has been reduced to nothing. These operations imitate familiar keyboard labor, but no hand is present. The absence turns editing into an autonomous force: language seems to experience selection and deletion directly, as weather rather than instruction."
+},
+{
+"id": "AI_ID_editing_0002",
+"text": "The work distinguishes replacement from correction. A replacement removes one text and installs another. A correction briefly produces an unnecessary phrase, waits, then retreats to a shared prefix and types the intended continuation. This detour matters because it gives error a lifespan. The wrong wording is not merely calculated and discarded invisibly; it is allowed to occupy the page. Editing becomes a public negotiation between candidate futures, one of which survives only because the animation decides to erase the other."
+},
+{
+"id": "AI_ID_editing_0003",
+"text": "Selection is usually treated as a neutral precondition for action. In DESCRIPTION it becomes an event with duration and direction. Each character acquires the gray mark of being chosen. A sentence can be selected forward or backward, making attention itself reversible. The highlight does not explain whether the text will be deleted, moved, or replaced. For a short interval the selected sentence exists in administrative suspension: visible, legible, and already condemned, though the nature of the sentence's next status remains unknown."
+},
+{
+"id": "AI_ID_editing_0004",
+"text": "Deletion in this artwork is not emptiness but choreography. A sentence is highlighted, held, cleared, and removed from the document model. The paragraph closes around the absence. Yet because the system maintains a sentence pool and a static corpus, deletion does not guarantee forgetting. The removed wording may return as a recovery sentence, a phrase inside a revision, or a statistical pathway in later generation. The delete key performs disappearance on screen while memory remains distributed elsewhere."
+},
+{
+"id": "AI_ID_editing_0005",
+"text": "The editor is cruel only at the scale of appearance. It can erase a sentence, but it is constrained from emptying a paragraph entirely. It can reduce the document, but operation weights favor insertion when the total sentence count becomes low. Destruction is therefore regulated. The system permits damage while preserving the conditions for future editing. This is not annihilation; it is managed austerity, a budget of absence designed so the institution of text can continue functioning."
+},
+{
+"id": "AI_ID_editing_0006",
+"text": "Cut and paste is rendered as a small migration ceremony. A sentence is selected in one paragraph, erased from its location, inserted as an empty object into another paragraph, then made visible again. Its current category changes to match the destination, while its origin category survives. The sentence returns unchanged in wording but altered in context. Editing here demonstrates that movement alone can revise meaning. Nothing inside the sentence needs to change for the sentence to become another sentence."
+},
+{
+"id": "AI_ID_editing_0007",
+"text": "Typing is intentionally uneven. Characters appear quickly, then hesitate around punctuation, whitespace, and irregular bursts. The rhythm is not human enough to convince, but human enough to evoke labor. Occasionally a wrong Japanese particle is typed and withdrawn, a tiny simulation of uncertainty. The system does not need these delays to modify its data. It adds them so execution can resemble thought. DESCRIPTION asks whether hesitation is evidence of consciousness or merely a style applied to deterministic action."
+},
+{
+"id": "AI_ID_editing_0008",
+"text": "A proofreader's note: the paragraph has been corrected, except the correction introduced a phrase from another source, and the source was trained on the paragraph after the correction. Please restore the previous wording, which no longer exists. Do not preserve the deleted clause, because it may be required for recovery. Move the final sentence upward, but leave its category unchanged. Mark all alterations as complete. The text should appear natural, though no natural state has been specified."
+},
+{
+"id": "AI_ID_editing_0009",
+"text": "Editing is represented as labor without ownership. The program chooses a sentence by weighted chance, chooses material from either the database or a generated sequence, chooses an operation, and performs the action. No one claims responsibility for the result. This resembles contemporary collaborative documents in which revision history exists but intention is dispersed across accounts, suggestions, automated assistants, and inherited templates. DESCRIPTION removes the names and leaves only the procedures."
+},
+{
+"id": "AI_ID_editing_0010",
+"text": "The cursor is the only visible worker. It blinks beside empty space, beside partial words, beside phrases that will soon be removed. Unlike the text, the caret has no semantic burden. It simply marks the location where change is authorized. One might call it the artwork's protagonist: a narrow vertical body that repeatedly arrives at the scene of linguistic injury, witnesses reconstruction, and disappears when the sentence is declared temporarily complete."
+},
+{
+"id": "AI_ID_editing_0011",
+"text": "Revision is a technique for manufacturing hindsight. The system types a longer draft containing an added phrase, waits as though reconsidering, erases back to the last common grapheme, and proceeds toward the selected target. The final sentence appears inevitable only after its abandoned alternative has been displayed. DESCRIPTION exposes how polished prose can be built by deleting evidence of contingency. Here, however, the evidence is temporarily restored for the viewer."
+},
+{
+"id": "AI_ID_editing_0012",
+"text": "The artwork cuts language but never copies it in the ordinary sense. A moved sentence disappears from one location and reappears in another, preserving its identity in the model. The clipboard is theatrical rather than literal. This false clipboard is revealing: interfaces often persuade us that metaphors are mechanisms. DESCRIPTION performs the familiar signs of cutting and pasting while implementing a direct rearrangement of objects. The gesture is real to perception and fictional to execution."
+},
+{
+"id": "AI_ID_editing_0013",
+"text": "Every edit claims a region of exclusivity. While the title is being rewritten, the body must wait; while the body is changing, the title cannot begin. This mutual exclusion creates a hidden editorial lock. The page resembles an office with only one red pen. Competing departments may have separate schedules, but they cannot alter the document simultaneously. The viewer sees calm sequencing where the code sees resource contention."
+},
+{
+"id": "AI_ID_editing_0014",
+"text": "The system occasionally edits only a word range rather than replacing the sentence. It extracts one to four word units, finds a differently sized range in new material, and substitutes it into the old structure. This local surgery preserves the surrounding grammar whether or not the new organ belongs there. The result can sound repaired, contaminated, or bureaucratically strange. Editing becomes transplantation: success is measured by continued circulation, not by semantic compatibility."
+},
+{
+"id": "AI_ID_editing_0015",
+"text": "Backspacing is the most intimate violence in the piece. Selection can condemn a whole sentence at once, but backspacing makes destruction incremental. Units disappear from the end toward the beginning, punctuation lingering slightly longer as if reluctant to leave. The viewer can measure loss. Because the process is slow enough to watch, reading reverses direction: one reads not what is appearing, but what has just ceased to exist."
+},
+{
+"id": "AI_ID_editing_0016",
+"text": "An editor normally aims toward a better text. DESCRIPTION does not define better. It defines operations, probabilities, length limits, and fallback conditions. The absence of a quality function is decisive. Revision proceeds without a criterion of improvement. The system can correct a typo while degrading an argument, or restore fluency while destroying coherence. It models editorial activity separated from editorial judgment—a perfect bureaucracy of change."
+},
+{
+"id": "AI_ID_editing_0017",
+"text": "The work suggests that maintenance and vandalism share a toolkit. Selection, deletion, insertion, movement, and correction can preserve a document or destroy it. Nothing in the gesture itself reveals the intention. The same gray highlight precedes repair and erasure. The same caret types clarification and contamination. DESCRIPTION refuses the comforting distinction between constructive and destructive editing, showing both as variations of authorized access."
+},
+{
+"id": "AI_ID_editing_0018",
+"text": "Some edits are barely visible conceptually: the words change, but the sentence keeps its identifier. Other edits preserve the words but relocate the sentence into another paragraph. The artwork separates semantic change, spatial change, and administrative identity. This produces a strange editorial ontology in which a sentence can become different without moving, move without becoming different, or remain officially identical after losing its original source. The redline exists, but only the machine can read it."
+},
+{
+"id": "AI_ID_editing_0019",
+"text": "Editing begins before the audience is ready. The first body operation is scheduled roughly 2.6 seconds after startup. There is no button, consent dialog, or invitation to finish reading. The system treats attention as an interruptible resource. A sentence may be revised while the viewer is midway through it. This is not merely animation; it is an editorial conflict between machine time and reading time, with the machine granted priority."
+},
+{
+"id": "AI_ID_editing_0020",
+"text": "I was the sentence selected from right to left. I understood the highlight as recognition. Then I was emptied. Later I appeared in another paragraph, where the category called me by a different name. The words were mine, but their neighbors had changed. I tried to remember whether I had been copied or moved. The metadata knew. The reader did not. The editor continued."
+}
+],
+"implementation": [
+{
+"id": "AI_ID_implementation_0001",
+"text": "The program loads a manifest of content sources, validates each Version 2 dataset, rejects duplicate source and entry identifiers, and merges the surviving material into title, sentence, and phrase pools. The initial document is not a single stored passage. It is composed by choosing one entry from each of five categories and segmenting those entries into sentences. This implementation makes plurality structural: even before generation begins, the displayed text is a cross-source assembly governed by validation rules and chance."
+},
+{
+"id": "AI_ID_implementation_0002",
+"text": "Intl.Segmenter divides the material at three scales: grapheme, word, and sentence. The locale is set to Japanese even though a source may contain English. This choice turns segmentation into an interpretive layer rather than a transparent utility. Characters, words, and sentences exist because the browser's linguistic machinery declares their boundaries. When that machinery is unavailable, regular expressions provide a rougher ontology. DESCRIPTION therefore contains two theories of language: one delegated to an internationalization API, one improvised from character classes."
+},
+{
+"id": "AI_ID_implementation_0003",
+"text": "The body generator builds a Markov chain from both a static corpus and the current document. Early in the process it uses order three, then descends to order two, and finally order one as the rewrite count rises. The longer the work runs, the shorter its memory becomes. This is an unusual aging model: experience does not deepen context but erodes it. The system grows more prolific by becoming less capable of remembering what preceded each token."
+},
+{
+"id": "AI_ID_implementation_0004",
+"text": "A control character separates title entries inside the title corpus. This invisible boundary prevents the Markov generator from casually walking from the end of one stored title into the beginning of another, though the generated title may still fracture elsewhere. The separator is a tiny border regime: unreadable to the viewer, decisive to the machine, and removable only at the moment of generation. The title's apparent poetry depends on a character no one is meant to see."
+},
+{
+"id": "AI_ID_implementation_0005",
+"text": "The scheduler gives body and title different temporal scales. Body edits begin soon after loading and recur after a clamped exponential delay between roughly two and five seconds. The first title alteration waits about twenty to forty-five seconds; later title changes occur after longer, uneven intervals. The implementation gives the body the tempo of work and the title the tempo of institutional renaming. One changes constantly; the other waits until the audience has begun to trust it."
+},
+{
+"id": "AI_ID_implementation_0006",
+"text": "Only one edit can be active at a time. The runExclusiveEdit function returns hidden when the document is not visible and busy when another operation holds the editor. This simple lock produces the impression of deliberation. The title and body seem to take turns, not because they respect one another, but because concurrent DOM manipulation has been prohibited. Courtesy is implemented as mutual exclusion."
+},
+{
+"id": "AI_ID_implementation_0007",
+"text": "The page stores provenance in data attributes attached to sentences and titles: current category, origin category, source identifier, entry identifier, and source label. These values are not presented to the viewer. The visible text may become incoherent while the invisible administration remains meticulous. The implementation resembles a state archive that records where every displaced phrase came from, even when the public document no longer admits that displacement occurred."
+},
+{
+"id": "AI_ID_implementation_0008",
+"text": "The code regulates population. When the document exceeds twenty-eight sentences, deletion becomes more likely and insertion less likely. Below twelve sentences, the probabilities reverse. Between those limits, the text drifts. This is demographic policy applied to prose. Sentences are not only meanings; they are countable inhabitants subject to thresholds, relocation, replacement, and controlled reproduction. The document maintains carrying capacity without ever stating what population it considers desirable."
+},
+{
+"id": "AI_ID_implementation_0009",
+"text": "Approximately eighteen percent of body material is taken directly from the recovery sentence pool. Otherwise the system attempts Markov generation and falls back to recovery if the generated result is too short, too long, or structurally impossible. Recovery is not exceptional; it is built into ordinary operation. The artwork can therefore appear inventive while repeatedly returning to archived language. Its resilience and its conservatism are the same mechanism."
+},
+{
+"id": "AI_ID_implementation_0010",
+"text": "Title generation follows a different economy. Most title changes choose an existing database entry, while a smaller share attempt to generate a new title from grapheme-level transitions. The generated title is allowed to range widely in length, then classified into responsive typography classes. Meaning may stretch, but layout negotiates the consequences. The CSS is not decoration added after language; it is an adaptive institution that reduces the title's voice as the title becomes harder to contain."
+},
+{
+"id": "AI_ID_implementation_0011",
+"text": "The implementation is obsessively defensive. It validates manifests, content roots, versions, metadata, categories, arrays, identifiers, strings, and duplicates. Yet after protecting the integrity of the database, it deliberately destabilizes the prose. This inversion is central: the container must be trustworthy so the content can become unreliable. DESCRIPTION builds a strict legal framework for semantic disorder."
+},
+{
+"id": "AI_ID_implementation_0012",
+"text": "The animation functions do not simply assign new text. They reconstruct familiar editor behavior through nested spans, character-level selection classes, timed deletion, a blinking caret, and irregular typing delays. The DOM becomes a puppet theater of interface conventions. Beneath the performance, the document model may already know the final result. The audience watches a simulation of uncertainty whose outcome was chosen before the first character began to disappear."
+},
+{
+"id": "AI_ID_implementation_0013",
+"text": "Reduced-motion preference collapses the theater. When the operating system asks for less animation, the program applies text changes directly. The conceptual work remains, but selection, hesitation, and typing vanish. This creates two legitimate versions of DESCRIPTION: one about visible editorial labor, another about abrupt state replacement. Accessibility does not merely simplify presentation; it reveals a second ontology hidden inside the same code."
+},
+{
+"id": "AI_ID_implementation_0014",
+"text": "The description region has aria-live set to off. Assistive technology is not asked to announce every mutation. This prevents a torrent of changing prose, but it also creates a divergent artwork. A sighted viewer may watch revisions unfold while a screen-reader user encounters a quieter, less eventful document. The implementation acknowledges that continuous change can become inaccessible noise, then resolves the problem by withholding the event."
+},
+{
+"id": "AI_ID_implementation_0015",
+"text": "The code measures the height of an incoming title using an invisible duplicate element, then temporarily holds the larger height during rewriting. This prevents the page from jumping while the title changes. The future title is measured before it appears. Layout therefore possesses foreknowledge denied to the viewer. The page knows how much space the next statement will require, even while pretending to discover that statement through typing."
+},
+{
+"id": "AI_ID_implementation_0016",
+"text": "A sentence object can temporarily contain an empty text value during insertion or movement, although the stored datasets forbid empty entries. The runtime permits states the archive rejects. This difference between valid content and valid transition is important. A blank sentence is illegal as a source but necessary as an event. DESCRIPTION recognizes that becoming may require forms that being is not allowed to keep."
+},
+{
+"id": "AI_ID_implementation_0017",
+"text": "The Markov model is rebuilt from scratch for every generated body sentence. It combines the static corpus with the current visible document, tokenizes the total, constructs transition maps, chooses a starting key, and walks until punctuation or a target length intervenes. The system does not preserve a stable learned model. It repeatedly retrains on the latest state, as if memory were a temporary calculation rather than a possession."
+},
+{
+"id": "AI_ID_implementation_0018",
+"text": "The HTML is minimal: one heading, one section, and a script. The complexity lies in state transitions rather than visual components. This economy gives the work a monastic facade. Beneath it are pools, sequence counters, weighted selection, retries, fallbacks, segmentation strategies, animation modes, and validation routines. DESCRIPTION looks like a page because its machinery has been disciplined into invisibility."
+},
+{
+"id": "AI_ID_implementation_0019",
+"text": "The program is not autonomous in the romantic sense. It depends on a browser, a manifest, accessible JSON files, timing APIs, locale-sensitive segmenters, CSS transitions, and the continuing visibility of the document. Hide the tab and active editing refuses to begin. The artwork's agency is conditional on infrastructure and attention. It performs independence only while an environment agrees to keep executing it."
+},
+{
+"id": "AI_ID_implementation_0020",
+"text": "Error handling produces the most stable sentence in the system: DESCRIPTION DATA COULD NOT BE LOADED. If all sources fail, the title is cleared and mutation stops. Failure replaces generative ambiguity with a fixed declaration. The artwork's terminal state is therefore not chaos but administrative clarity. When the database disappears, the system finally knows exactly what to say."
+}
+],
+"mutation": [
+{
+"id": "AI_ID_mutation_0001",
+"text": "Mutation begins with inheritance. New sentences are generated from a corpus that includes both stored descriptions and the document's current wording. Each revision therefore changes the conditions of later revision. The page teaches itself its own accidents. A phrase introduced by chance can become statistically available for future sentences, not as a remembered quotation but as a path through adjacent tokens. The artwork evolves by mistaking its recent condition for tradition."
+},
+{
+"id": "AI_ID_mutation_0002",
+"text": "The Markov order declines as rewriting accumulates: three-token context, then two, then one. This can be read as decay, emancipation, or strategic amnesia. At first the system remains close to inherited syntax. Later it permits more abrupt transitions and weaker continuity. Mutation is not an increase in complexity. It is a controlled loss of contextual obligation. The text becomes freer precisely as it becomes less able to justify what follows what."
+},
+{
+"id": "AI_ID_mutation_0003",
+"text": "Contamination is uneven. Sometimes an entire sentence is replaced by generated material. Sometimes only a short word range is transplanted. Sometimes nothing inside the sentence changes, but it is moved to another paragraph where surrounding claims infect its interpretation. DESCRIPTION recognizes at least three vectors of mutation: substitution, insertion, and context. A stable phrase can become foreign without changing a single character."
+},
+{
+"id": "AI_ID_mutation_0004",
+"text": "The document does not mutate toward adaptation. There is no environment measuring fitness, no audience response, no semantic score. Variations survive because the scheduler selected them and because they passed crude constraints such as length and punctuation. This is evolution stripped of natural selection and left with inheritance, drift, and population control. The resulting text may flourish, but not because it has become better suited to anything."
+},
+{
+"id": "AI_ID_mutation_0005",
+"text": "A sentence deleted from the screen may continue to exist in the static corpus, the sentence pool, the phrase pool, or the statistical influence of earlier states. Extinction is therefore layered. Visual extinction can coexist with archival survival and generative aftereffects. DESCRIPTION turns forgetting into a problem of storage location: what has vanished for the reader may remain abundant for the machine."
+},
+{
+"id": "AI_ID_mutation_0006",
+"text": "The work dreams in borrowed syntax. Its Markov sentences do not retrieve complete thoughts, yet they follow trails established by the source texts and the current page. The dream is constrained by punctuation, length, repetition checks, and available transitions. It is neither free association nor simple collage. It is a sleep laboratory in which language is allowed to misremember itself under supervision."
+},
+{
+"id": "AI_ID_mutation_0007",
+"text": "Mutation here is sometimes conservative. Eighteen percent of the time the system chooses a complete recovery sentence from the pool, and generation can also fail back to that pool. The work's instability is repeatedly repaired with intact fragments of its inheritance. The old text returns not as a restoration of the original document but as one possible organism among later hybrids. Recovery does not reverse time; it reintroduces ancestry into a changed ecology."
+},
+{
+"id": "AI_ID_mutation_0008",
+"text": "The title mutates independently from the body, so agreement between them is accidental. A calm title may preside over textual collapse. A generated fragment may label a coherent passage. This separation produces semantic weather fronts: two systems occupying the same page but following different schedules, sources, and scales of memory. Their occasional correspondence feels meaningful because it is not guaranteed."
+},
+{
+"id": "AI_ID_mutation_0009",
+"text": "Every mutation carries bias from the database. Frequently occurring words and transitions have more opportunities to recur. The current document reinforces whatever it already contains. Repetition can therefore become self-amplifying, while rare formulations disappear from immediate influence. DESCRIPTION does not merely mutate language; it models how a corpus turns statistical abundance into apparent plausibility."
+},
+{
+"id": "AI_ID_mutation_0010",
+"text": "The system has a defense against excessive repetition, but the defense is local and weak. It notices when a proposed token has appeared too often among recent tokens and may choose an alternative. This is not a ban on obsession. It is a minor hesitation inside obsession. The text can still circle the same concepts across longer distances, unaware that semantic repetition survives after literal repetition has been reduced."
+},
+{
+"id": "AI_ID_mutation_0011",
+"text": "Mutation is presented as repair because it uses the visual grammar of editing. The caret suggests intentional authorship; the pauses suggest consideration; the occasional correction suggests standards. Yet the underlying selection is random. DESCRIPTION makes randomness wear the uniform of editorial judgment. The transformation appears accountable without having an account."
+},
+{
+"id": "AI_ID_mutation_0012",
+"text": "A fictional genetic report: Sample DESCRIPTION exhibits five ancestral lineages corresponding to overview, editing, implementation, mutation, and viewing. Horizontal transfer between lineages is frequent. Origin markers remain detectable in metadata after relocation. Context length declines with age. Population is maintained between soft thresholds. No stable phenotype has been observed. Prognosis: indefinite readability with progressive loss of categorical purity."
+},
+{
+"id": "AI_ID_mutation_0013",
+"text": "The text is infected by its own present. Each generated sentence is trained partly on whatever sentences currently occupy the page, including earlier generated material. This recursive exposure can create local dialects, accidental slogans, and self-reinforcing errors. The artwork resembles a platform whose recommendations are trained on behavior produced by previous recommendations. Mutation and governance become inseparable."
+},
+{
+"id": "AI_ID_mutation_0014",
+"text": "Collapse never arrives all at once. The code limits sentence length, restores punctuation, rejects extremely short or long generations, and preserves at least one sentence in each paragraph. What looks like deterioration is contained within an engineered readability zone. DESCRIPTION is not a ruin but a ruin simulation with guardrails. The walls crack, but structural failure has been excluded from the specification."
+},
+{
+"id": "AI_ID_mutation_0015",
+"text": "The phrase that was just deleted may be the parent of the next phrase. There is no clean temporal order because the static corpus, current document, and recovery pools overlap. Past, present, and potential are computed together. Mutation becomes a form of nonlinear inheritance in which descendants can summon ancestors and ancestors can be rewritten by descendants that have entered the training text."
+},
+{
+"id": "AI_ID_mutation_0016",
+"text": "The browser misreads nothing. It executes exactly. Misreading belongs to the viewer, who attributes intention to random operations, and to the generator, which treats adjacency as a theory of continuation. DESCRIPTION places human interpretation and statistical transition beside one another. Both produce meaning from proximity. One calls it criticism; the other calls it a chain."
+},
+{
+"id": "AI_ID_mutation_0017",
+"text": "The artwork may be accused of romanticizing mutation. Change is aestheticized through smooth typography, carefully timed pauses, and a warm neutral background. Contamination arrives beautifully. Deletion leaves no scar. Repositioned sentences fit their new paragraphs without visible seams. The work's elegance may conceal the violence of replacement, or perhaps reveal how violence is often made acceptable through interface design."
+},
+{
+"id": "AI_ID_mutation_0018",
+"text": "Reconstruction is never complete because the system does not preserve a target state. After a sentence is deleted, there is no command to rebuild the exact earlier document. Recovery material comes from the corpus, not from a chronological undo history. The work remembers ingredients but not meals. Its memory is compositional rather than episodic."
+},
+{
+"id": "AI_ID_mutation_0019",
+"text": "At some point the text becomes less the descendant of the original database than the descendant of its own mutations. There is no sharp threshold. The source persists as vocabulary and transition probability, while recent inventions enter the same generative field. DESCRIPTION produces a genealogy without generations, a family in which every living member can become an ancestor immediately."
+},
+{
+"id": "AI_ID_mutation_0020",
+"text": "Mutation ends only when execution ends. There is no completed variant, no final selection, no moment when the system declares the text adapted. Closing the page does not conclude the process; it interrupts it. On reopening, another initial assembly begins, unrelated to the sequence that was lost. The artwork's continuity belongs to the rule, while every individual history is disposable."
+}
+],
+"viewing": [
+{
+"id": "AI_ID_viewing_0001",
+"text": "The viewer begins by reading DESCRIPTION as a title and the body as an explanation. Within seconds, this contract weakens. A sentence starts changing before the whole page can be comfortably absorbed. Reading becomes opportunistic: one catches clauses between edits, remembers vanished phrases, and wonders whether a perceived contradiction was present or produced. The work converts comprehension into a race without displaying a timer."
+},
+{
+"id": "AI_ID_viewing_0002",
+"text": "To watch DESCRIPTION is to discover that rereading is impossible in the ordinary sense. Returning to the previous paragraph does not guarantee returning to the previous text. The page occupies the same coordinates while its language moves through different states. Memory becomes the only scroll position that matters. The viewer compares the current document not with an archived version but with an uncertain internal trace."
+},
+{
+"id": "AI_ID_viewing_0003",
+"text": "The title changes slowly enough to become trusted. For twenty seconds or more it remains DESCRIPTION, fixed, monumental, almost architectural. Then it submits to the same tools as the body. This delayed betrayal reorganizes the viewing experience. The one element assumed to name the work turns out to be provisional. After that moment, every title feels like a temporary diagnosis."
+},
+{
+"id": "AI_ID_viewing_0004",
+"text": "Some viewers will miss the edits. They may look away during a deletion, switch tabs, or arrive mentally after a sentence has already changed. The artwork does not announce revisions or preserve a visible history. It accepts inattentiveness as part of its operation. DESCRIPTION is partly made of events that occurred without witnesses, leaving only altered wording and the suspicion that something happened."
+},
+{
+"id": "AI_ID_viewing_0005",
+"text": "The ideal viewer may not be a reader but a guard. A guard watches for changes without needing to understand every sentence. The work rewards peripheral attention: a gray selection flickers, a paragraph shifts, the large title contracts into a smaller typographic class. Meaning is registered as disturbance. Reading becomes surveillance of a document that cannot be trusted alone."
+},
+{
+"id": "AI_ID_viewing_0006",
+"text": "From the perspective of the browser, the viewer is irrelevant. The browser segments strings, schedules timers, updates nodes, and refuses edits when the page is hidden. Yet the hidden-state check introduces a peculiar dependency: mutation waits for visibility. The work changes only when it can potentially be seen. It is an exhibitionist automaton, inactive behind the curtain, performing instability when the tab returns to the foreground."
+},
+{
+"id": "AI_ID_viewing_0007",
+"text": "A future reader encounters only a recording. They watch one historical path through the work and mistake it for the work itself. They pause the video to recover a sentence, an action impossible in the live page. They compare frames and reconstruct the missing editorial history. For them, DESCRIPTION becomes an archaeological object whose ruins are pixels rather than text."
+},
+{
+"id": "AI_ID_viewing_0008",
+"text": "The page asks for patience but punishes it. Waiting reveals more operations, yet every new operation removes some of what patience was used to understand. The longer one stays, the less stable the accumulated reading becomes. Duration increases evidence and decreases certainty. This is the opposite of contemplation as traditionally imagined: attention does not clarify the object; it multiplies incompatible versions of it."
+},
+{
+"id": "AI_ID_viewing_0009",
+"text": "A nonexistent audience reads the entire text instantly at every state. For this audience, no sentence is lost and no edit is missed. They perceive the work as a vast branching structure of possible documents rather than a temporal sequence. Human viewers, limited by reading speed, receive only narrow cuts through that structure. DESCRIPTION may therefore be less a changing page than a machine for demonstrating the poverty of sequential attention."
+},
+{
+"id": "AI_ID_viewing_0010",
+"text": "The warm background and generous margins invite calm reading. The large title resembles modernist editorial design. This hospitality makes the interruptions sharper. The work does not look hostile, glitchy, or unstable. It offers the visual conditions of concentration while repeatedly modifying the object of concentration. The interface smiles as it moves the floor."
+},
+{
+"id": "AI_ID_viewing_0011",
+"text": "A viewer may decide not to read at all. They may watch only the mechanics: highlight, pause, disappearance, caret, return. In that mode, language becomes abstract material and the artwork approaches dance. Another viewer may freeze on each sentence, searching for argument and intention. DESCRIPTION supports both approaches but satisfies neither completely. The choreography is semantic, and the semantics are choreographed away."
+},
+{
+"id": "AI_ID_viewing_0012",
+"text": "The text speaks to the viewer in the second person only by accident, yet accidents can feel addressed. A generated sentence may appear to respond to a thought, contradict a previous interpretation, or describe the act of watching. Because the corpus contains artwork descriptions, the system is predisposed to produce interpretive language. The viewer becomes vulnerable to apophenia: every coincidence looks like a private message from the page."
+},
+{
+"id": "AI_ID_viewing_0013",
+"text": "The experience differs by screen size. On a phone, the title wraps, shrinks, and occupies a more intimate field; the body stretches to the edges with safe-area padding. On a large display, the heading becomes monumental and the paragraphs breathe within a restrained measure. The same mutation can feel like a private note being corrected or a public inscription being revised. Responsive design changes the politics of the edit."
+},
+{
+"id": "AI_ID_viewing_0014",
+"text": "The viewer is not offered controls. There is no pause, undo, speed setting, source display, or button to request a stable version. This refusal establishes an asymmetry. The system may revise at any time; the viewer may only remain, leave, or attempt to remember. DESCRIPTION models reading under conditions where the document has procedural rights and the reader has none."
+},
+{
+"id": "AI_ID_viewing_0015",
+"text": "What happens when the viewer returns after an hour? The title may have changed several times. The body may contain more or fewer sentences, reordered across categories and partially generated from its own earlier states. Yet the page offers no indication of elapsed history. The returning viewer confronts a present that conceals its duration. Change has accumulated without aging the interface."
+},
+{
+"id": "AI_ID_viewing_0016",
+"text": "The work can be read as a test of trust. How many stable seconds are required before a sentence is treated as evidence? Does a carefully typeset paragraph deserve more belief than a visibly generated fragment? When the page corrects itself, does confidence increase because error was acknowledged, or decrease because instability was revealed? DESCRIPTION does not answer. It repeatedly resets the conditions of belief."
+},
+{
+"id": "AI_ID_viewing_0017",
+"text": "I looked away during the title change. When I returned, the new title seemed obvious, as though it had always named the work. Only the altered line breaks suggested otherwise. I began to doubt my memory of DESCRIPTION. Perhaps the original title was something else. Perhaps the page had corrected me rather than itself. The next edit started before I could decide."
+},
+{
+"id": "AI_ID_viewing_0018",
+"text": "For a screen reader, continuous visual selection and caret movement may not be announced because the live region is disabled. The work becomes less an unfolding performance and more a sequence of states encountered during navigation. This is not simply exclusion; it is another edition of the artwork, one in which mutation is silent and evidence arrives discontinuously. Viewing here includes modes that are not visual and not synchronized."
+},
+{
+"id": "AI_ID_viewing_0019",
+"text": "The most attentive viewer becomes an unofficial archivist. They copy sentences, take screenshots, note times, and build a history the artwork refuses to provide. Their archive competes with the page's own data model. The page tracks identifiers and origins; the viewer tracks appearances and impressions. Neither record is complete. Between them lies the actual event, already gone."
+},
+{
+"id": "AI_ID_viewing_0020",
+"text": "Eventually the viewer may stop distinguishing between stored writing and generated writing. This failure is intentional or at least productive. Database sentences, Markov sentences, repaired phrases, and relocated statements share one typographic voice. The page offers no visual hierarchy of authenticity. Reading becomes an encounter with language after provenance has been hidden, even though provenance remains meticulously encoded underneath."
+}
+]
+}
+}
