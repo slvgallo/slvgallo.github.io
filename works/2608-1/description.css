@@ -1,0 +1,170 @@
+body.work-description-active {
+  --description-bg: #f3f1eb;
+  --description-fg: #101010;
+  background: var(--description-bg);
+  color: var(--description-fg);
+}
+
+body.work-description-active .entry-header {
+  margin-top: clamp(28px, 5vw, 64px);
+}
+
+body.work-description-active .work-title-row {
+  align-items: flex-start;
+  margin-bottom: clamp(76px, 11vw, 150px);
+}
+
+body.work-description-active #project-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: min(100%, 14ch);
+  margin: 0;
+  font-family: Arial, "Helvetica Neue", "Hiragino Sans", "Yu Gothic", YuGothic, sans-serif;
+  font-size: clamp(3.2rem, 10.5vw, 9.4rem);
+  font-weight: 400;
+  line-height: 0.84;
+  letter-spacing: -0.085em;
+  overflow-wrap: anywhere;
+  transition: min-height 160ms ease;
+}
+
+body.work-description-active #project-title.title-medium,
+body.work-description-active .title-measure.title-medium {
+  font-size: clamp(2.5rem, 7vw, 6.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.065em;
+}
+
+body.work-description-active #project-title.title-long,
+body.work-description-active .title-measure.title-long {
+  font-size: clamp(1.8rem, 4.8vw, 4.2rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+body.work-description-active #project-title.title-very-long,
+body.work-description-active .title-measure.title-very-long {
+  font-size: clamp(1.35rem, 3vw, 2.6rem);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+
+body.work-description-active .title-measure {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  max-width: min(100%, 14ch);
+  margin: 0;
+  font-family: Arial, "Helvetica Neue", "Hiragino Sans", "Yu Gothic", YuGothic, sans-serif;
+  font-size: clamp(3.2rem, 10.5vw, 9.4rem);
+  font-weight: 400;
+  line-height: 0.84;
+  letter-spacing: -0.085em;
+  overflow-wrap: anywhere;
+}
+
+body.work-description-active #project-desc {
+  max-width: 58rem;
+  font-family: Arial, "Helvetica Neue", "Hiragino Sans", "Yu Gothic", YuGothic, sans-serif;
+  font-size: clamp(1.04rem, 1.55vw, 1.34rem);
+  line-height: 1.72;
+  letter-spacing: -0.022em;
+  text-align: left;
+  text-wrap: pretty;
+}
+
+body.work-description-active #project-desc .paragraph {
+  margin: 0 0 1.62em;
+}
+
+body.work-description-active #project-desc .paragraph:last-child {
+  margin-bottom: 0;
+}
+
+body.work-description-active .sentence {
+  transition: opacity 120ms linear;
+}
+
+body.work-description-active .sentence.is-rewriting {
+  cursor: progress;
+}
+
+body.work-description-active .editor-selection-character {
+  background: transparent;
+  color: inherit;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+body.work-description-active .editor-selection-character.is-selected {
+  background: rgba(120, 120, 125, 0.34);
+}
+
+body.work-description-active .editor-caret {
+  display: inline-block;
+  width: 0.08em;
+  height: 1em;
+  margin-left: 0.04em;
+  vertical-align: -0.12em;
+  background: currentColor;
+  animation: description-caret-blink 0.72s steps(1, end) infinite;
+}
+
+@keyframes description-caret-blink {
+  0%, 48% { opacity: 1; }
+  49%, 100% { opacity: 0; }
+}
+
+@media (max-width: 760px) {
+  body.work-description-active .work-title-row {
+    margin-bottom: 54px;
+  }
+
+  body.work-description-active #project-title,
+  body.work-description-active .title-measure {
+    max-width: min(100%, 14ch);
+    font-size: clamp(2.55rem, 15vw, 4.65rem);
+    line-height: 0.88;
+    letter-spacing: -0.075em;
+  }
+
+  body.work-description-active #project-title.title-medium,
+  body.work-description-active .title-measure.title-medium {
+    font-size: clamp(2rem, 10vw, 3.7rem);
+  }
+
+  body.work-description-active #project-title.title-long,
+  body.work-description-active .title-measure.title-long {
+    font-size: clamp(1.5rem, 7vw, 2.7rem);
+    line-height: 1.05;
+  }
+
+  body.work-description-active #project-title.title-very-long,
+  body.work-description-active .title-measure.title-very-long {
+    font-size: clamp(1.15rem, 5vw, 1.9rem);
+    line-height: 1.25;
+  }
+
+  body.work-description-active #project-desc {
+    max-width: none;
+    font-size: clamp(1rem, 4.25vw, 1.12rem);
+    line-height: 1.78;
+    letter-spacing: -0.018em;
+    overflow-wrap: anywhere;
+  }
+
+  body.work-description-active #project-desc .paragraph {
+    margin-bottom: 1.72em;
+  }
+}
+
+@media (max-width: 390px) {
+  body.work-description-active #project-title,
+  body.work-description-active .title-measure {
+    font-size: clamp(2.35rem, 14vw, 3.5rem);
+  }
+
+  body.work-description-active #project-desc {
+    font-size: 0.98rem;
+  }
+}

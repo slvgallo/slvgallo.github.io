@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title description">
+  <title id="title">DESCRIPTION</title>
+  <desc id="description">The word DESCRIPTION above five changing lines of text.</desc>
+  <rect width="1200" height="800" fill="#f3f1eb"/>
+  <g fill="#101010" font-family="Arial, Helvetica, sans-serif">
+    <text x="70" y="190" font-size="150" letter-spacing="-10">DESCRIPTION</text>
+    <text x="76" y="350" font-size="30">A document is being rewritten while it is being read.</text>
+    <text x="76" y="420" font-size="30">Selection, deletion, and revision remain visible.</text>
+    <rect x="72" y="463" width="654" height="42" fill="#9a9a9f" opacity=".34"/>
+    <text x="76" y="495" font-size="30">The sentence has not decided where it belongs.</text>
+    <rect x="76" y="545" width="4" height="36"/>
+    <text x="94" y="574" font-size="30">Meaning continues after the caret.</text>
+    <text x="76" y="648" font-size="30">The title changes on another clock.</text>
+  </g>
+</svg>

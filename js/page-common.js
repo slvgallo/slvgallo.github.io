@@ -23,6 +23,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     initLangToggle();
   }
 
+  // DESCRIPTION turns the generated work title and description into the artwork.
+  if (currentPage === '2608-1.html') {
+    try {
+      await import('../works/2608-1/description.js');
+    } catch (error) {
+      console.error('Failed to initialize DESCRIPTION:', error);
+    }
+  }
+
   const isIndexPage = currentPage === 'index.html' || currentPage === '';
 
   // インデックスページ固有の処理

@@ -77,6 +77,10 @@ function extractPublicIdFromCloudinaryUrl(url) {
 function generateOGPImageUrl(imageSource) {
   if (!imageSource) return null;
 
+  // Root-relative assets are served by this site and cannot be fetched by
+  // Cloudinary until after deployment. Use the standard OGP fallback instead.
+  if (imageSource.startsWith('/')) return null;
+
   const cloudName = "ddwxt9vnm";
   const logoId = "slv_pbcs35";
 

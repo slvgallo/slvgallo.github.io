@@ -34,9 +34,12 @@ class DataValidator {
     }
 
     // メディア
-    if (!work.media || work.media.length === 0) {
+    if (
+      (!work.media || work.media.length === 0) &&
+      !work.presentation
+    ) {
       this.warnings.push(`Work #${index} (${work.id}): No media defined`);
-    } else {
+    } else if (work.media) {
       work.media.forEach((media, mIndex) => {
         if (!media.type) {
           this.errors.push(`Work #${index} (${work.id}), Media #${mIndex}: Missing type`);

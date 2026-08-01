@@ -1,5 +1,16 @@
 [
   {
+    "id": "2608-1",
+    "title": "DESCRIPTION",
+    "thumb": "/works/2608-1/thumbnail.svg",
+    "tags": [
+      "code"
+    ],
+    "desc": "<p>タイトルと五つの段落からなる文書が、選択、削除、入力、修正、移動を繰り返しながら自らを書き換え続ける。説明は完成した文章として提示されるのではなく、生成と編集の途中にある一時的な状態として現れる。</p>",
+    "desc_en": "<p>A document consisting of a title and five paragraphs continuously rewrites itself through selection, deletion, typing, correction, and relocation. Description is presented not as a finished text, but as a temporary state within an ongoing process of generation and editing.</p>",
+    "presentation": "self-editing-description"
+  },
+  {
     "id": "2607-5",
     "title": "POLYRHYTHMETER",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1785435812/POLYRHYTHMETER_bfrrns.png",

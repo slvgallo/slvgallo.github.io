@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "language": "ja",
+  "sources": [
+    "./chatgpt.json",
+    "./grok.json",
+    "./claude.json",
+    "./gemini.json"
+  ]
+}

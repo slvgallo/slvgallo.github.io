@@ -294,7 +294,7 @@
     "implementation": [
       {
         "id": "grok_implementation_0001",
-        "text": "コードはsources.jsonを読み込み、複数のコンテンツソースを並列で取得する。各ソースはversion 2の形式を持ち、titlesとcategoriesを含む。検証に失敗したソースは無視され、成功したものだけが統合される。"
+        "text": "コードは言語別のmanifest.jsonを読み込み、複数のコンテンツソースを並列で取得する。各ソースはversion 2の形式を持ち、titlesとcategoriesを含む。検証に失敗したソースは無視され、成功したものだけが統合される。"
       },
       {
         "id": "grok_implementation_0002",
