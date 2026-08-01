@@ -1,0 +1,541 @@
+{
+"version": 2,
+"source": {
+"id": "AI_ID",
+"label": "AI_LABEL"
+},
+"titles": [
+{
+"id": "AI_ID_title_0001",
+"text": "DESCRIPTION"
+},
+{
+"id": "AI_ID_title_0002",
+"text": "the text that rewrites itself while you watch"
+},
+{
+"id": "AI_ID_title_0003",
+"text": "MARKOV FAILURE MODE"
+},
+{
+"id": "AI_ID_title_0004",
+"text": "Untitled Document (Auto-Saved)"
+},
+{
+"id": "AI_ID_title_0005",
+"text": "What the cursor forgets"
+},
+{
+"id": "AI_ID_title_0006",
+"text": "source.json never arrives"
+},
+{
+"id": "AI_ID_title_0007",
+"text": "SELECTION IS A FORM OF VIOLENCE"
+},
+{
+"id": "AI_ID_title_0008",
+"text": "runtime_title_47"
+},
+{
+"id": "AI_ID_title_0009",
+"text": "Five paragraphs in continuous decay"
+},
+{
+"id": "AI_ID_title_0010",
+"text": "error: no recovery sentence is available"
+},
+{
+"id": "AI_ID_title_0011",
+"text": "DESCRIPTION (revised)"
+},
+{
+"id": "AI_ID_title_0012",
+"text": "the artist never meant this"
+},
+{
+"id": "AI_ID_title_0013",
+"text": "Cut. Paste. Forget."
+},
+{
+"id": "AI_ID_title_0014",
+"text": "A machine that believes it is editing"
+},
+{
+"id": "AI_ID_title_0015",
+"text": "title-very-long"
+},
+{
+"id": "AI_ID_title_0016",
+"text": "The body text has already moved on"
+},
+{
+"id": "AI_ID_title_0017",
+"text": "DESCRIPTION DATA COULD NOT BE LOADED."
+},
+{
+"id": "AI_ID_title_0018",
+"text": "waiting for the next rewrite"
+},
+{
+"id": "AI_ID_title_0019",
+"text": "corpus contamination protocol"
+},
+{
+"id": "AI_ID_title_0020",
+"text": "This is not a description"
+},
+{
+"id": "AI_ID_title_0021",
+"text": "the deleted sentence still remembers you"
+},
+{
+"id": "AI_ID_title_0022",
+"text": "v2.0 / unstable"
+},
+{
+"id": "AI_ID_title_0023",
+"text": "Please do not look away"
+},
+{
+"id": "AI_ID_title_0024",
+"text": "phrasePool overflow"
+},
+{
+"id": "AI_ID_title_0025",
+"text": "an organism of sentences"
+},
+{
+"id": "AI_ID_title_0026",
+"text": "TITLE THAT CONTRADICTS ITSELF"
+},
+{
+"id": "AI_ID_title_0027",
+"text": "the caret blinks for no one"
+},
+{
+"id": "AI_ID_title_0028",
+"text": "What remains after the Markov chain forgets"
+},
+{
+"id": "AI_ID_title_0029",
+"text": "DESCRIPTION is only the beginning"
+},
+{
+"id": "AI_ID_title_0030",
+"text": "end of file"
+}
+],
+"categories": {
+"overview": [
+{
+"id": "AI_ID_overview_0001",
+"text": "DESCRIPTION is a living document that refuses to stay still. On load it presents five paragraphs drawn from a hidden corpus, then begins to rewrite itself with the patience of a proofreader who never sleeps. The title, always first DESCRIPTION, later slips into other names. The body mutates through selection, deletion, insertion, and quiet rearrangement. What you read is never the same text twice."
+},
+{
+"id": "AI_ID_overview_0002",
+"text": "This is not software that displays a description. It is a description that has become software. The artwork treats language as a body that can be cut, moved, and healed. Markov chains feed on the current page and the original sources, producing sentences that sound almost true. The system schedules its own revisions the way a person might schedule regret."
+},
+{
+"id": "AI_ID_overview_0003",
+"text": "An endless editorial session conducted by an absent author. The page opens with a fixed title and five categorical paragraphs. Immediately the machinery of rewriting begins. Sentences are selected like suspects, deleted like mistakes, retyped with false starts and corrections. The viewer is left holding a text that is always in the act of becoming something else."
+},
+{
+"id": "AI_ID_overview_0004",
+"text": "Imagine a museum label that rewrites itself while the visitor is still reading. DESCRIPTION performs exactly that. It begins as a stable object and then slowly dissolves its own stability. The five categories—overview, editing, implementation, mutation, viewing—are both content and trap. Once inside the loop, the text can no longer be trusted to remain what it claimed."
+},
+{
+"id": "AI_ID_overview_0005",
+"text": "The work is a closed ecosystem of language. Static sources supply the initial genetic material. The living document feeds on itself. Over time the proportion of generated Markov text increases. The original categories begin to blur. What started as ordered paragraphs becomes a single restless surface that remembers its own previous states only as faint statistical echoes."
+},
+{
+"id": "AI_ID_overview_0006",
+"text": "DESCRIPTION is an attempt to make visible the labor of editing. Every visible change is staged: the selection highlight, the backspace, the hesitant typing, the occasional false keystroke that is immediately erased. The artwork does not merely change its content; it performs the theatrical gestures of change so that the viewer can watch language being handled."
+},
+{
+"id": "AI_ID_overview_0007",
+"text": "A system that believes description is an active verb. The title begins as a noun and is later rewritten into other nouns, questions, error messages, and fragments. The body text, meanwhile, is subjected to continuous surgical attention. The result is a page that never finishes describing itself because the act of description keeps altering the thing being described."
+},
+{
+"id": "AI_ID_overview_0008",
+"text": "This artwork is a slow-motion collapse of textual authority. The initial five paragraphs arrive already sorted by category. The code then begins to treat those categories as suggestions rather than laws. Sentences migrate between paragraphs. Whole passages are deleted. New material is generated from the statistical residue of what has already been written. Authority leaks away with every rewrite."
+},
+{
+"id": "AI_ID_overview_0009",
+"text": "DESCRIPTION stages the fantasy that a text can edit itself into truth. The fantasy fails beautifully. The Markov generator produces plausible sentences that are nevertheless slightly wrong. The correction animations reveal the wrongness and then bury it under new text. The viewer is left with the sensation of watching a mind that cannot stop revising and cannot remember why."
+},
+{
+"id": "AI_ID_overview_0010",
+"text": "It is a document that has decided to become a process. The static sources are only the starting condition. After the first few minutes the page is no longer quoting its sources so much as dreaming with them. The title drifts. The body thickens and thins. Categories lose their borders. The artwork is the slow conversion of description into pure editorial motion."
+},
+{
+"id": "AI_ID_overview_0011",
+"text": "The piece can be understood as a portrait of attention under continuous interruption. The viewer tries to read a sentence only to watch it being selected and erased. A new sentence is typed in its place. The original meaning is gone, but the rhythm of attention remains. DESCRIPTION is less about what the text says than about the impossibility of finishing a reading."
+},
+{
+"id": "AI_ID_overview_0012",
+"text": "An artificial organism whose metabolism is language. The five initial paragraphs are its organs. The Markov chain is its digestive system. Selection and deletion are its immune responses. Title rewriting is a form of seasonal molt. Over long periods the organism changes species without ever leaving the browser window."
+},
+{
+"id": "AI_ID_overview_0013",
+"text": "DESCRIPTION is the name of a machine that pretends to be a museum wall text. The machine is honest about its own operations. It shows the caret, the selection, the hesitation before a correction. It does not hide the fact that every stable moment is temporary. The only permanent element is the schedule that guarantees the next rewrite."
+},
+{
+"id": "AI_ID_overview_0014",
+"text": "What if a text could be embarrassed by its own previous versions? This work stages that embarrassment. Sentences are rewritten because they are no longer adequate. Titles are replaced because they no longer fit. The code never explains why a particular passage has become inadequate. The inadequacy is simply performed, again and again, until the original embarrassment is forgotten."
+},
+{
+"id": "AI_ID_overview_0015",
+"text": "The artwork is a closed room in which language is both prisoner and guard. The sources provide the initial statements. The editing loop keeps those statements under constant interrogation. Some sentences are released after light revision. Others are moved to different cells. A few are executed. New prisoners are generated from the statistical ghosts of the old ones."
+},
+{
+"id": "AI_ID_overview_0016",
+"text": "DESCRIPTION begins as a clear five-part structure and ends as something closer to weather. The categories remain as labels on the paragraphs, but the content inside them no longer respects the labels. Overview sentences appear in the mutation section. Viewing language migrates into editing. The system continues to operate as if the original taxonomy still mattered."
+},
+{
+"id": "AI_ID_overview_0017",
+"text": "A meditation on the fact that every description is already a revision of a previous description. The code makes that fact literal. There is no first version that is pure. Even the initial paragraphs are assembled by random selection from a larger pool. From the first second the text is already a rearrangement. The subsequent edits are only more of the same."
+},
+{
+"id": "AI_ID_overview_0018",
+"text": "The work refuses the distinction between content and interface. The selection highlight is part of the meaning. The typing animation is part of the argument. The occasional false keystroke that is immediately corrected is a small confession that the system is improvising. DESCRIPTION is not a text displayed by software; it is software that has become a text."
+},
+{
+"id": "AI_ID_overview_0019",
+"text": "Somewhere inside the code a counter named rewriteCount keeps increasing. That number is the true subject of the artwork. Everything else—the sentences, the titles, the categories—is only the visible surface of an accumulation of revisions. The longer you stay, the higher the count becomes. The text grows older in public."
+},
+{
+"id": "AI_ID_overview_0020",
+"text": "This is a description that has outlived its own usefulness and continues anyway. The original sources may have been careful, even beautiful. The system does not care. It will keep rewriting until the browser is closed. The resulting text is neither better nor worse than the beginning. It is simply later."
+}
+],
+"editing": [
+{
+"id": "AI_ID_editing_0001",
+"text": "Selection is the first violence. A sentence is highlighted character by character, sometimes from the beginning, sometimes from the end. The highlight is held for a moment, as if the system is deciding whether the selected material deserves to continue existing. Then the material is gone and the caret waits in an empty space."
+},
+{
+"id": "AI_ID_editing_0002",
+"text": "The backspace is not instantaneous. Words are removed one unit at a time, with slight pauses after punctuation. The system appears to be thinking about what it is deleting. After the field is empty there is a longer pause, almost a breath, before the new text begins to appear."
+},
+{
+"id": "AI_ID_editing_0003",
+"text": "Typing is performed with deliberate irregularity. Some characters arrive quickly. Others are delayed by small random intervals. Occasionally the system types a wrong particle—の, を, に—and then erases it before continuing. These false starts are not errors; they are the performance of hesitation."
+},
+{
+"id": "AI_ID_editing_0004",
+"text": "Sometimes the edit is more complex. The system types a draft that includes an extra phrase drawn from the phrase pool, then realizes the draft is wrong, erases back to the common prefix, and types the correct ending. The viewer watches a mind changing its mind in real time."
+},
+{
+"id": "AI_ID_editing_0005",
+"text": "Cut and paste is staged as a physical transfer. A sentence is selected, emptied, and removed from its original paragraph. The document is re-rendered. The same sentence appears in a new location, first as an empty caret, then as typed text, then as a brief selection highlight that confirms its arrival."
+},
+{
+"id": "AI_ID_editing_0006",
+"text": "Word-range rewriting is the most intimate form of edit. Only a portion of a sentence is selected and replaced. The prefix and suffix remain visible while the middle is rewritten. The sentence is altered without ever being fully deleted. Continuity and rupture occupy the same line."
+},
+{
+"id": "AI_ID_editing_0007",
+"text": "The system prefers not to edit the same sentence twice in succession. Weights are calculated so that recent targets are less likely to be chosen again. Editing therefore drifts across the document like a restless hand that cannot stay in one place for long."
+},
+{
+"id": "AI_ID_editing_0008",
+"text": "Deletion is permanent only for the current state. The deleted sentence may still exist inside the phrase pool or the Markov model. It can return later in altered form. The edit removes a particular instance, not the possibility of the language itself."
+},
+{
+"id": "AI_ID_editing_0009",
+"text": "When the document grows too long the system increases the probability of deletion. When it grows too short the system increases the probability of insertion. Editing is not only aesthetic; it is also a form of population control."
+},
+{
+"id": "AI_ID_editing_0010",
+"text": "The caret is always present during active rewriting. It blinks according to a fixed animation even while characters are being added or removed. The caret is the only element that does not change its meaning. Everything else is provisional."
+},
+{
+"id": "AI_ID_editing_0011",
+"text": "Revision mode is the most theatrical. The system first writes something longer and slightly wrong, then erases the excess and types the intended ending. The extra material is drawn from the phrase pool so that it feels related but not identical. The correction is therefore both technical and semantic."
+},
+{
+"id": "AI_ID_editing_0012",
+"text": "Moving a sentence changes its category. The sentence keeps its original originCategory in the data model, but its current category becomes that of the destination paragraph. The act of relocation is also an act of reclassification."
+},
+{
+"id": "AI_ID_editing_0013",
+"text": "There is no undo. Once a sentence has been rewritten, the previous version exists only in the viewer’s short-term memory and in the statistical residue of the Markov chain. The system itself does not keep a history of discrete states."
+},
+{
+"id": "AI_ID_editing_0014",
+"text": "The editing operations are exclusive. Only one rewrite—title or body—can be active at a time. If a new request arrives while an edit is in progress it is rejected as busy. The system protects its own concentration."
+},
+{
+"id": "AI_ID_editing_0015",
+"text": "Reduced-motion preference disables the animations. The text simply changes. The labor of editing is still performed, but it is no longer offered as a spectacle. The artwork becomes quieter and more private."
+},
+{
+"id": "AI_ID_editing_0016",
+"text": "Insertion always begins with an empty sentence element. The caret appears, waits, then types the full new material. The sentence is born in public, character by character, rather than arriving fully formed."
+},
+{
+"id": "AI_ID_editing_0017",
+"text": "The phrase pool is the memory of previous language. When the system needs material for a draft or a correction it can reach into this pool and extract a fragment that has already been used. Editing therefore recycles its own past."
+},
+{
+"id": "AI_ID_editing_0018",
+"text": "Sometimes the chosen material is identical to the current sentence. In that case the rewrite is abandoned and another attempt is made. The system refuses to perform a null edit. Change is mandatory."
+},
+{
+"id": "AI_ID_editing_0019",
+"text": "The timing of edits is deliberately irregular. Body rewrites arrive on an exponential distribution centered around three and a half seconds. Title rewrites are much rarer and more variable. The document is never allowed to feel settled for long."
+},
+{
+"id": "AI_ID_editing_0020",
+"text": "Editing is the only true content of the work. Everything else—the sources, the categories, the Markov generator—exists only to give the editing operations something to operate upon. Without continuous rewriting the page would be merely a static display."
+}
+],
+"implementation": [
+{
+"id": "AI_ID_implementation_0001",
+"text": "The page loads a manifest from ./data/sources.json. Each listed source is fetched and validated. Only sources that pass version and structure checks are accepted. If every source fails, the page displays a single error message and stops. The artwork begins in a state of possible silence."
+},
+{
+"id": "AI_ID_implementation_0002",
+"text": "Content is expected in version 2 format. Titles and five fixed categories must be present. Entry IDs must be unique across all sources. The code treats these constraints as absolute. A single missing category or duplicate ID causes the entire source to be rejected."
+},
+{
+"id": "AI_ID_implementation_0003",
+"text": "Sentence segmentation uses the Intl.Segmenter when available, falling back to a regular expression that recognizes Japanese and Western sentence terminators. The same dual approach is used for graphemes and words. The implementation is therefore language-aware without being language-specific."
+},
+{
+"id": "AI_ID_implementation_0004",
+"text": "The Markov model is rebuilt on every generation attempt. Tokens are taken from the static corpus concatenated with the current document text. Order decreases as rewriteCount increases: three, then two, then one. The model becomes coarser as the document ages."
+},
+{
+"id": "AI_ID_implementation_0005",
+"text": "Title generation uses a separate corpus joined by a rare separator character. Grapheme-level Markov chains of order one or two produce new title strings. Generated titles are accepted only if they differ from the current title and do not contain pathological repetition."
+},
+{
+"id": "AI_ID_implementation_0006",
+"text": "Exclusive editing is enforced by a single activeEdit flag. Any attempt to begin a new edit while one is running returns immediately with the status busy. The system is single-threaded by design even though the browser is not."
+},
+{
+"id": "AI_ID_implementation_0007",
+"text": "Minimum height is locked during body and title rewrites so that the layout does not jump while text is being replaced. After the edit completes the lock is removed. The visual stability is temporary and calculated."
+},
+{
+"id": "AI_ID_implementation_0008",
+"text": "Phrase pools are built by sliding windows over word units. Each entry contributes a limited number of short phrases. The pools are used both for recovery material and for the temporary drafts that appear during revision-mode edits."
+},
+{
+"id": "AI_ID_implementation_0009",
+"text": "The initial paragraphs are composed by choosing one entry from each category and splitting that entry into sentences. The five-paragraph structure is therefore guaranteed at startup and then immediately subjected to operations that can destroy it."
+},
+{
+"id": "AI_ID_implementation_0010",
+"text": "Scheduling uses recursive setTimeout rather than setInterval. After each rewrite the next delay is calculated according to the operation type and the result status. Busy results produce short retries. Successful results produce the normal distribution of delays."
+},
+{
+"id": "AI_ID_implementation_0011",
+"text": "Dataset attributes on each sentence element record id, category, originCategory, sourceId, and entryId. These attributes survive visual rewrites and allow the code to locate and update the correct internal model object after DOM changes."
+},
+{
+"id": "AI_ID_implementation_0012",
+"text": "Title length classes are applied according to grapheme count. Short, medium, long, and very-long titles receive different CSS rules so that the large display type remains legible across extreme variation in title length."
+},
+{
+"id": "AI_ID_implementation_0013",
+"text": "The recovery path is always available. If Markov generation fails or produces text that is too short or too long, the system falls back to a randomly chosen sentence from the original sentence pool. The artwork can never run out of material."
+},
+{
+"id": "AI_ID_implementation_0014",
+"text": "All random choices are made with Math.random. There is no seed and no reproducibility. Two viewers opening the page at the same moment will experience divergent sequences of edits. The artwork is singular for each session."
+},
+{
+"id": "AI_ID_implementation_0015",
+"text": "The code never writes to permanent storage. Everything lives in memory and in the DOM. Closing the tab erases the entire history of rewrites. The only surviving record is the statistical bias left inside any future Markov model that might be rebuilt from the same sources."
+},
+{
+"id": "AI_ID_implementation_0016",
+"text": "Validation functions throw descriptive errors that are caught and logged. The user sees only the final failure message. The detailed diagnosis remains in the console, available to anyone who opens the developer tools but invisible to the ordinary viewer."
+},
+{
+"id": "AI_ID_implementation_0017",
+"text": "The CATEGORY_ORDER array is the only place where the five categories are enumerated. Every other part of the code refers to this constant. Adding or removing a category would require coordinated changes across loading, initialization, rendering, and weighting logic."
+},
+{
+"id": "AI_ID_implementation_0018",
+"text": "Grapheme and word segmentation are used for both animation timing and phrase extraction. The same linguistic units that determine how fast characters appear also determine which fragments can be borrowed for drafts. Typography and generation share a single model of language."
+},
+{
+"id": "AI_ID_implementation_0019",
+"text": "The system distinguishes between originCategory and current category. A sentence that migrates keeps a record of where it was born. This information is stored but never displayed. The history of movement is present in the data model and absent from the visible page."
+},
+{
+"id": "AI_ID_implementation_0020",
+"text": "Everything depends on the browser remaining open and the tab remaining active. If the document is hidden, edits are skipped. The artwork is not a background process. It requires the continuous presence of a viewer, even if that viewer is only the browser itself."
+}
+],
+"mutation": [
+{
+"id": "AI_ID_mutation_0001",
+"text": "Mutation begins the moment the first rewrite occurs. The static corpus is still pure, but the living document has already diverged. Every subsequent Markov generation mixes the original sources with the altered present. Contamination is cumulative and irreversible."
+},
+{
+"id": "AI_ID_mutation_0002",
+"text": "The order of the Markov chain decreases as the rewrite count rises. Early generations are more coherent because they draw on longer contexts. Later generations become more fragmented. The text loses grammatical memory the longer it lives."
+},
+{
+"id": "AI_ID_mutation_0003",
+"text": "Sentences can migrate between categories. A fragment that began life as an overview statement may later appear inside the mutation paragraph. The original taxonomy is slowly erased by the movement of its own contents."
+},
+{
+"id": "AI_ID_mutation_0004",
+"text": "Recovery sentences reintroduce original material into a document that has already drifted. The result is a form of partial restoration that is also a form of contamination. The past returns, but it returns into a new context that changes its meaning."
+},
+{
+"id": "AI_ID_mutation_0005",
+"text": "Phrase extraction allows the system to borrow short sequences from both the static pool and the current document. These phrases are inserted into temporary drafts and then sometimes abandoned. The language of the page is therefore continuously sampling itself."
+},
+{
+"id": "AI_ID_mutation_0006",
+"text": "Word-range mutation replaces only part of a sentence. The surrounding text remains, creating hybrids that never existed in the original sources. These hybrids become part of the new corpus for future generations. Mutation compounds."
+},
+{
+"id": "AI_ID_mutation_0007",
+"text": "When the document becomes too long the system begins to prefer deletion. When it becomes too short it prefers insertion. Population pressure drives the mutation rate. The text regulates its own density."
+},
+{
+"id": "AI_ID_mutation_0008",
+"text": "Generated sentences that fail length or terminal-punctuation checks are discarded. The system is allowed to fail and retry. Mutation is therefore not only generative but also selective. Only certain kinds of change are permitted to survive."
+},
+{
+"id": "AI_ID_mutation_0009",
+"text": "The title mutates on a much slower schedule than the body. Its changes feel more consequential because they are rarer. A new title can reframe everything that has been written beneath it without altering a single body sentence."
+},
+{
+"id": "AI_ID_mutation_0010",
+"text": "Repetition is actively discouraged inside the Markov generator. If a token has appeared too recently the system tries to choose an alternative. The mutation process contains a small force that pushes against pure statistical inertia."
+},
+{
+"id": "AI_ID_mutation_0011",
+"text": "Over long sessions the original five categories become statistical fictions. Sentences still carry category labels, but the labels no longer predict the content. The taxonomy survives as metadata after the language has escaped it."
+},
+{
+"id": "AI_ID_mutation_0012",
+"text": "Deletion removes a sentence from the visible document but not from the phrase pool or the Markov model. The deleted material continues to influence future generations. Absence is only partial."
+},
+{
+"id": "AI_ID_mutation_0013",
+"text": "The system can produce text that contradicts earlier statements in the same document. There is no consistency checker. Mutation is free to introduce local incoherence. Global meaning is allowed to fray."
+},
+{
+"id": "AI_ID_mutation_0014",
+"text": "Each successful rewrite increments a counter that is never displayed. That invisible number is the true measure of mutation. The visible text is only the current surface of an accumulating history of changes."
+},
+{
+"id": "AI_ID_mutation_0015",
+"text": "Title generation can invent strings that never appeared in the original title pool. These runtime titles are given synthetic IDs and source labels. The system is capable of naming things that did not previously exist."
+},
+{
+"id": "AI_ID_mutation_0016",
+"text": "The longer the session continues the more the document resembles a dream of its sources rather than a quotation of them. Early text is still recognizable. Late text is only statistically related. Mutation is a form of forgetting that still produces language."
+},
+{
+"id": "AI_ID_mutation_0017",
+"text": "Cut-and-paste mutation preserves the sentence identity while changing its location and category. The same object occupies a new position. Continuity of identity coexists with discontinuity of place."
+},
+{
+"id": "AI_ID_mutation_0018",
+"text": "False keystrokes during typing are a micro-mutation that is immediately corrected. The system briefly entertains an alternative and then rejects it. These moments are the smallest visible unit of revision."
+},
+{
+"id": "AI_ID_mutation_0019",
+"text": "The artwork never reaches equilibrium. Even if the visible text appears stable for several seconds the next rewrite is already scheduled. Mutation is the default state. Stasis is only an interval between scheduled events."
+},
+{
+"id": "AI_ID_mutation_0020",
+"text": "Eventually the original sources become minority influence. The living document has rewritten itself so many times that its own history outweighs the external corpus. The text has become primarily self-referential. Mutation has achieved autonomy."
+}
+],
+"viewing": [
+{
+"id": "AI_ID_viewing_0001",
+"text": "The viewer arrives and finds a stable title and five coherent paragraphs. Within a few seconds the first body rewrite begins. The sense of having arrived at a finished object is immediately withdrawn. Reading becomes an act of chasing a moving target."
+},
+{
+"id": "AI_ID_viewing_0002",
+"text": "You try to finish a sentence and the sentence is selected before your eyes. The highlight moves across the words you were still reading. Then the words disappear. What you were about to understand is gone. The page continues without you."
+},
+{
+"id": "AI_ID_viewing_0003",
+"text": "Waiting is the primary mode of attention. Between rewrites the text is readable. During rewrites it is theatrical. The viewer learns to hold both modes at once: the desire to extract meaning and the recognition that meaning is being actively dismantled."
+},
+{
+"id": "AI_ID_viewing_0004",
+"text": "Some viewers will leave after a minute. Others will stay for an hour, watching the slow transformation of language into language. The artwork does not reward either duration. It simply continues. The length of attention is the viewer’s own decision."
+},
+{
+"id": "AI_ID_viewing_0005",
+"text": "The title changes so rarely that each new title feels like an event. The body has already shifted many times. When the large type finally rewrites itself the entire page is momentarily recontextualized. The viewer is forced to re-evaluate everything beneath the new name."
+},
+{
+"id": "AI_ID_viewing_0006",
+"text": "Looking away is dangerous. When you return the text may have changed in ways you cannot reconstruct. There is no version history. The previous state exists only in your imperfect memory. The artwork exploits the unreliability of human recollection."
+},
+{
+"id": "AI_ID_viewing_0007",
+"text": "The caret blinks even when no one is watching. The selection animations play for an empty room. The system does not check whether a human is present. Viewing is optional. The process continues regardless."
+},
+{
+"id": "AI_ID_viewing_0008",
+"text": "A future reader opening the same URL will never see the session you witnessed. Each loading of the page begins again from the initial sources. The specific sequence of mutations is unrepeatable. What you saw is already lost."
+},
+{
+"id": "AI_ID_viewing_0009",
+"text": "The browser itself is a kind of viewer. It keeps the tab alive, runs the timers, and paints the animations. When the tab is backgrounded the edits pause. The artwork is therefore dependent on a form of mechanical attention that is not human."
+},
+{
+"id": "AI_ID_viewing_0010",
+"text": "You may begin to anticipate the next rewrite. The rhythm of delays becomes familiar. Anticipation replaces reading. The content of the sentences matters less than the fact that they will soon be replaced. The viewer is trained into a new form of vigilance."
+},
+{
+"id": "AI_ID_viewing_0011",
+"text": "Some sentences survive for a long time. Others are deleted almost immediately. The viewer cannot know in advance which passages will endure. Attachment becomes risky. The text teaches a mild form of non-attachment through continuous loss."
+},
+{
+"id": "AI_ID_viewing_0012",
+"text": "The error state is also a form of viewing. If the sources fail to load the page shows only a single line of capital letters. That failure message is stable. It does not rewrite. In the failure state the artwork finally becomes still."
+},
+{
+"id": "AI_ID_viewing_0013",
+"text": "Reading against the mutations is possible but exhausting. You can try to hold a mental model of the original five paragraphs while watching them dissolve. Most viewers will abandon the attempt and simply watch the process itself."
+},
+{
+"id": "AI_ID_viewing_0014",
+"text": "The text sometimes refers to material that has already been deleted. These broken references are not bugs. They are the residue of a document that continues to speak as if its previous states still exist. The viewer is left to notice the gaps."
+},
+{
+"id": "AI_ID_viewing_0015",
+"text": "There is no preferred viewing distance or duration. The large title type is designed to be seen from across a room. The body text rewards close reading that is constantly interrupted. The artwork occupies both scales at once."
+},
+{
+"id": "AI_ID_viewing_0016",
+"text": "A viewer who understands the code will watch differently from a viewer who does not. Knowledge of the Markov order, the exclusive edit lock, and the phrase pool changes the experience of each animation. The same visual event becomes two different events depending on what is known."
+},
+{
+"id": "AI_ID_viewing_0017",
+"text": "The page never tells you that it is finished. There is no final state and no closing animation. The only way to end the viewing is to close the tab or navigate away. The artwork outlasts any single act of attention."
+},
+{
+"id": "AI_ID_viewing_0018",
+"text": "Sometimes the mutations produce a sentence that feels more true than the original. Sometimes they produce nonsense. The viewer is left to decide whether the system is improving the text or merely continuing it. The artwork offers no judgment of its own output."
+},
+{
+"id": "AI_ID_viewing_0019",
+"text": "Returning to the page after a long absence is like meeting a stranger who claims to be someone you once knew. The title may have changed. The paragraphs may have different lengths and different tones. Continuity is a matter of faith rather than evidence."
+},
+{
+"id": "AI_ID_viewing_0020",
+"text": "The final act of viewing is the decision to stop. When the tab closes the entire history of that session vanishes. The sources remain. The code remains. The particular sequence of descriptions that was generated for you is gone forever. You were the only witness."
+}
+]
+}
+}
