@@ -95,7 +95,7 @@ a img {
   right: calc(20px + env(safe-area-inset-right));
   z-index: 1000;
   opacity: 0.8;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.3s ease;
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -107,7 +107,6 @@ a img {
 
 .profile-float:hover {
   opacity: 1;
-  transform: translateY(-2px);
 }
 
 .profile-float img {
@@ -274,6 +273,7 @@ a img {
 
 @supports (animation-timeline: scroll()) {
   .header-title a {
+    transform: translateZ(0) scale(1);
     animation: header-logo-scale linear both;
     animation-timeline: scroll(root block);
     animation-range: 0px 200px;
@@ -308,6 +308,7 @@ a img {
     .header-wrapper {
       --header-shift-start: 4rem;
       --header-shift-end: 0rem;
+      transform: translate3d(0, var(--header-shift-start), 0);
       animation: header-scroll-shift linear both;
       animation-timeline: scroll(root block);
       animation-range: 0px 200px;
