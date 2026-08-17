@@ -412,6 +412,7 @@ select:focus-visible {
   height: 14px;
   background: none;
   cursor: pointer;
+  touch-action: none;
 }
 .slider::-webkit-slider-runnable-track {
   height: 1px;
@@ -436,6 +437,14 @@ select:focus-visible {
   border: 0;
   border-radius: 0;
   background: var(--ink);
+}
+/* A finger cannot land on a 2px thumb. The negative margins keep the row
+   height the track was laid out at, so only the grab area grows. */
+@media (pointer: coarse) {
+  .meter .slider {
+    height: 28px;
+    margin: -7px 0;
+  }
 }
 .phrases {
   position: relative;
