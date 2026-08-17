@@ -13,7 +13,8 @@
       {
         "type": "html",
         "src": "/works/2608-2/PhaseShiftingRhythmPracticeTool.html",
-        "aspectRatio": "4 / 3"
+        "aspectRatio": "4 / 3",
+        "aspectRatioMobile": "3 / 4"
       },
       {
         "type": "link-card",

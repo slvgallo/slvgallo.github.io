@@ -1195,6 +1195,14 @@ html.lang-ja-active .lang-ja {
   height: auto;
 }
 
+/* 横長の埋め込みはスマホ幅だと操作UIで埋まってしまうため、
+   works.json の aspectRatioMobile を指定した作品だけ縦長に切り替える */
+@media (max-width: 768px) {
+  .html-wrap--fixed-ratio {
+    aspect-ratio: var(--html-aspect-ratio-mobile, var(--html-aspect-ratio));
+  }
+}
+
 @media (min-width: 769px) {
   .html-wrap--square {
     max-width: min(1120px, 90vh);

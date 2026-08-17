@@ -153,19 +153,31 @@ class SiteBuilder {
         const hSrc = mediaItem.src.startsWith('/works/') 
           ? mediaItem.src.replace('/works/', '../works/') 
           : mediaItem.src;
-        const ratioMatch = typeof mediaItem.aspectRatio === 'string'
-          ? mediaItem.aspectRatio.match(/^(\d+(?:\.\d+)?)\s*[/:]\s*(\d+(?:\.\d+)?)$/)
-          : null;
-        const hasValidRatio = ratioMatch
-          && Number(ratioMatch[1]) > 0
-          && Number(ratioMatch[2]) > 0;
+        const parseRatio = value => {
+          const match = typeof value === 'string'
+            ? value.match(/^(\d+(?:\.\d+)?)\s*[/:]\s*(\d+(?:\.\d+)?)$/)
+            : null;
+          return match && Number(match[1]) > 0 && Number(match[2]) > 0 ? match : null;
+        };
+        const ratioMatch = parseRatio(mediaItem.aspectRatio);
+        // 狭い画面では埋め込みが横長すぎて操作パネルに埋まる作品があるため、
+        // aspectRatioMobile で768px以下だけ別の比率を渡せるようにしている
+        const mobileRatioMatch = parseRatio(mediaItem.aspectRatioMobile);
+        const hasValidRatio = Boolean(ratioMatch);
         const isSquareRatio = hasValidRatio
           && Number(ratioMatch[1]) === Number(ratioMatch[2]);
         const ratioClass = hasValidRatio
           ? ` html-wrap--fixed-ratio${isSquareRatio ? ' html-wrap--square' : ''}`
           : '';
-        const ratioStyle = hasValidRatio
-          ? ` style="--html-aspect-ratio: ${ratioMatch[1]} / ${ratioMatch[2]}"`
+        const ratioVars = hasValidRatio
+          ? [`--html-aspect-ratio: ${ratioMatch[1]} / ${ratioMatch[2]}`].concat(
+              mobileRatioMatch
+                ? [`--html-aspect-ratio-mobile: ${mobileRatioMatch[1]} / ${mobileRatioMatch[2]}`]
+                : []
+            )
+          : [];
+        const ratioStyle = ratioVars.length
+          ? ` style="${ratioVars.join('; ')}"`
           : '';
         return `<div class="html-wrap${ratioClass}"${ratioStyle}>
           <iframe src="${hSrc}" frameborder="0" allow="autoplay" allowfullscreen></iframe>
