@@ -431,10 +431,15 @@
   @media (prefers-reduced-motion:reduce){
     .hud{ transition:none; }
   }
+  .sr-only{
+    position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
 
 </style>
 </head>
 <body>
+<h1 class="sr-only">Peirce Quincuncial Projection — Interactive Map Projection</h1>
 <script>
   if (window.matchMedia('(max-width:640px), (max-height:640px) and (pointer:coarse)').matches){
     document.body.classList.add('hud-hidden');

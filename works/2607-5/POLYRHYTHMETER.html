@@ -457,10 +457,15 @@
   @media (prefers-reduced-motion:reduce){
     .panel, .menu-icon span{ transition:none; }
   }
+  .sr-only{
+    position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
 </style>
 </head>
 <body>
 <div class="app">
+  <h1 class="sr-only">POLYRHYTHMETER — Polyrhythm &amp; Polymeter Sequencer</h1>
   <header class="panel-topbar">
     <button id="panelToggle" type="button" aria-label="Hide controls" aria-keyshortcuts="H Escape" aria-expanded="true" aria-controls="controlPanel">
       <span class="menu-button-icon" aria-hidden="true">
