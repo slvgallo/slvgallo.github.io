@@ -1214,13 +1214,20 @@ html.lang-ja-active .lang-ja {
   justify-content: space-between;
   gap: 20px;
   width: 100%;
-  max-width: min(1120px, 90vh);
+  max-width: 100%;
   margin: 0 auto;
   padding: 18px 20px;
   border: 1px solid currentColor;
   color: inherit;
   text-decoration: none;
   transition: color 0.2s, background-color 0.2s;
+}
+
+/* 同じコンテナ内にiframeがある場合、リンクカードの幅をそのiframeに揃える */
+@media (min-width: 769px) {
+  #project-media-full .html-wrap--square ~ .project-link-card {
+    max-width: min(1120px, 90vh);
+  }
 }
 
 #project-media-full .project-link-card:hover,
