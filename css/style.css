@@ -755,6 +755,29 @@ a img {
   display: none;
 }
 
+/* SoundCloud作品だけ、タイトルをサムネイル画像内に表示 */
+.index-post--soundcloud .post-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0;
+  pointer-events: none;
+}
+
+.index-post--soundcloud .post-title {
+  display: block;
+  margin: 0;
+  padding: 0.2rem 0.35rem;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 0;
+  color: #000;
+  font-size: clamp(0.65rem, 0.8vw, 0.8rem);
+  line-height: 1.25;
+  text-align: right;
+}
+
 /* アクセシビリティ用 */
 .sr-only {
   position: absolute;

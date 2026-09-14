@@ -375,7 +375,8 @@ class SiteBuilder {
         id: work.id,
         title: work.title,
         thumb: work.thumb,
-        tags: work.tags || []
+        tags: work.tags || [],
+        isSoundCloud: work.media?.some(mediaItem => mediaItem.type === 'soundcloud') || false
       };
       
       // Apply same processing as client-side
@@ -403,9 +404,11 @@ const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_
     works.forEach((work, index) => {
       const thumbInfo = this.getProcessedThumb(work.thumb);
       const isPriority = index < 4;
+      const isSoundCloud = work.media?.some(mediaItem => mediaItem.type === 'soundcloud');
+      const soundCloudClass = isSoundCloud ? ' index-post--soundcloud' : '';
 
       worksGrid += `
-      <article class="post index-post" data-tags="${work.tags ? work.tags.join(' ') : ''}">
+      <article class="post index-post${soundCloudClass}" data-tags="${work.tags ? work.tags.join(' ') : ''}">
         <div class="post-inner">
           <a href="works/${work.id}.html" class="post-content-anchor">
             <div class="post-photo-thumb">${this.generateThumbContent(work, thumbInfo, isPriority)}</div>

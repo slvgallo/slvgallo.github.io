@@ -8,6 +8,9 @@ import { getOptimizedImageUrl, getOptimizedIndexImageUrl } from './utils.js';
 export function createWorkItem(work, index = 100) { 
   const article = document.createElement("article");
   article.className = "post index-post";
+  if (work.isSoundCloud) {
+    article.classList.add("index-post--soundcloud");
+  }
   article.dataset.tags = work.tags ? work.tags.join(" ") : "";
 
   const postInner = document.createElement("div");
