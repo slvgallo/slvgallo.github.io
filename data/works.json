@@ -3,7 +3,7 @@
     "id": "2609-1",
     "title": "Splitline",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1789407163/Splitline_fgrnze.png",
-    "tags": ["code"],
+    "tags": ["code","motion"],
     "desc": "<p>UIコンポーネントのプロトタイプ。<br>16種類のインターフェースを共通の造形原理から構成している。</p>",
     "desc_en": "<p>A prototype of UI components.<br>Sixteen interface components are built on a shared visual principle.</p>",
     "customContent": {
