@@ -55,6 +55,7 @@
   </noscript>
   
   <link rel="stylesheet" href="../css/style.css">
+  {{CUSTOM_STYLES}}
 </head>
 <body class="page-permalink{{PAGE_MODIFIER_CLASS}}">
 
@@ -95,6 +96,7 @@
     <article class="post permalink-post">
       <!-- フルサイズメディアコンテナ -->
       <div id="project-media-full" class="l-container full-image">{{FULL_MEDIA_CONTENT}}</div>
+      {{CUSTOM_CONTENT}}
       
       <!-- コンテンツエリア -->
       <div class="l-container-mini section">
@@ -122,6 +124,7 @@
 </div>
 
 <script type="module" defer src="../js/page-common.js"></script>
+{{CUSTOM_SCRIPTS}}
 
 <!-- プロフィールフロートボタン -->
 <a href="../profile.html" class="profile-float">

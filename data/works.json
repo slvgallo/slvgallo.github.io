@@ -1,5 +1,19 @@
 [
   {
+    "id": "2609-1",
+    "title": "Splitline",
+    "thumb": "/works/2609-1/Splitline.thumb.png",
+    "tags": ["code"],
+    "desc": "<p>UIコンポーネントのプロトタイプ。<br>16種類のインターフェースを共通の造形原理から構成している。</p>",
+    "desc_en": "<p>A prototype of UI components.<br>Sixteen interface components are built on a shared visual principle.</p>",
+    "customContent": {
+      "src": "works/2609-1/Splitline.content.html",
+      "styles": ["works/2609-1/Splitline.css"],
+      "scripts": ["works/2609-1/Splitline.js"],
+      "width": "wide"
+    }
+  },
+  {
     "id": "2608-2",
     "title": "Phase-Shifting Rhythm Practice Tool",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1786930728/PhaseShiftingRhythmPracticeTool_gi2ibe.png",
@@ -7,8 +21,8 @@
       "sound",
       "code"
     ],
-    "desc": "<p>手拍子によるフェイズシフティングの練習をサポートするツール。</p><p>12ステップのリズムパターンを入力すると、一方のパートを1ステップずつずらした12のフェーズを生成する。テンポや反復回数を調整できるほか、任意のフェーズ範囲をループし、切り替わりを繰り返し練習できる。</p>",
-    "desc_en": "<p>A tool for practicing phase shifting through hand clapping.</p><p>Enter a 12-step rhythm pattern to generate 12 phases, with one part shifting by one step at a time. Adjust the tempo and repeat count, or loop any range to practice transitions between phases.</p>",
+    "desc": "<p>手拍子によるフェイズシフティングの練習をサポートするツール。<br>12ステップのリズムパターンを入力すると、一方のパートを1ステップずつずらした12のフェーズを生成する。テンポや反復回数を調整できるほか、任意のフェーズ範囲をループし、切り替わりを繰り返し練習できる。</p>",
+    "desc_en": "<p>A tool for practicing phase shifting through hand clapping.<br>Enter a 12-step rhythm pattern to generate 12 phases, with one part shifting by one step at a time. Adjust the tempo and repeat count, or loop any range to practice transitions between phases.</p>",
     "media": [
       {
         "type": "html",

@@ -1,0 +1,1130 @@
+#splitline-work {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --track: #ebebeb;
+  --fill: rgb(212 212 212);
+  --ink: #333333;
+  --text: #4a4a4a;
+  --accent: #333333;
+  --line: #dddddd;
+  --focus: var(--accent);
+  --radius: 21px;
+  --font: YakuHanJP, "Noto Sans", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+  color-scheme: light;
+}
+#splitline-work * {
+  box-sizing: border-box;
+}
+#splitline-work {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+}
+#splitline-work button, #splitline-work input, #splitline-work select, #splitline-work textarea {
+  font: inherit;
+}
+#splitline-work button {
+  color: inherit;
+  cursor: pointer;
+}
+#splitline-work h1, #splitline-work h2, #splitline-work p, #splitline-work fieldset {
+  margin: 0;
+}
+#splitline-work {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  container-type: inline-size;
+}
+#splitline-work .library-header {
+  margin-bottom: 24px;
+}
+#splitline-work .library-header h2 {
+  color: var(--ink);
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -.04em;
+}
+#splitline-work .theme-editor {
+  margin-bottom: 24px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) * .9524);
+  background: var(--surface);
+}
+#splitline-work .theme-editor__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 52px;
+  padding: 0 20px;
+}
+#splitline-work .theme-editor__header h2, #splitline-work .color-settings legend, #splitline-work .radius-setting label {
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 500;
+}
+#splitline-work .theme-editor__reset {
+  height: 42px;
+  min-height: 42px;
+  padding: 0 11px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+#splitline-work .theme-editor__reset:hover {
+  background: var(--track);
+}
+#splitline-work .theme-editor__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+#splitline-work .theme-editor__actions button {
+  font-size: 14px;
+}
+#splitline-work .theme-editor__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(230px, .34fr);
+  gap: 24px;
+  align-items: end;
+  padding: 20px;
+}
+#splitline-work .color-settings {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+#splitline-work .color-settings legend {
+  margin-bottom: 12px;
+}
+#splitline-work .color-palette {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(90px, 1fr));
+  gap: 8px;
+}
+#splitline-work .color-token {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  padding: 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 12px;
+}
+#splitline-work .color-token span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#splitline-work .color-token input {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  padding: 2px;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  cursor: pointer;
+}
+#splitline-work .radius-setting {
+  min-width: 0;
+}
+#splitline-work .radius-setting .split-slider {
+  width: 100%;
+}
+#splitline-work :is(#contour-parts, .theme-editor) {
+  --control-surface: var(--surface);
+  --control-text: var(--text);
+  --control-sub: var(--text);
+  --control-ink: var(--ink);
+  --control-line: var(--line);
+  --control-track: var(--track);
+  --control-fill: var(--fill);
+  --control-accent: var(--accent);
+  --control-radius: var(--radius);
+  --control-time: 240ms;
+  color: var(--control-text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+#splitline-work .component-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+#splitline-work .component-card {
+  min-width: 0;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) * .9524);
+  background: var(--surface);
+}
+#splitline-work .component-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+}
+#splitline-work .component-index {
+  color: var(--text);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+#splitline-work .component-demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  justify-content: center;
+  gap: 16px;
+  min-height: 126px;
+  padding: 42px 0 12px;
+}
+#splitline-work .component-status {
+  display: none;
+}
+@container (max-width: 720px) {
+  #splitline-work .theme-editor__content {
+    grid-template-columns: 1fr;
+  }
+  #splitline-work .color-palette {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@container (max-width: 540px) {
+  #splitline-work .component-grid {
+    grid-template-columns: 1fr;
+  }
+  #splitline-work .component-card {
+    padding: 20px;
+  }
+  #splitline-work .component-demo {
+    min-height: 112px;
+  }
+}
+#splitline-work .split-slider {
+  position: relative;
+  width: min(400px, 100%);
+  height: 42px;
+  background: var(--track);
+  border-radius: var(--radius, 21px);
+  user-select: none;
+  cursor: pointer;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+  touch-action: none;
+}
+
+#splitline-work .split-slider__fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  background: var(--fill);
+  clip-path: inset(0 50% 0 0);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+#splitline-work .split-slider__label {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text);
+  pointer-events: none;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+#splitline-work .split-slider__value {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text);
+  pointer-events: none;
+  z-index: 2;
+  font-variant-numeric: tabular-nums;
+}
+
+#splitline-work .split-slider__outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 5;
+}
+#splitline-work .split-slider__handle {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#splitline-work .split-slider:focus-visible {
+  outline: none;
+}
+#splitline-work .split-slider__value {
+  min-width: 3ch;
+  text-align: right;
+}
+#splitline-work :is(#contour-parts, .theme-editor) svg {
+  overflow:visible;
+  pointer-events:none
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-rail path {
+  fill:none;
+  stroke:var(--control-text);
+  stroke-width:2.5;
+  stroke-linecap:round;
+  stroke-linejoin:round
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-rail {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-button {
+  position:relative;
+  border:1px solid var(--control-line);
+  border-radius:var(--control-radius);
+  background:var(--control-track);
+  min-height:48px;
+  padding:12px 32px;
+  min-width:156px;
+  cursor:pointer;
+  isolation:isolate;
+  transition:background var(--control-time)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-button:hover {
+  background:var(--control-fill)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-button:active {
+  background:var(--control-fill)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-button[data-done=true] {
+  color:var(--control-accent);
+  background:var(--control-fill)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-button span {
+  position:relative;
+  pointer-events:none
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-button[data-done=true] .control-rail path {
+  stroke:var(--control-accent)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-choice {
+  position:relative;
+  display:inline-flex;
+  gap:10px;
+  align-items:center;
+  cursor:pointer;
+  min-height:44px;
+  padding:5px 2px
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-choice input {
+  position:absolute;
+  left:0;
+  top:50%;
+  transform:translateY(-50%);
+  width:30px;
+  height:30px;
+  margin:0;
+  opacity:0;
+  cursor:pointer
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-choice-mark {
+  position:relative;
+  display:block;
+  width:28px;
+  height:28px;
+  border-radius:calc(var(--radius) * 0.42857142857142855);
+  background:var(--control-track);
+  border:1px solid var(--control-line);
+  pointer-events:none;
+  transition:background var(--control-time),border-color var(--control-time)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-choice input:checked+.control-choice-mark {
+  background:var(--control-fill);
+  border-color:transparent
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-choice input:focus-visible+.control-choice-mark {
+  outline:2px solid var(--control-accent);
+  outline-offset:4px
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-choice-mark svg {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-choice-mark path {
+  stroke:var(--control-accent);
+  stroke-width:2.5;
+  fill:none;
+  stroke-linecap:round;
+  stroke-linejoin:round
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-radio-mark {
+  border-radius:50%
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-radio-mark circle {
+  fill:var(--control-accent);
+  transition:r var(--control-time);
+  r:0
+}
+#splitline-work :is(#contour-parts, .theme-editor) input:checked+.control-radio-mark circle {
+  r:5
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-radio-mark path {
+  transition:opacity var(--control-time)
+}
+#splitline-work :is(#contour-parts, .theme-editor) input:checked+.control-radio-mark path {
+  opacity:.65
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-radio-group {
+  border:0;
+  margin:0;
+  padding:0;
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  justify-content:center
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-radio-group legend {
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  clip-path:inset(50%)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-toggle {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  cursor:pointer;
+  min-height:48px;
+  position:relative
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-toggle-shell {
+  position:relative;
+  width:102px;
+  height:44px;
+  background:var(--control-track);
+  border:1px solid var(--control-line);
+  border-radius:calc(var(--radius) * 1.0476190476190477);
+  display:block;
+  transition:background var(--control-time)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-toggle input {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  margin:0;
+  cursor:pointer
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-toggle:has(input:checked) .control-toggle-shell {
+  background:var(--control-fill)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-toggle input:focus-visible+.control-toggle-shell {
+  outline:2px solid var(--control-accent);
+  outline-offset:4px
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-toggle-word {
+  position:absolute;
+  left:16px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--control-sub);
+  font-size:12px;
+  font-weight:500;
+  pointer-events:none
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-toggle-word.control-on {
+  left:auto;
+  right:16px;
+  color:var(--control-accent)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-toggle:not(:has(input:checked)) .control-on {
+  opacity:.35
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-toggle:has(input:checked) .control-off {
+  opacity:.35
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-field {
+  position:relative;
+  width:min(100%,270px);
+  padding-top:7px
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-field-shell {
+  position:relative;
+  border-radius:var(--control-radius);
+  height:52px;
+  background:var(--control-track);
+  border:1px solid var(--control-line)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-field textarea {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+  background:transparent;
+  padding:13px 17px;
+  font-size:16px;
+  border-radius:var(--control-radius)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-field-label {
+  position:absolute;
+  left:17px;
+  top:32px;
+  transform:translateY(-50%);
+  color:var(--control-sub);
+  pointer-events:none;
+  transition:top var(--control-time),font-size var(--control-time),background var(--control-time);
+  z-index:2;
+  padding:0 4px;
+  margin-left:-4px
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-field:has(textarea:focus) .control-field-label, #splitline-work :is(#contour-parts, .theme-editor) .control-field:has(textarea:not(:placeholder-shown)) .control-field-label {
+  top:7px;
+  font-size:12px;
+  background:var(--control-surface);
+  color:var(--control-accent)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-field textarea:focus {
+  outline:none
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-field textarea[aria-invalid=true] {
+  outline-color:light-dark(#af3542,#ffa6b1)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-field .control-rail path {
+  stroke:var(--control-accent)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-dropdown {
+  width:min(100%,270px);
+  position:relative
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-select-button {
+  width:100%;
+  min-height:50px;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 18px;
+  background:var(--control-track);
+  border:1px solid var(--control-line);
+  border-radius:var(--control-radius);
+  cursor:pointer;
+  gap:14px
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-select-button .control-caret {
+  width:20px;
+  height:20px;
+  position:relative;
+  flex-shrink:0
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-caret:before, #splitline-work :is(#contour-parts, .theme-editor) .control-caret:after {
+  content:"";
+  position:absolute;
+  top:9px;
+  width:8px;
+  height:2px;
+  background:var(--control-text);
+  border-radius:calc(var(--radius) * 0.09523809523809523);
+  transition:transform var(--control-time)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-caret:before {
+  left:3px;
+  transform:rotate(35deg)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-caret:after {
+  right:3px;
+  transform:rotate(-35deg)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-select-button[aria-expanded=true] .control-caret:before {
+  transform:rotate(-35deg)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-select-button[aria-expanded=true] .control-caret:after {
+  transform:rotate(35deg)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-select-button[aria-expanded=true] {
+  border-radius:var(--control-radius) var(--control-radius) calc(var(--radius) * 0.38095238095238093) calc(var(--radius) * 0.38095238095238093)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-options {
+  margin:0;
+  padding:4px 8px 10px;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  display:grid;
+  gap:3px;
+  box-shadow:none
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-options[hidden] {
+  display:none
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-options button {
+  position:relative;
+  display:flex;
+  width:100%;
+  align-items:center;
+  border:0;
+  border-radius:var(--control-radius);
+  background:transparent;
+  padding:10px 12px;
+  min-height:42px;
+  cursor:pointer;
+  text-align:left
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-options button[aria-pressed=true] {
+  background:var(--control-fill);
+  color:var(--control-accent)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-options button:hover {
+  background:var(--control-fill)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-drop-stage {
+  align-items:flex-start;
+  min-height:126px
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-reset {
+  border:1px solid var(--control-line);
+  background:var(--control-surface);
+  padding:8px 13px;
+  border-radius:var(--radius);
+  cursor:pointer;
+  min-height:38px
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-choice-mark {
+  border-radius:calc(var(--radius) * 0.6666666666666666)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-button, #splitline-work :is(#contour-parts, .theme-editor) .control-select-button {
+  height:42px;
+  min-height:42px;
+  padding-top:0;
+  padding-bottom:0
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-toggle-shell, #splitline-work :is(#contour-parts, .theme-editor) .control-field-shell {
+  height:42px
+}
+#splitline-work :is(#contour-parts, .theme-editor) {
+  --control-height:42px
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-button, #splitline-work :is(#contour-parts, .theme-editor) .control-select-button, #splitline-work :is(#contour-parts, .theme-editor) .control-field-shell, #splitline-work :is(#contour-parts, .theme-editor) .control-toggle-shell {
+  height:var(--control-height);
+  min-height:var(--control-height)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-field {
+  padding-top:0;
+  height:var(--control-height)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-field-label {
+  top:calc(var(--control-height)/2)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-field:has(textarea:focus) .control-field-label, #splitline-work :is(#contour-parts, .theme-editor) .control-field:has(textarea:not(:placeholder-shown)) .control-field-label {
+  top:0
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-drop-stage {
+  align-items:center
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-field:has(textarea:focus) .control-field-label, #splitline-work :is(#contour-parts, .theme-editor) .control-field:has(textarea:not(:placeholder-shown)) .control-field-label {
+  background:var(--control-track)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-segment {
+  width:200px;
+  display:flex;
+  align-items:stretch;
+  position:relative
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-segment button {
+  flex:1 1 0;
+  min-width:0;
+  border:0;
+  background:transparent;
+  position:relative;
+  z-index:1;
+  padding:0 4px;
+  border-radius:inherit;
+  color:var(--control-sub)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-segment button {
+  transition:background var(--control-time),color var(--control-time),opacity var(--control-time)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-segment button[aria-pressed=true] {
+  color:var(--control-accent)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-segment:before {
+  content:"";
+  position:absolute;
+  inset:0 auto 0 0;
+  width:calc(100% / var(--item-count,3));
+  border-radius:inherit;
+  background:var(--control-fill);
+  transform:translateX(calc(var(--selected-index,0) * 100%));
+  transition:transform var(--control-time) cubic-bezier(.22,.7,.2,1);
+  pointer-events:none
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-segment .control-rail {
+  z-index:2
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-choice-mark {
+  transition:background var(--control-time),box-shadow var(--control-time)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-choice-mark svg {
+  transition:transform var(--control-time);
+  transform-origin:center
+}
+@media(hover:hover) {
+  #splitline-work :is(#contour-parts, .theme-editor) .control-choice:hover input:not(:checked)+.control-choice-mark {
+    background:var(--control-fill)
+  }
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-segment button:focus-visible {
+  outline:2px solid var(--control-accent);
+  outline-offset:4px
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-select-button[aria-expanded=true] {
+  border-radius:var(--control-radius)
+}
+#splitline-work :is(#contour-parts, .theme-editor) input:checked+.control-radio-mark circle {
+  r:0
+}
+#splitline-work :is(#contour-parts, .theme-editor) input:checked+.control-radio-mark path {
+  opacity:1
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-segment-wide {
+  width:min(100%,300px)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-segment button[aria-pressed=false] {
+  opacity:.55
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-icon {
+  width:42px;
+  height:42px;
+  padding:0;
+  min-width:42px;
+  display:grid;
+  place-items:center
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-symbol {
+  width:28px;
+  height:28px;
+  pointer-events:none
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-symbol path {
+  fill:none;
+  stroke:var(--control-accent);
+  stroke-width:3;
+  stroke-linecap:round;
+  stroke-linejoin:round
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-accordion {
+  width:min(100%,300px)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-accordion-trigger {
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  min-width:0
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-panel {
+  display:grid;
+  grid-template-rows:0fr;
+  opacity:0;
+  transition:grid-template-rows var(--control-time),opacity var(--control-time)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-panel[data-open=true] {
+  grid-template-rows:1fr;
+  opacity:1
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-panel>div {
+  overflow:hidden;
+  min-height:0
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-panel p {
+  padding:16px 4px;
+  color:var(--control-sub);
+  font-size:13px;
+  line-height:1.7
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-tag {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:0 8px 0 18px;
+  height:42px;
+  border-radius:var(--control-radius);
+  background:var(--control-track);
+  transition:opacity var(--control-time),transform var(--control-time)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-tag[data-removing=true] {
+  opacity:0;
+  transform:scale(.9)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-tag[hidden] {
+  display:none
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-tag button {
+  border:0;
+  background:transparent;
+  width:32px;
+  height:36px;
+  padding:0;
+  cursor:pointer
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-field textarea {
+  font:inherit;
+  font-size:16px;
+  line-height:20px;
+  color:inherit;
+  padding:10px 17px;
+  resize:none;
+  overflow:hidden;
+  display:block
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-menu-demo {
+  position:relative;
+  width:min(100%,270px);
+  isolation:isolate
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-menu-demo:before {
+  content:"";
+  position:absolute;
+  top:0;
+  right:0;
+  width:42px;
+  height:42px;
+  border-radius:var(--control-radius);
+  background:var(--control-track);
+  transition:width var(--control-time),height var(--control-time);
+  z-index:-1
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-menu-demo:has(#control-menu[aria-expanded=true]):before {
+  width:100%;
+  height:100%
+}
+#splitline-work :is(#contour-parts, .theme-editor) #control-menu {
+  margin-left:auto;
+  background:transparent
+}
+#splitline-work :is(#contour-parts, .theme-editor) #control-menu:hover, #splitline-work :is(#contour-parts, .theme-editor) #control-menu[aria-expanded=true] {
+  background:transparent
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-accordion-trigger {
+  padding-right:0
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-end-control {
+  position:relative;
+  display:block;
+  flex:0 0 42px;
+  width:42px;
+  height:42px;
+  border-radius:inherit
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-tag {
+  padding-right:0;
+  gap:0
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-tag button {
+  position:relative;
+  width:42px;
+  height:42px;
+  border-radius:inherit;
+  flex-shrink:0
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-end-control .control-symbol, #splitline-work :is(#contour-parts, .theme-editor) .control-tag .control-symbol {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%
+}
+#splitline-work :is(#contour-parts, .theme-editor) #control-loading[aria-busy=true] {
+  background:var(--control-fill);
+  cursor:progress
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-menu-items {
+  display:grid;
+  gap:4px;
+  padding:4px 8px 10px
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-menu-items button {
+  height:42px;
+  border:0;
+  border-radius:var(--control-radius);
+  background:transparent;
+  text-align:left;
+  padding:0 16px;
+  cursor:pointer;
+  color:var(--control-sub);
+  transition:color var(--control-time)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-menu-items button:hover, #splitline-work :is(#contour-parts, .theme-editor) .control-menu-items button[aria-pressed=true] {
+  background:transparent;
+  color:var(--control-accent)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-icon[aria-expanded=true] {
+  background:var(--control-fill)
+}
+@media(hover:hover) {
+  #splitline-work :is(#contour-parts, .theme-editor) .control-choice:hover #control-checkbox:checked+.control-choice-mark {
+    background:var(--control-track)
+  }
+  #splitline-work :is(#contour-parts, .theme-editor) .control-choice[data-checked-hover=true]:hover #control-checkbox:checked+.control-choice-mark {
+    background:var(--control-fill)
+  }
+  #splitline-work :is(#contour-parts, .theme-editor) .control-choice[data-checked-hover=true]:hover #control-checkbox:not(:checked)+.control-choice-mark {
+    background:var(--control-track)
+  }
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-accordion {
+  background:var(--control-track);
+  border-radius:var(--control-radius);
+  overflow:hidden
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-accordion .control-accordion-trigger, #splitline-work :is(#contour-parts, .theme-editor) .control-accordion .control-accordion-trigger:hover {
+  background:transparent
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-accordion .control-panel p {
+  padding:12px 18px 18px
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-tag[data-removing=true] {
+  transform:none
+}
+#splitline-work :is(#contour-parts, .theme-editor) #control-menu .control-symbol {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-dropdown {
+  background:var(--control-track);
+  
+  border-radius:min(var(--control-radius), calc(var(--control-height) / 2));
+  overflow:hidden
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-spinner {
+  position:relative;
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:var(--control-radius);
+  background:var(--control-track);
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-select-button {
+  background:transparent
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-rail path, #splitline-work :is(#contour-parts, .theme-editor) .control-field .control-rail path, #splitline-work :is(#contour-parts, .theme-editor) .control-symbol path, #splitline-work :is(#contour-parts, .theme-editor) .control-choice-mark path, #splitline-work :is(#contour-parts, .theme-editor) .control-button[data-done=true] .control-rail path {
+  stroke:var(--control-ink)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-caret:before, #splitline-work :is(#contour-parts, .theme-editor) .control-caret:after {
+  background:var(--control-ink)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-radio-mark circle {
+  fill:var(--control-ink)
+}
+#splitline-work :is(#contour-parts, .theme-editor) #control-save {
+  background:var(--control-track)
+}
+#splitline-work :is(#contour-parts, .theme-editor) #control-save[data-done=true] {
+  background:var(--control-fill)
+}
+@media(hover:hover) {
+  #splitline-work :is(#contour-parts, .theme-editor) #control-save:hover {
+    background:var(--control-fill)
+  }
+  #splitline-work :is(#contour-parts, .theme-editor) #control-save[data-done=true]:hover {
+    background:var(--control-track)
+  }
+  #splitline-work :is(#contour-parts, .theme-editor) #control-save[data-hover-lock=true]:hover {
+    background:var(--control-track)
+  }
+  #splitline-work :is(#contour-parts, .theme-editor) #control-save[data-hover-lock=true][data-done=true]:hover {
+    background:var(--control-fill)
+  }
+}
+#splitline-work :is(#contour-parts, .theme-editor) #control-generic .control-center-icon {
+  width:16px;
+  height:16px;
+  fill:none;
+  stroke:var(--control-ink);
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round
+}
+#splitline-work :is(#contour-parts, .theme-editor) #control-generic span.control-center-icon {
+  width:24px;
+  height:24px;
+  display:grid;
+  place-items:center;
+  font-size:24px;
+  line-height:1;
+  color:var(--text)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-stepper button:disabled, #splitline-work :is(#contour-parts, .theme-editor) .control-stepper button:disabled:hover {
+  opacity:.3;
+  cursor:default;
+  background:transparent
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-stepper {
+  display:flex;
+  align-items:center;
+  width:168px;
+  height:42px;
+  border-radius:var(--control-radius);
+  background:var(--control-track);
+  overflow:hidden
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-stepper button {
+  position:relative;
+  flex:0 0 42px;
+  width:42px;
+  height:42px;
+  border:0;
+  background:transparent;
+  cursor:pointer
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-stepper .control-rail {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-stepper span {
+  flex:1;
+  text-align:center;
+  font-variant-numeric:tabular-nums;
+  color:var(--control-text)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-stepper button {
+  border-radius:var(--control-radius);
+  transition:background var(--control-time)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-stepper button:hover {
+  background:var(--control-fill)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-stepper button .control-step-symbol {
+  color:var(--control-ink)
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-stepper .control-step-symbol {
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:14px;
+  height:14px;
+  transform:translate(-50%,-50%);
+  z-index:2;
+  pointer-events:none
+}
+#splitline-work .control-step-symbol::before,
+#splitline-work .control-step-symbol--plus::after {
+  content:"";
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:14px;
+  height:2px;
+  border-radius:1px;
+  background:currentColor;
+  transform:translate(-50%,-50%)
+}
+#splitline-work .control-step-symbol--plus::after {
+  width:2px;
+  height:14px
+}
+#splitline-work :is(#contour-parts, .theme-editor) #control-tag-restore {
+  display:none
+}
+#splitline-work :is(#contour-parts, .theme-editor) #control-menu-panel {
+  opacity:1
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-menu-items {
+  opacity:0;
+  transition:opacity var(--control-time);
+  pointer-events:none
+}
+#splitline-work :is(#contour-parts, .theme-editor) #control-menu-panel[data-open=true] .control-menu-items {
+  opacity:1;
+  transition-delay:var(--control-time);
+  pointer-events:auto
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-tag[data-appearing=true] {
+  animation:splitline-tag-appear var(--control-time) ease-out
+}
+@keyframes splitline-tag-appear {
+  from {
+    opacity:0
+  }
+  to {
+    opacity:1
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  #splitline-work :is(#contour-parts, .theme-editor) *, #splitline-work :is(#contour-parts, .theme-editor) *:before, #splitline-work :is(#contour-parts, .theme-editor) *:after {
+    transition:none!important;
+    animation:none!important
+  }
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-button, #splitline-work :is(#contour-parts, .theme-editor) .control-field-shell, #splitline-work :is(#contour-parts, .theme-editor) .control-select-button, #splitline-work :is(#contour-parts, .theme-editor) .control-toggle-shell, #splitline-work :is(#contour-parts, .theme-editor) .control-choice-mark {
+  border-radius:var(--radius);
+  border:0
+}
+#splitline-work :is(#contour-parts, .theme-editor) .control-rail path {
+  stroke-width:3
+}
+
+#splitline-work h2 { font-family: var(--font); }
+#splitline-work .library-header h2 { line-height: 1.2; }
+@media (max-width: 590px) {
+  #splitline-work { padding: 16px 12px; }
+  #splitline-work .component-card { padding: 20px 16px; }
+}
+
+/* Theme controls use the same button geometry and rails as the demos. */
+#splitline-work .theme-editor .color-palette {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+#splitline-work :is(#contour-parts, .theme-editor) .color-token.control-button {
+  min-width: 0;
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+#splitline-work .color-token input {
+  position: relative;
+  z-index: 1;
+}
+#splitline-work .theme-editor .control-rail {
+  pointer-events: none;
+}
+#splitline-work .theme-editor .control-button:focus-visible,
+#splitline-work .theme-editor .color-token:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+@container (max-width: 720px) {
+  #splitline-work .theme-editor .color-palette {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

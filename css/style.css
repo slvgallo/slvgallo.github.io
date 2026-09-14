@@ -892,6 +892,19 @@ a img {
   }
 }
 
+/* 作品ごとの自由配置欄 */
+.project-custom-content {
+  min-width: 0;
+}
+
+.project-custom-content--content {
+  max-width: min(100%, 52rem);
+}
+
+#project-media-full:not(:empty) + .project-custom-content {
+  margin-top: 20px;
+}
+
 /* エントリーヘッダー */
 .entry-header {
   margin-bottom: 20px;

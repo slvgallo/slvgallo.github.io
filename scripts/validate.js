@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
+const { readCustomContent } = require('./custom-content');
 
 class DataValidator {
   constructor() {
@@ -36,7 +37,7 @@ class DataValidator {
     // メディア
     if (
       (!work.media || work.media.length === 0) &&
-      !work.presentation
+      !work.presentation && !work.customContent
     ) {
       this.warnings.push(`Work #${index} (${work.id}): No media defined`);
     } else if (work.media) {
@@ -48,6 +49,12 @@ class DataValidator {
           this.errors.push(`Work #${index} (${work.id}), Media #${mIndex}: Missing src`);
         }
       });
+    }
+
+    try {
+      readCustomContent(work, path.join(__dirname, '..'));
+    } catch (error) {
+      this.errors.push(`Work #${index} (${work.id}): ${error.message}`);
     }
 
     // サムネイル

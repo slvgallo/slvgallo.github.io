@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
+const { readCustomContent } = require('./custom-content');
 const {
   extractYouTubeId,
   optimizeCloudinaryUrl,
@@ -329,6 +330,14 @@ class SiteBuilder {
         
         html = html.replace('{{FULL_MEDIA_CONTENT}}', fullMediaContent);
         html = html.replace('{{MEDIA_CONTENT}}', contentMediaContent);
+
+        const custom = readCustomContent(work, this.config.srcDir);
+        html = html.replace('{{CUSTOM_STYLES}}', () => custom
+          ? custom.styles.map(url => `<link rel="stylesheet" href="${url}">`).join('\n  ') : '');
+        html = html.replace('{{CUSTOM_CONTENT}}', () => custom
+          ? `<div id="project-custom-content" class="project-custom-content project-custom-content--${custom.width} ${custom.width === 'wide' ? 'l-container' : 'l-container-mini'}">${custom.html}</div>` : '');
+        html = html.replace('{{CUSTOM_SCRIPTS}}', () => custom
+          ? custom.scripts.map(url => `<script defer src="${url}"></script>`).join('\n') : '');
         
         // OGPメタデータを置換
         html = html.replace('{{OGP_IMAGE_URL}}', ogpImageUrl);
@@ -346,6 +355,7 @@ class SiteBuilder {
     });
     
     console.log(`   ✓ Generated ${this.stats.pages} work pages`);
+    if (this.stats.errors.length) throw new Error('Work page generation failed');
   }
 
   /**
@@ -564,6 +574,7 @@ const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_
    */
   async build() {
     const startTime = Date.now();
+    this.stats = { pages: 0, images: 0, errors: [] };
     
     try {
       console.log('\n🚀 Starting build process...\n');

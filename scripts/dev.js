@@ -43,7 +43,8 @@ class DevServer {
       path.join(__dirname, '..', 'data'),
       path.join(__dirname, '..', 'templates'),
       path.join(__dirname, '..', 'css'),
-      path.join(__dirname, '..', 'js')
+      path.join(__dirname, '..', 'js'),
+      path.join(__dirname, '..', 'works')
     ];
 
     const watcher = chokidar.watch(watchPaths, {
@@ -52,7 +53,8 @@ class DevServer {
       ignoreInitial: true
     });
 
-    watcher.on('change', (filePath) => {
+    watcher.on('all', (event, filePath) => {
+      if (!['add', 'change', 'unlink'].includes(event)) return;
       this.rebuild(path.relative(process.cwd(), filePath));
     });
 

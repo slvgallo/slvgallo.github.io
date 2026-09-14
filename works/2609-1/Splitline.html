@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Splitline component library">
+  <title>Splitline</title>
+  <link rel="stylesheet" href="Splitline.css">
+  <script src="Splitline.js" defer></script>
+</head>
+<body>
+  <main id="splitline-work" class="component-library">
+    <header class="library-header"><h2>Splitline</h2></header>
+    <section class="theme-editor" aria-labelledby="theme-title">
+  <div class="theme-editor__header">
+    <h2 id="theme-title">Theme</h2>
+  </div>
+  <div class="theme-editor__content">
+    <fieldset class="color-settings">
+      <legend>Color palette</legend>
+      <div class="color-palette">
+        <label class="color-token control-button"><input type="color" data-token="bg" value="#ffffff"><span>Page</span><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg></label>
+        <label class="color-token control-button"><input type="color" data-token="surface" value="#ffffff"><span>Card</span><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg></label>
+        <label class="color-token control-button"><input type="color" data-token="track" value="#ebebeb"><span>Default</span><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg></label>
+        <label class="color-token control-button"><input type="color" data-token="fill" value="#d4d4d4"><span>Fill & hover</span><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg></label>
+        <label class="color-token control-button"><input type="color" data-token="ink" value="#333333"><span>Lines & icons</span><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg></label>
+        <label class="color-token control-button"><input type="color" data-token="text" value="#4a4a4a"><span>Body text</span><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg></label>
+        <label class="color-token control-button"><input type="color" data-token="accent" value="#333333"><span>Selected & focus</span><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg></label>
+        <label class="color-token control-button"><input type="color" data-token="line" value="#dddddd"><span>Borders</span><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg></label>
+      </div>
+    </fieldset>
+    <div class="radius-setting" id="radius-slider">
+      <div class="theme-editor__actions" role="group" aria-label="Reset controls">
+        <button class="control-button theme-editor__reset" id="reset-all" type="button" aria-busy="false"><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg><span>Reset All</span></button>
+      </div>
+      <div class="split-slider" data-ref="slider" role="slider" tabindex="0" aria-label="Corner radius" aria-valuemin="0" aria-valuemax="28" aria-valuenow="21" aria-valuetext="21 px">
+        <div class="split-slider__fill" data-ref="trackFill"></div>
+        <span class="split-slider__label" data-ref="label">Corner radius</span>
+        <span class="split-slider__value" data-ref="valueDisplay" id="radius-value">21 px</span>
+        <svg class="split-slider__outline" data-ref="handleGroup" aria-hidden="true">
+          <path class="split-slider__handle" data-ref="handleTop"></path>
+          <path class="split-slider__handle" data-ref="handleBottom"></path>
+        </svg>
+      </div>
+      <input type="hidden" id="radius-control" value="21">
+    </div>
+  </div>
+</section>
+    <div id="contour-parts" aria-label="UI components">
+      <div class="component-grid">
+<section class="component-card" id="branched-slider"><h2><span class="component-index">01</span>Slider</h2><div class="component-demo">  <div class="split-slider" data-ref="slider" role="slider" tabindex="0" aria-label="Always-split slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+    <div class="split-slider__fill" data-ref="trackFill"></div>
+    <span class="split-slider__label" data-ref="label">Volume</span>
+    <span class="split-slider__value" data-ref="valueDisplay">50</span>
+
+    <svg class="split-slider__outline" data-ref="handleGroup" aria-hidden="true">
+      <path class="split-slider__handle" data-ref="handleTop"></path>
+      <path class="split-slider__handle" data-ref="handleBottom"></path>
+    </svg>
+  </div>
+
+</div></section>
+  <section class="component-card"><h2><span class="component-index">02</span>Segmented control</h2><div class="component-demo"><div class="control-toggle-shell control-segment control-segment-wide" id="control-segment-four" role="group" aria-label="Time period"><button type="button" aria-pressed="true">Day</button><button type="button" aria-pressed="false">Week</button><button type="button" aria-pressed="false">Month</button><button type="button" aria-pressed="false">Year</button><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg></div></div><div class="component-status" id="control-three-state">Day selected</div></section>
+  <section class="component-card">
+    <h2><span class="component-index">03</span>Button</h2>
+    <div class="component-demo">
+      <button type="button" class="control-button" id="control-text-button" aria-busy="false">
+        <svg class="control-rail" aria-hidden="true"><path></path><path></path></svg>
+        <span>Button</span>
+      </button>
+    </div>
+    <div class="component-status" id="control-text-button-state" role="status">Idle</div>
+  </section>
+  <section class="component-card"><h2><span class="component-index">04</span>Icon button</h2><div class="component-demo"><button type="button" class="control-button control-icon" id="control-generic" aria-label="Run" aria-busy="false"><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg><span class="control-center-icon" aria-hidden="true">➰</span></button></div><div class="component-status" id="control-generic-state" role="status">Idle</div></section>
+  <section class="component-card"><h2><span class="component-index">05</span>Toggle button</h2><div class="component-demo"><button class="control-button" id="control-save" type="button"><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg><span>Follow</span></button></div><div class="component-status" id="control-save-status" role="status" aria-live="polite">Follow</div></section>
+  <section class="component-card"><h2><span class="component-index">06</span>Toggle switch</h2><div class="component-demo"><label class="control-toggle"><input type="checkbox" id="control-toggle"><span class="control-toggle-shell"><span class="control-toggle-word control-off">OFF</span><span class="control-toggle-word control-on">ON</span><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg></span></label></div><div class="component-status" id="control-toggle-state">Off</div></section>
+  <section class="component-card"><h2><span class="component-index">07</span>Checkbox</h2><div class="component-demo"><label class="control-choice"><input id="control-checkbox" type="checkbox"><span class="control-choice-mark"><svg viewBox="0 0 28 28" aria-hidden="true"><path></path><path></path></svg></span></label></div><div class="component-status" id="control-check-state">Off</div></section>
+  <section class="component-card"><h2><span class="component-index">08</span>Radio button</h2><div class="component-demo"><fieldset class="control-radio-group"><legend>Display density</legend><label class="control-choice"><input type="radio" name="control-density" value="Standard" checked><span class="control-choice-mark control-radio-mark"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M 7 6 A 10 10 0 0 0 7 22"></path><path d="M 21 6 A 10 10 0 0 1 21 22"></path><circle cx="14" cy="14" r="5"></circle></svg></span></label><label class="control-choice"><input type="radio" name="control-density" value="Compact"><span class="control-choice-mark control-radio-mark"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M 7 6 A 10 10 0 0 0 7 22"></path><path d="M 21 6 A 10 10 0 0 1 21 22"></path><circle cx="14" cy="14" r="0"></circle></svg></span></label></fieldset></div><div class="component-status" id="control-radio-state">Standard selected</div></section>
+    <section class="component-card"><h2><span class="component-index">09</span>Removable tag</h2><div class="component-demo"><span class="control-tag" id="control-tag">UI Design<button type="button" aria-label="Remove UI Design tag"><svg class="control-symbol" viewBox="0 0 28 28" aria-hidden="true"><path></path><path></path></svg></button></span><button class="control-reset" type="button" id="control-tag-restore" hidden>Restore tag</button></div><div class="component-status" id="control-tag-state" role="status">Tag added</div></section>
+    <section class="component-card"><h2><span class="component-index">10</span>Number stepper</h2><div class="component-demo"><div class="control-stepper" id="control-stepper"><button type="button" aria-label="Decrease"><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg><span class="control-step-symbol" aria-hidden="true"></span></button><span aria-live="polite">1</span><button type="button" aria-label="Increase"><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg><span class="control-step-symbol control-step-symbol--plus" aria-hidden="true"></span></button></div></div></section>
+<section class="component-card"><h2><span class="component-index">11</span>Accordion</h2><div class="component-demo"><div class="control-accordion"><button type="button" class="control-button control-accordion-trigger" id="control-accordion-trigger" aria-expanded="false" aria-controls="control-panel"><span>Note</span><span class="control-end-control"><svg class="control-symbol" viewBox="0 0 42 42" aria-hidden="true"><path></path><path></path></svg></span></button><div class="control-panel" id="control-panel" data-open="false" aria-hidden="true"><div><p>Outline-following lines communicate open, close, and selection. Corner radius and colors follow the shared theme.</p></div></div></div></div><div class="component-status" id="control-accordion-state">Closed</div></section>
+  <section class="component-card"><h2><span class="component-index">12</span>Hamburger Menu</h2><div class="component-demo"><div class="control-menu-demo"><button type="button" class="control-button control-icon" id="control-menu" aria-label="Open menu" aria-expanded="false" aria-controls="control-menu-panel"><svg class="control-symbol" viewBox="0 0 42 42" aria-hidden="true"><path></path><path></path></svg></button><div class="control-panel" id="control-menu-panel" data-open="false" aria-hidden="true" inert><div><div class="control-menu-items" role="group" aria-label="Menu"><button type="button" aria-pressed="true">Overview</button><button type="button" aria-pressed="false">Projects</button><button type="button" aria-pressed="false">Settings</button></div></div></div></div></div><div class="component-status" id="control-menu-state">Closed</div></section>
+<section class="component-card"><h2><span class="component-index">13</span>Dropdown</h2><div class="component-demo control-drop-stage"><div class="control-dropdown"><button type="button" class="control-select-button" id="control-dropdown-trigger" aria-expanded="false" aria-controls="control-options"><span id="control-selected">All layers</span><span class="control-caret" aria-hidden="true"></span><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg></button><div class="control-options" id="control-options" hidden role="group" aria-label="Layer visibility"><button type="button" aria-pressed="true" data-value="All layers"><span>All layers</span></button><button type="button" aria-pressed="false" data-value="Selected layers"><span>Selected layers</span></button><button type="button" aria-pressed="false" data-value="Visible layers"><span>Visible layers</span></button></div></div></div><div class="component-status" id="control-dropdown-state">Closed</div></section>
+  <section class="component-card"><h2><span class="component-index">14</span>Text field</h2><div class="component-demo"><label class="control-field"><span class="control-field-label">Message</span><div class="control-field-shell"><textarea id="control-text" placeholder=" " maxlength="500" rows="1" aria-describedby="control-field-state"></textarea><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg></div></label></div><div class="component-status" id="control-field-state">Empty</div></section>
+  <section class="component-card"><h2><span class="component-index">15</span>Loading indicator</h2><div class="component-demo"><button type="button" class="control-button" id="control-loading" aria-busy="false"><svg class="control-rail" aria-hidden="true"><path></path><path></path></svg><span>Load</span></button></div><div class="component-status" id="control-loading-state" role="status">Idle</div></section>
+
+      <section class="component-card">
+        <h2><span class="component-index">16</span>Spinner</h2>
+        <div class="component-demo">
+          <div class="control-spinner" id="control-spinner" role="status" aria-label="Loading">
+            <svg class="control-rail" aria-hidden="true"><path></path><path></path></svg>
+          </div>
+        </div>
+      </section>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
