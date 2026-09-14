@@ -9,6 +9,8 @@
   --line: #dddddd;
   --focus: var(--accent);
   --radius: 21px;
+  --component-width: 300px;
+  --component-compact-width: 168px;
   --font: YakuHanJP, "Noto Sans", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
   color-scheme: light;
 }
@@ -104,7 +106,7 @@
 #splitline-work .color-palette {
   display: grid;
   grid-template-columns: repeat(4, minmax(90px, 1fr));
-  gap: 8px;
+  gap: 12px;
 }
 #splitline-work .color-token {
   display: flex;
@@ -136,6 +138,18 @@
 }
 #splitline-work .radius-setting .split-slider {
   width: 100%;
+}
+#splitline-work #branched-slider .split-slider {
+  width: min(100%, var(--component-width));
+}
+#splitline-work .theme-editor #reset-all.control-button {
+  width: 120px;
+  min-width: 0;
+  padding: 0 18px;
+}
+#splitline-work #contour-parts #control-loading {
+  width: var(--component-compact-width);
+  min-width: 0;
 }
 #splitline-work :is(#contour-parts, .theme-editor) {
   --control-surface: var(--surface);
@@ -470,7 +484,7 @@
 }
 #splitline-work :is(#contour-parts, .theme-editor) .control-field {
   position:relative;
-  width:min(100%,270px);
+  width:min(100%,var(--component-width));
   padding-top:7px
 }
 #splitline-work :is(#contour-parts, .theme-editor) .control-field-shell {
@@ -519,7 +533,7 @@
   stroke:var(--control-accent)
 }
 #splitline-work :is(#contour-parts, .theme-editor) .control-dropdown {
-  width:min(100%,270px);
+  width:min(100%,var(--component-width));
   position:relative
 }
 #splitline-work :is(#contour-parts, .theme-editor) .control-select-button {
@@ -712,7 +726,7 @@
   opacity:1
 }
 #splitline-work :is(#contour-parts, .theme-editor) .control-segment-wide {
-  width:min(100%,300px)
+  width:min(100%,var(--component-width))
 }
 #splitline-work :is(#contour-parts, .theme-editor) .control-segment button[aria-pressed=false] {
   opacity:.55
@@ -738,7 +752,7 @@
   stroke-linejoin:round
 }
 #splitline-work :is(#contour-parts, .theme-editor) .control-accordion {
-  width:min(100%,300px)
+  width:min(100%,var(--component-width))
 }
 #splitline-work :is(#contour-parts, .theme-editor) .control-accordion-trigger {
   width:100%;
@@ -805,7 +819,7 @@
 }
 #splitline-work :is(#contour-parts, .theme-editor) .control-menu-demo {
   position:relative;
-  width:min(100%,270px);
+  width:min(100%,var(--component-width));
   isolation:isolate
 }
 #splitline-work :is(#contour-parts, .theme-editor) .control-menu-demo:before {
@@ -825,6 +839,10 @@
   height:100%
 }
 #splitline-work :is(#contour-parts, .theme-editor) #control-menu {
+  width:42px;
+  min-width:0;
+  display:flex;
+  justify-content:flex-end;
   margin-left:auto;
   background:transparent
 }
@@ -989,7 +1007,7 @@
 #splitline-work :is(#contour-parts, .theme-editor) .control-stepper {
   display:flex;
   align-items:center;
-  width:168px;
+  width:var(--component-compact-width);
   height:42px;
   border-radius:var(--control-radius);
   background:var(--control-track);

@@ -361,11 +361,11 @@ let dropHovered=false,dropFocused=false,dropConfirmed=false;
 function updateDrop(){formState('drop',dropSVG,trigger.getAttribute('aria-expanded')==='true'?2:dropConfirmed?3:(dropHovered||dropFocused)?1:0)}
 trigger.addEventListener('pointerenter',()=>{dropHovered=true;updateDrop()});trigger.addEventListener('pointerleave',()=>{dropHovered=false;updateDrop()});
 trigger.addEventListener('focus',()=>{dropFocused=true;updateDrop()});trigger.addEventListener('blur',()=>{dropFocused=false;updateDrop()});
-function setOpen(open,focus=false){trigger.setAttribute('aria-expanded',open);dropPanel.dataset.open=open;dropPanel.inert=!open;dropPanel.setAttribute('aria-hidden',!open);$('#control-dropdown-state').textContent=open?'Choose an option':dropConfirmed?$('#control-selected').textContent+' selected':'Closed';updateDrop();if(open&&focus)options.querySelector('[aria-pressed="true"]').focus()}
+function setOpen(open,focus=false){trigger.setAttribute('aria-expanded',open);dropPanel.dataset.open=open;dropPanel.inert=!open;dropPanel.setAttribute('aria-hidden',!open);$('#control-dropdown-state').textContent=open?'Choose an option':dropConfirmed?$('#control-selected').textContent+' selected':'Closed';updateDrop();if(open&&focus)(options.querySelector('[aria-pressed="true"]')||options.querySelector('button')).focus()}
 trigger.addEventListener('click',()=>setOpen(trigger.getAttribute('aria-expanded')!=='true'));trigger.addEventListener('keydown',e=>{if(e.key==='ArrowDown'){e.preventDefault();setOpen(true,true)}});
 options.querySelectorAll('button').forEach((b,i)=>{b.addEventListener('click',()=>{options.querySelectorAll('button').forEach(o=>o.setAttribute('aria-pressed',o===b));$('#control-selected').textContent=b.dataset.value;dropConfirmed=true;setOpen(false);trigger.focus()});b.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const buttons=[...options.querySelectorAll('button')];buttons[(i+(e.key==='ArrowDown'?1:buttons.length-1))%buttons.length].focus()}})});
 root.addEventListener('keydown',e=>{if(e.key==='Escape'&&trigger.getAttribute('aria-expanded')==='true'){setOpen(false);trigger.focus()}});root.addEventListener('pointerdown',e=>{if(!e.target.closest('.control-dropdown')&&trigger.getAttribute('aria-expanded')==='true')setOpen(false)});
-function reset(){save.dataset.done='false';save.querySelector('span').textContent='Follow';$('#control-save-status').textContent='Follow';hovered=false;updateSave();checkbox.checked=false;checkbox.dispatchEvent(new Event('change'));toggle.checked=false;toggle.dispatchEvent(new Event('change'));const radio=root.querySelector('input[name="control-density"]');radio.checked=true;radio.dispatchEvent(new Event('change'));field.value='';$('#control-field-state').textContent='Empty';formState('field',fieldSVG,0);$('#control-selected').textContent='All layers';options.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-pressed',i===0));setOpen(false)}
+function reset(){save.dataset.done='false';save.querySelector('span').textContent='Follow';$('#control-save-status').textContent='Follow';hovered=false;updateSave();checkbox.checked=false;checkbox.dispatchEvent(new Event('change'));toggle.checked=false;toggle.dispatchEvent(new Event('change'));const radio=root.querySelector('input[name="control-density"]');radio.checked=true;radio.dispatchEvent(new Event('change'));field.value='';$('#control-field-state').textContent='Empty';formState('field',fieldSVG,0);$('#control-selected').textContent='Option';options.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false'));setOpen(false)}
 splitlineRoot.addEventListener('splitui:reset-state',()=>{togglePreview=false;fieldHovered=fieldFocused=fieldConfirmed=dropHovered=dropFocused=dropConfirmed=false;reset()});
 [['check',0,drawCheck],['toggle',0,drawToggle]].forEach(([key,value,draw])=>{animations.set(key,{value,target:value,frame:0,draw});draw(value)});
 updateSave();formState('field',fieldSVG,0);formState('drop',dropSVG,0);
@@ -533,7 +533,7 @@ menuPanel.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
 splitlineRoot.addEventListener('splitui:reset-state',()=>{setMenu(false);menuControl.reset(0);menuPanel.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-pressed',i===0))});
 const loading=$('#control-loading'),loadingSVG=loading.querySelector('svg');let loadingFrame=0,loadingTimer=0,loadingHovered=false,loadingDone=false;
 function updateLoading(){if(loading.getAttribute('aria-busy')!=='true'&&!loadingDone)formState('loading',loadingSVG,loadingHovered?1:0)}
-function finishLoading(reset=false){cancelAnimationFrame(loadingFrame);clearTimeout(loadingTimer);loadingFrame=0;loading.disabled=false;loading.setAttribute('aria-busy','false');loading.querySelector('span').textContent=reset?'Load':'Loaded';$('#control-loading-state').textContent=reset?'Idle':'Loaded';loadingDone=!reset;loadingHovered=false;formRotations.set(loadingSVG,0);if(reset)updateLoading();else{formState('loading',loadingSVG,3);loadingTimer=setTimeout(()=>finishLoading(true),900)}}
+function finishLoading(reset=false){cancelAnimationFrame(loadingFrame);clearTimeout(loadingTimer);loadingFrame=0;loading.disabled=false;loading.setAttribute('aria-busy','false');loading.querySelector('span').textContent=reset?'Load':'Uncomplete!';$('#control-loading-state').textContent=reset?'Idle':'Uncomplete';loadingDone=!reset;loadingHovered=false;formRotations.set(loadingSVG,0);if(reset)updateLoading();else{formState('loading',loadingSVG,3);loadingTimer=setTimeout(()=>finishLoading(true),900)}}
 loading.addEventListener('pointerenter',()=>{loadingHovered=true;updateLoading()});loading.addEventListener('pointerleave',()=>{loadingHovered=false;updateLoading()});
 loading.addEventListener('focus',()=>{loadingHovered=true;updateLoading()});loading.addEventListener('blur',()=>{loadingHovered=false;updateLoading()});
 function loadingProgress(t,initial,svg=loadingSVG,key='loading',loop=false){
@@ -565,11 +565,87 @@ loading.addEventListener('click',()=>{
 });
 formState('loading',loadingSVG,0);splitlineRoot.addEventListener('splitui:reset-state',()=>finishLoading(true));
 const spinnerSVG=$('#control-spinner').querySelector('svg');
-const spinnerAnimation={value:0,draw:t=>loadingProgress(t,[1,0,0,0],spinnerSVG,'spinner',true)};
+const spinnerMotion = Object.freeze({
+ cycleMs: 6400,
+ hold: .25,
+ inward: .5,
+ outward: .25,
+ rotations: 6,
+ acceleration: 10 / 3,
+ outerLength: 11,
+ minimumScale: .3,
+ sampleStep: .001
+});
+function spinnerState(phase) {
+ const cycle = Math.floor(phase);
+ const t = phase - cycle;
+ const {hold, inward, outward, rotations, acceleration, minimumScale} = spinnerMotion;
+ let concentration = 0;
+ let acceleratedTime = 0;
+ // Hold on the perimeter, then ease inward and back out. Integrating the
+ // easing curve keeps the rotation continuous while speeding up inward.
+ if (t >= hold && t < hold + inward) {
+  const u = (t - hold) / inward;
+  concentration = (1 - Math.cos(Math.PI * u)) / 2;
+  acceleratedTime = inward * (u / 2 - Math.sin(Math.PI * u) / (2 * Math.PI));
+ } else if (t >= hold + inward) {
+  const u = (t - hold - inward) / outward;
+  concentration = (1 + Math.cos(Math.PI * u)) / 2;
+  acceleratedTime = inward / 2 + outward * (u / 2 + Math.sin(Math.PI * u) / (2 * Math.PI));
+ }
+ const outerSpeed = rotations / (1 + acceleration * (inward + outward) / 2);
+ return {
+  scale: 1 - (1 - minimumScale) * concentration,
+  turns: rotations * cycle + outerSpeed * (t + acceleration * acceleratedTime)
+ };
+}
+function spinnerPoint(phase, pathIndex, rail, center) {
+ const {scale, turns} = spinnerState(phase);
+ const [x, y] = rail.point((pathIndex / 2 - turns) * rail.total);
+ return [center.x + (x - center.x) * scale, center.y + (y - center.y) * scale];
+}
+function spinnerStroke(phase, pathIndex, rail, center) {
+ const {outerLength, sampleStep} = spinnerMotion;
+ const centerPoint = spinnerPoint(phase, pathIndex, rail, center);
+ const halfLength = outerLength * spinnerState(phase).scale / 2;
+ const trace = direction => {
+  const points = [centerPoint];
+  let distance = 0;
+  for (let sample = 1; sample <= 256 && distance < halfLength; sample++) {
+   const previous = points.at(-1);
+   const next = spinnerPoint(phase + direction * sample * sampleStep, pathIndex, rail, center);
+   const step = Math.hypot(next[0] - previous[0], next[1] - previous[1]);
+   if (distance + step >= halfLength) {
+    const amount = (halfLength - distance) / step;
+    points.push([mix(previous[0], next[0], amount), mix(previous[1], next[1], amount)]);
+    break;
+   }
+   points.push(next);
+   distance += step;
+  }
+  return points;
+ };
+ return [...trace(-1).reverse(), ...trace(1).slice(1)];
+}
+function drawSpinner(phase) {
+ const width = spinnerSVG.parentElement.clientWidth;
+ const height = spinnerSVG.parentElement.clientHeight;
+ if (width <= 6 || height <= 6) return;
+ if (reduced.matches) phase = 0;
+ const radius = Math.max(0, Math.min(design.radius, width / 2, height / 2) - 3);
+ const rail = outline(width, height, radius);
+ const center = {x: width / 2, y: height / 2};
+ spinnerSVG.setAttribute('viewBox', `0 0 ${width} ${height}`);
+ spinnerSVG.querySelectorAll('path').forEach((path, index) => {
+  const points = spinnerStroke(phase, index, rail, center);
+  path.setAttribute('d', points.map(([x, y], n) => `${n ? 'L' : 'M'}${x.toFixed(4)},${y.toFixed(4)}`).join(' '));
+ });
+}
+const spinnerAnimation={value:0,draw:drawSpinner};
 animations.set('spinner-orbit',spinnerAnimation);
 let spinnerFrame=0,spinnerPrevious=null;
 function tickSpinner(time){
- if(spinnerPrevious!==null)spinnerAnimation.value+=Math.min(time-spinnerPrevious,50)/3200;
+ if(spinnerPrevious!==null)spinnerAnimation.value=(spinnerAnimation.value+Math.min(time-spinnerPrevious,50)/spinnerMotion.cycleMs)%1;
  spinnerPrevious=time;
  spinnerAnimation.draw(spinnerAnimation.value);
  spinnerFrame=requestAnimationFrame(tickSpinner);
@@ -582,6 +658,11 @@ function updateSpinnerMotion(){
 }
 reduced.addEventListener('change',updateSpinnerMotion);
 document.addEventListener('visibilitychange',updateSpinnerMotion);
+splitlineRoot.addEventListener('splitui:reset-state',()=>{
+ spinnerAnimation.value=0;
+ spinnerPrevious=null;
+ spinnerAnimation.draw(0);
+});
 updateSpinnerMotion();
 function genericProgress(t,initial,from,button,key,orbit){
  const ease=u=>{u=clamp(u,0,1);return u*u*u*(u*(u*6-15)+10)};
