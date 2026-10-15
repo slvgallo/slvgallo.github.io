@@ -53,11 +53,10 @@
     background:transparent;
     color:var(--brass);
     transition:background-color .18s ease, border-color .18s ease,
-      color .18s ease, box-shadow .18s ease, transform .18s ease;
+      color .18s ease, transform .18s ease;
   }
   #panelToggle:hover{
     background:var(--brass); border-color:var(--brass); color:#ffffff;
-    box-shadow:0 4px 14px rgba(40,104,215,.3);
     transform:scale(1.08);
   }
   #panelToggle:active{ transform:scale(.96); }
@@ -151,7 +150,7 @@
   #panelToggle:hover .menu-icon{ color:#ffffff; }
   .menu-icon span{
     display:block; position:absolute; left:0;
-    width:15px; height:1px; border-radius:2px;
+    width:15px; height:1px; border-radius:0;
     background:currentColor; transition:.3s;
   }
   .menu-icon span:nth-child(1){ top:0; }
@@ -196,16 +195,13 @@
     transform:translateX(-50%);
     transition:
       opacity .24s ease,
-      transform .34s cubic-bezier(.22,1,.36,1),
       visibility 0s linear 0s;
   }
   body.panel-hidden .panel{
     opacity:0; visibility:hidden; pointer-events:none;
-    transform:translate(-50%, -12px);
     transition:
       opacity .2s ease,
-      transform .28s cubic-bezier(.4,0,1,1),
-      visibility 0s linear .28s;
+      visibility 0s linear .2s;
   }
   .panel::-webkit-scrollbar{ display:none; }
   .panel-column{ min-width:0; }
@@ -237,7 +233,7 @@
   .panel-column--rings .rings-list::-webkit-scrollbar{ width:6px; }
   .panel-column--rings .rings-list::-webkit-scrollbar-thumb{
     background:var(--panel-line);
-    border-radius:3px;
+    border-radius:0;
   }
   .panel h2{
     font-size: 12px; text-transform:uppercase; letter-spacing:0.05em;
@@ -265,7 +261,7 @@
   button{
     font-family:inherit;
     cursor:pointer;
-    border-radius: 4px;
+    border-radius: 0;
     border: 1px solid var(--brass-dim);
     background: transparent;
     color: var(--brass);
@@ -279,7 +275,7 @@
   .row .val{ font-family:inherit; font-size:12px; color: var(--brass); min-width:44px; text-align:right; }
   .val-input{
     font-family:inherit; font-size:12px; color: var(--brass);
-    background:rgba(40,104,215,0.09); border:0; border-radius:2px;
+    background:rgba(40,104,215,0.09); border:0; border-radius:0;
     width:44px; text-align:right; padding:2px 4px; cursor:text;
     transition:background-color .15s ease;
   }
@@ -289,7 +285,7 @@
   }
   .value-with-unit{
     display:inline-flex; align-items:center; gap:3px;
-    padding-right:5px; border-radius:2px;
+    padding-right:5px; border-radius:0;
     background:rgba(40,104,215,0.09); color:var(--brass);
     font-size:10px; line-height:1;
   }
@@ -305,7 +301,7 @@
   .val-input{ -moz-appearance:textfield; }
   input[type=range]{
     flex:1; -webkit-appearance:none; appearance:none; height:2px; background: var(--panel-line);
-    border-radius:2px; outline:none;
+    border-radius:0; outline:none;
   }
   .section > input[type=range]{
     display:block; width:100%; margin:0;
@@ -323,7 +319,7 @@
   select{
     font-family:inherit; font-size:12px;
     background: var(--bg2); color: var(--brass); border:1px solid var(--brass-dim);
-    border-radius:4px; padding: 6px 8px; cursor:pointer;
+    border-radius:0; padding: 6px 8px; cursor:pointer;
     box-shadow:none;
   }
   select:focus-visible{ outline:2px solid var(--brass); outline-offset:1px; }
@@ -351,7 +347,7 @@
   .ring-row{
     background:rgba(255,255,255,0.48);
     border:1px solid var(--panel-line);
-    border-radius:4px; padding:10px;
+    border-radius:0; padding:10px;
     box-shadow:none;
   }
   .ring-rhythm-row, .ring-sound-row, .ring-volume-row{ display:flex; align-items:center; gap:6px; }
@@ -376,13 +372,13 @@
     display:flex; flex-direction:column; justify-content:center; gap:1px;
   }
   .ring-step-btn{
-    width:14px; height:9px; min-height:0; padding:0; border:0; border-radius:2px;
+    width:14px; height:9px; min-height:0; padding:0; border:0; border-radius:0;
     background:transparent; color:var(--brass); box-shadow:none;
     font-size:9px; font-weight:500; line-height:8px;
   }
   .ring-step-btn:hover{ background:rgba(40,104,215,0.14); color:var(--brass); }
   .ring-row .ring-number-input{
-    width:26px; background:rgba(40,104,215,0.09); border:0; border-radius:2px;
+    width:26px; background:rgba(40,104,215,0.09); border:0; border-radius:0;
     color:var(--brass); font-family:inherit; font-size:13px; padding:1px 2px;
     text-align:center; cursor:text;
     transition:background-color .15s ease;
@@ -517,7 +513,6 @@
       padding-right:0;
       overflow:visible;
     }
-    body.panel-hidden .panel{ transform:translateY(-12px); }
   }
   @media (prefers-reduced-motion:reduce){
     .panel, .menu-icon span{ transition:none; }
@@ -2039,11 +2034,13 @@
   }
 
   function setPanelOpen(open){
+    const restoreFocus = !open && controlPanel.contains(document.activeElement);
     document.body.classList.toggle('panel-hidden', !open);
     panelToggle.setAttribute('aria-expanded', String(open));
     panelToggle.setAttribute('aria-label', open ? 'Hide controls' : 'Show controls');
     controlPanel.setAttribute('aria-hidden', String(!open));
     controlPanel.inert = !open;
+    if (restoreFocus) panelToggle.focus({preventScroll:true});
   }
 
   panelToggle.addEventListener('click', ()=>{
@@ -2062,7 +2059,8 @@
       Boolean(target.closest('input, select, textarea'))
     );
     if (
-      isEditing ||
+      (isEditing && !(event.code === 'KeyH' && target.matches('input[type="range"], input[type="checkbox"], input[type="radio"]'))) ||
+      event.isComposing ||
       event.defaultPrevented ||
       event.repeat ||
       event.altKey ||

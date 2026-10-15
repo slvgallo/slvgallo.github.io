@@ -1,5 +1,30 @@
 [
   {
+    "id": "2610-1",
+    "title": "GRAPHONEME",
+    "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1792090018/GRAPHONEME_p5uybt.png",
+    "tags": [
+      "sound",
+      "code"
+    ],
+    "desc": "<p>文章をモールス符号に変換し、その符号列から音と図像を生成する。</p><p>各文字に和音を割り当て、点と線の長さと間隔に従って音を鳴らす。同時に、符号列は蛇行や渦巻き状の経路に沿って描画され、時間的な信号が空間的な図像として徐々に蓄積されていく。</p><p>これは、文字と音の従来の対応関係を組み替える試みである。文章の意味を音や図像として表現するのではなく、符号化という共通の規則から、異なる知覚形式を生み出す。</p><p>音と図像は互いを模倣するものではなく、同一の情報を異なる形式で記述したものである。</p>",
+    "desc_en": "<p>Text is converted into Morse code, from which sound and image are generated.</p><p>Each character is assigned a chord, and sounds are produced according to the durations and intervals of the dots and dashes. At the same time, the sequence is drawn along a winding or spiral path, transforming a temporal signal into an accumulating spatial image.</p><p>This is an attempt to rearrange the conventional correspondence between characters and sound. Rather than expressing the meaning of the text as sound or image, it generates different sensory forms through a shared system of encoding.</p><p>Sound and image do not imitate one another; they are different representations of the same information.</p>",
+    "media": [
+      {
+        "type": "html",
+        "src": "/works/2610-1/GPN.html",
+        "aspectRatio": "1 / 1"
+      },
+      {
+        "type": "link-card",
+        "src": "/works/2610-1/GRAPHONEME.html",
+        "title": "GRAPHONEME",
+        "label": "Open Full Version",
+        "placement": "full"
+      }
+    ]
+  },
+  {
     "id": "2609-1",
     "title": "Splitline",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1789407163/Splitline_fgrnze.png",
