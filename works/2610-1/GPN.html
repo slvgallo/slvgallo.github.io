@@ -113,10 +113,14 @@ h2{margin:16px 0 10px;padding-top:16px;border-top:1px solid var(--line);font-fam
  .editor-settings::before{display:none}
  .editor-settings > .editor-column[aria-label="Drawing settings"],.editor-settings > .controls-section{padding-left:0;border-left:0}
 }
+/* Start the embedded work with a single centered play button. */
+.awaiting-first-play .dock-transport{top:50%;bottom:auto;left:50%;transform:translate(-50%,-50%)}
+.awaiting-first-play #dock-play{width:64px;height:64px;min-width:64px;opacity:1}
+.awaiting-first-play #dock-restart{display:none}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}.is-resetting .reset-icon{animation:none}}
 </style>
 </head>
-<body>
+<body class="awaiting-first-play">
 <main>
 <div class="art"><svg id="art" role="img" tabindex="0" aria-label="Morse code" xmlns="http://www.w3.org/2000/svg"></svg></div>
 </main>
@@ -192,7 +196,7 @@ function syncEditorState(){
  editorToggle.setAttribute('aria-label',label);editorToggle.title=label;
  editor.setAttribute('aria-hidden',String(!open));editor.inert=!open;
 }
-function openEditor(){if(editor.open)return;editor.show();syncEditorState();editor.scrollTop=0;input.focus({preventScroll:true});}
+function openEditor(){if(editor.open)return;document.body.classList.remove('awaiting-first-play');editor.show();syncEditorState();editor.scrollTop=0;input.focus({preventScroll:true});}
 function closeEditor(){
  if(!editor.open)return;
  const restoreFocus=editor.contains(document.activeElement);
@@ -218,10 +222,9 @@ document.addEventListener('keydown',event=>{
  if(event.defaultPrevented||event.repeat||event.altKey||event.ctrlKey||event.metaKey||event.target?.closest?.('input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),select,textarea,[contenteditable]'))return;
  if(event.code==='KeyH'){event.preventDefault();if(editor.open)closeEditor();else openEditor();}
 });
-editor.addEventListener('click',event=>{
- if(event.target!==editor)return;
- const bounds=editor.getBoundingClientRect();
- if(event.clientX<bounds.left||event.clientX>bounds.right||event.clientY<bounds.top||event.clientY>bounds.bottom)closeEditor();
+document.addEventListener('click',event=>{
+ if(!editor.open||editor.contains(event.target)||editorToggle.contains(event.target))return;
+ closeEditor();
 });
 const ns='http://www.w3.org/2000/svg';
 const examples={en:'The quick brown fox jumps over the lazy dog.',ja:'いろはにほへと ちりぬるを\nわかよたれそ つねならむ\nうゐのおくやま けふこえて\nあさきゆめみし ゑひもせす'};
@@ -268,7 +271,9 @@ for(const [key,palette] of Object.entries(PALETTES)){
 for(const [key,label] of Object.entries(STYLES)){
  const option=document.createElement('option');option.value=key;option.textContent=label;playStyle.appendChild(option);
 }
-pitchSet.value='majorSevenths';playStyle.value='block';
+const minorSnakePreset=new URLSearchParams(window.location.search).get('preset')==='minor-snake';
+pitchSet.value=minorSnakePreset?'minorSevenths':'majorSevenths';playStyle.value='block';
+if(minorSnakePreset)drawingMode.value='snake';
 ROOTS.forEach((name,index)=>{const option=document.createElement('option');option.value=String(index);option.textContent=name;rootNote.appendChild(option);});
 rootNote.value='0';
 let chordMap=new Map(),characterOrder=[],chordSeed=1,symbolNotes=[],noteSequence=[];
@@ -778,6 +783,7 @@ function start(position=0){
  pendingTempo=null;dit=1.2/Number(speed.value);
  audioClock=soundEnabled&&audio?.state==='running';createVoice();
  baseUnit=position;clockStart=(audioClock?audio.currentTime:performance.now()/1000)+.045;
+ document.body.classList.remove('awaiting-first-play');
  scheduled=finished;setState(STATES.PLAYING);art.dataset.sound=audioClock?'on':'off';
  if(editor.open)closeEditor();
  lastFollowTime=-Infinity;followPlayback(position,true);
@@ -978,8 +984,11 @@ for(const id of ['dock-restart']){
 }
 art.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();openEditor();}});
 window.addEventListener('keydown',event=>{
- if(event.key!==' '||event.target?.closest?.('input,textarea,select,button'))return;
- event.preventDefault();transport();
+ if(event.key!==' '||event.defaultPrevented||event.isComposing||composition||event.altKey||event.ctrlKey||event.metaKey)return;
+ const onMenu=editorToggle.contains(event.target);
+ if(!onMenu&&event.target?.closest?.('input,textarea,select,button,[contenteditable]'))return;
+ event.preventDefault();
+ if(!event.repeat)transport();
 });
 editor.addEventListener('cancel',event=>{if(composition)event.preventDefault();});
 // Escape is handled by the native dialog; it never changes playback state.
@@ -989,8 +998,8 @@ new ResizeObserver(()=>{const width=art.parentElement.clientWidth;if(Math.abs(wi
 // Keep marks hidden until the user starts synchronized audio and drawing.
 setDrawing();layout();
 update();renderState();
-// Show controls initially and focus the text field without starting audio.
-openEditor();
+// Wait for the first play click before showing the normal transport controls.
+syncEditorState();
 </script>
 </body>
 </html>

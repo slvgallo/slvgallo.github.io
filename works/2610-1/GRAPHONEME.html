@@ -39,7 +39,7 @@ button{box-shadow:none}
 .editor:not([open]){opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s ease,visibility 0s linear .2s}
 .editor::-webkit-scrollbar{display:none}
 .dock .btn{min-width:38px}
-.dock .transport-button{position:relative;display:block;width:38px;height:38px;min-width:38px;margin:0;padding:0;border-radius:50%}
+.dock .transport-button,.editor-transport .transport-button{position:relative;display:block;width:38px;height:38px;min-width:38px;margin:0;padding:0;border-radius:50%}
 .play-button::before{content:"";position:absolute;top:50%;left:53%;width:30%;height:42%;background:currentColor;clip-path:polygon(0 0,100% 50%,0 100%);transform:translate(-50%,-50%)}
 .play-button[aria-pressed="true"]::before{left:50%;width:34%;height:42%;background:linear-gradient(to right,currentColor 0 32%,transparent 32% 68%,currentColor 68% 100%);clip-path:none}
 .reset-icon{position:absolute;top:50%;left:50%;width:28px;height:28px;margin:-14px 0 0 -14px;overflow:visible}
@@ -127,10 +127,15 @@ h2{margin:16px 0 10px;padding-top:16px;border-top:1px solid var(--line);font-fam
 .profile-menu-link img{display:block;width:44px;height:auto;opacity:.82;transition:opacity .18s ease,transform .18s ease}
 .profile-menu-link:hover img{opacity:1;transform:scale(1.06)}
 .profile-menu-link:focus-visible{outline:2px solid var(--accent-dim);outline-offset:2px}
+.input-actions{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:12px}
+.editor-transport{display:flex;align-items:center;gap:8px;margin:0}
+.input-actions .languages{margin:0;flex-shrink:0;align-self:flex-end}
+.work-title{position:fixed;top:calc(18px + env(safe-area-inset-top,0px));left:calc(18px + env(safe-area-inset-left,0px));z-index:2;margin:0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:15px;font-weight:500;line-height:1.4;letter-spacing:.08em;color:var(--ink)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}.is-resetting .reset-icon{animation:none}}
 </style>
 </head>
 <body>
+<h1 class="work-title">GRAPHONEME</h1>
 <main>
 <div class="art"><svg id="art" role="img" tabindex="0" aria-label="Morse code" xmlns="http://www.w3.org/2000/svg"></svg></div>
 </main>
@@ -138,7 +143,10 @@ h2{margin:16px 0 10px;padding-top:16px;border-top:1px solid var(--line);font-fam
 <div class="dock dock-menu"><button id="editor-toggle" class="btn" type="button" aria-label="Show controls" title="Show controls" aria-keyshortcuts="H Escape" aria-controls="editor" aria-expanded="false"><span class="menu-icon" aria-hidden="true"><span></span><span></span><span></span></span></button></div>
 <dialog id="editor" class="editor" aria-label="Editor" aria-hidden="true" inert>
 <textarea id="input" lang="ja" inputmode="text" autocapitalize="off" rows="7" maxlength="3000" aria-label="Text" placeholder="Type, then press Enter" spellcheck="false">The quick brown fox jumps over the lazy dog.</textarea>
+<div class="input-actions">
+<div class="editor-transport" role="group" aria-label="Playback"><button id="panel-play" class="btn transport-button play-button" type="button" aria-label="Play" aria-pressed="false"></button><button id="panel-restart" class="btn transport-button" type="button" aria-label="Restart"><svg class="reset-icon" viewBox="1 0 24 24" aria-hidden="true"><path d="M13 3a9 9 0 0 0-9 9H1l4 4 4-4H6a7 7 0 1 1 2.05 4.95l-1.42 1.42A9 9 0 1 0 13 3z" fill="currentColor"/></svg></button></div>
 <div class="languages" role="group" aria-label="Samples"><button type="button" data-language="en" aria-pressed="true">EN sample</button><button type="button" data-language="ja" aria-pressed="false">JA sample</button></div>
+</div>
 <p id="reading-status" role="status"></p><p id="input-warning" role="status"></p><p id="playback-status" role="status"></p>
 <div class="editor-settings">
 <section class="editor-column" aria-label="Sound settings">
@@ -235,10 +243,9 @@ document.addEventListener('keydown',event=>{
  if(event.defaultPrevented||event.repeat||event.altKey||event.ctrlKey||event.metaKey||event.target?.closest?.('input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),select,textarea,[contenteditable]'))return;
  if(event.code==='KeyH'){event.preventDefault();if(editor.open)closeEditor();else openEditor();}
 });
-editor.addEventListener('click',event=>{
- if(event.target!==editor)return;
- const bounds=editor.getBoundingClientRect();
- if(event.clientX<bounds.left||event.clientX>bounds.right||event.clientY<bounds.top||event.clientY>bounds.bottom)closeEditor();
+document.addEventListener('click',event=>{
+ if(!editor.open||editor.contains(event.target)||editorToggle.contains(event.target))return;
+ closeEditor();
 });
 const ns='http://www.w3.org/2000/svg';
 const examples={en:'The quick brown fox jumps over the lazy dog.',ja:'いろはにほへと ちりぬるを\nわかよたれそ つねならむ\nうゐのおくやま けふこえて\nあさきゆめみし ゑひもせす'};
@@ -644,9 +651,9 @@ function silence(){
 }
 function renderState(){
  const label=input.value!==currentText?'Play':state===STATES.PLAYING?'Pause':state===STATES.PAUSED?'Resume':'Play';
- for(const id of ['dock-play']){const b=document.getElementById(id);b.setAttribute('aria-pressed',String(label==='Pause'));b.setAttribute('aria-label',label);}
+ for(const id of ['dock-play','panel-play']){const b=document.getElementById(id);b.setAttribute('aria-pressed',String(label==='Pause'));b.setAttribute('aria-label',label);}
  document.getElementById('playback-status').textContent=audioFailed?'Audio unavailable. Drawing silently.':'';
- for(const id of ['dock-restart'])document.getElementById(id).disabled=!input.value;
+ for(const id of ['dock-restart','panel-restart'])document.getElementById(id).disabled=!input.value;
 }
 function setState(next){state=next;playing=next===STATES.PLAYING;art.dataset.playing=String(playing);renderState();}
 function stop(){
@@ -984,8 +991,8 @@ async function transport(restart=false){
  if(restart||state===STATES.FINISHED){resetDrawing();start(0);}
  else start(pausedPosition);
 }
-document.getElementById('dock-play').addEventListener('click',()=>transport());
-for(const id of ['dock-restart']){
+for(const id of ['dock-play','panel-play'])document.getElementById(id).addEventListener('click',()=>transport());
+for(const id of ['dock-restart','panel-restart']){
  const button=document.getElementById(id);
  button.addEventListener('click',()=>{
   button.classList.remove('is-resetting');void button.offsetWidth;button.classList.add('is-resetting');
@@ -995,8 +1002,11 @@ for(const id of ['dock-restart']){
 }
 art.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();openEditor();}});
 window.addEventListener('keydown',event=>{
- if(event.key!==' '||event.target?.closest?.('input,textarea,select,button'))return;
- event.preventDefault();transport();
+ if(event.key!==' '||event.defaultPrevented||event.isComposing||composition||event.altKey||event.ctrlKey||event.metaKey)return;
+ const onMenu=editorToggle.contains(event.target);
+ if(!onMenu&&event.target?.closest?.('input,textarea,select,button,[contenteditable]'))return;
+ event.preventDefault();
+ if(!event.repeat)transport();
 });
 editor.addEventListener('cancel',event=>{if(composition)event.preventDefault();});
 // Escape is handled by the native dialog; it never changes playback state.

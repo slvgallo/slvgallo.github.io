@@ -16,6 +16,12 @@
         "aspectRatio": "1 / 1"
       },
       {
+        "type": "html",
+        "src": "/works/2610-1/GPN.html?preset=minor-snake",
+        "aspectRatio": "1 / 1",
+        "placement": "full"
+      },
+      {
         "type": "link-card",
         "src": "/works/2610-1/GRAPHONEME.html",
         "title": "GRAPHONEME",
