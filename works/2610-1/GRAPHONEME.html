@@ -284,6 +284,7 @@ const PALETTES={
 };
 const STYLES={strum:'Strum',block:'Block',arp:'Arpeggio'};
 const ROOTS=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const MASTER_GAIN=2.4; // +6 dB over the previous output level
 const VOICES=5; // lowest sounding note uses sine, the remaining notes use triangle
 const pitchSet=document.getElementById('pitch-set'),rootNote=document.getElementById('root-note'),playStyle=document.getElementById('play-style');
 for(const [key,palette] of Object.entries(PALETTES)){
@@ -405,7 +406,7 @@ function noteGainScale(notes){
 // Tone and drawing share the same clock and adjustable unit duration.
 let dit=1.2/Number(speed.value),pendingTempo=null;
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
-let audio=null,voices=[],bus=null,filter=null,events=[],drawingEvents=[],marks=[],finished=0,active=-1;
+let audio=null,voices=[],bus=null,filter=null,limiter=null,events=[],drawingEvents=[],marks=[],finished=0,active=-1;
 const STATES=Object.freeze({READY:'READY',PLAYING:'PLAYING',PAUSED:'PAUSED',FINISHED:'FINISHED'});
 let state=STATES.READY,currentText=null,pausedPosition=0,transportRequest=0;
 let playing=false,clockStart=0,baseUnit=0,scheduled=0,raf=0,editTimer=0,resizeFrame=0;
@@ -636,8 +637,8 @@ function followPlayback(position,force=false){
  }
 }
 function silence(){
- const oldVoices=voices,oldBus=bus,oldFilter=filter;voices=[];bus=null;filter=null;
- if(!oldVoices.length){oldBus?.disconnect();oldFilter?.disconnect();return;}
+ const oldVoices=voices,oldBus=bus,oldFilter=filter,oldLimiter=limiter;voices=[];bus=null;filter=null;limiter=null;
+ if(!oldVoices.length){oldBus?.disconnect();oldFilter?.disconnect();oldLimiter?.disconnect();return;}
  const now=audio?.currentTime||0;
  for(const {osc,gain} of oldVoices){
   try{
@@ -647,7 +648,7 @@ function silence(){
   }catch{try{osc.stop();}catch{}}
  }
  // Let the short release finish before disconnecting these particular voices.
- setTimeout(()=>{for(const {osc,gain} of oldVoices){osc.disconnect();gain.disconnect();}oldBus?.disconnect();oldFilter?.disconnect();},30);
+ setTimeout(()=>{for(const {osc,gain} of oldVoices){osc.disconnect();gain.disconnect();}oldBus?.disconnect();oldFilter?.disconnect();oldLimiter?.disconnect();},30);
 }
 function renderState(){
  const label=input.value!==currentText?'Play':state===STATES.PLAYING?'Pause':state===STATES.PAUSED?'Resume':'Play';
@@ -720,12 +721,14 @@ function tick(){
 function createVoice(){
  if(!audioClock)return;
  try{
-  // The worst-case sum of five normalized notes stays below 0.87 at 100%
-  // dynamics. A non-resonant lowpass preserves that headroom without limiting.
-  bus=audio.createGain();bus.gain.value=1.2*Number(volume.value)/100;
+  // Raise the listening level; catch loud chord peaks after the lowpass.
+  bus=audio.createGain();bus.gain.value=MASTER_GAIN*Number(volume.value)/100;
   // Lowpass Q is expressed in dB (https://www.w3.org/TR/webaudio/#dom-biquadfilternode-q).
   filter=audio.createBiquadFilter();filter.type='lowpass';filter.frequency.value=2600;filter.Q.value=20*Math.log10(.5);
-  bus.connect(filter);filter.connect(audio.destination);
+  limiter=audio.createDynamicsCompressor();
+  limiter.threshold.value=-3;limiter.knee.value=3;limiter.ratio.value=20;
+  limiter.attack.value=0;limiter.release.value=.08;
+  bus.connect(filter);filter.connect(limiter);limiter.connect(audio.destination);
   voices=[];
   for(let slot=0;slot<VOICES;slot++){
    const osc=audio.createOscillator(),gain=audio.createGain();
@@ -770,7 +773,7 @@ volume.addEventListener('input',()=>{
  const level=Number(volume.value)/100;
  volumeValue.value=`${volume.value}%`;
  volume.setAttribute('aria-valuetext',volumeValue.value);
- if(bus&&audio)bus.gain.setTargetAtTime(1.2*level,audio.currentTime,.015);
+ if(bus&&audio)bus.gain.setTargetAtTime(MASTER_GAIN*level,audio.currentTime,.015);
 });
 function setPitch(){rebuildChords();rescheduleFuture();}
 pitchSet.addEventListener('change',setPitch);rootNote.addEventListener('change',setPitch);playStyle.addEventListener('change',()=>{rebuildNoteSequence();rescheduleFuture();});
@@ -981,14 +984,15 @@ async function replay(){
 }
 async function transport(restart=false){
  if(composition||performance.now()-compositionEndedAt<80)return;
+ if(restart){stop();resetDrawing();setState(STATES.READY);return;}
  if(currentText===null||input.value!==currentText)return replay();
- if(!restart&&state===STATES.PLAYING){stop();return;}
+ if(state===STATES.PLAYING){stop();return;}
  const request=++transportRequest,revision=draftRevision,text=input.value;
  await unlock();
  await layout();
  while(request===transportRequest&&lastLayoutEvents!==events)await layout();
  if(request!==transportRequest||revision!==draftRevision||input.value!==text||document.hidden||composition)return;
- if(restart||state===STATES.FINISHED){resetDrawing();start(0);}
+ if(state===STATES.FINISHED){resetDrawing();start(0);}
  else start(pausedPosition);
 }
 for(const id of ['dock-play','panel-play'])document.getElementById(id).addEventListener('click',()=>transport());
