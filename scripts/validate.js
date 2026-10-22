@@ -19,7 +19,7 @@ class DataValidator {
 
     // IDフォーマット
     if (work.id && !/^\d{4}-\d+$/.test(work.id)) {
-      this.warnings.push(`Work #${index} (${work.id}): ID should be in format YYMM-N`);
+      this.errors.push(`Work #${index} (${work.id}): ID must be in format YYMM-N`);
     }
 
     // タグ

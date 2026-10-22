@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { assertWorkId } = require('./html');
 
 // Paths are repository-relative and limited to the work's published directory.
 function readCustomContent(work, sourceRoot) {
@@ -12,6 +13,7 @@ function readCustomContent(work, sourceRoot) {
   if (!['wide', 'content'].includes(width)) {
     throw new Error('customContent.width must be wide or content');
   }
+  assertWorkId(work.id);
   const prefix = `works/${work.id}/`;
   const workDirectory = fs.realpathSync(path.join(sourceRoot, prefix));
   function asset(value, extension) {
