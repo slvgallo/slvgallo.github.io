@@ -76,7 +76,8 @@ test('updated file watcher detects edits', async () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'site-watcher-'));
   const file = path.join(root, 'fixture.css');
   fs.writeFileSync(file, 'body {}');
-  const watcher = chokidar.watch(root, { ignoreInitial: true });
+  // Poll in this fixture to avoid platform-dependent native event coalescing.
+  const watcher = chokidar.watch(root, { ignoreInitial: true, usePolling: true, interval: 20 });
   try {
     await new Promise((resolve, reject) => { watcher.once('ready', resolve); watcher.once('error', reject); });
     const changed = new Promise((resolve, reject) => {

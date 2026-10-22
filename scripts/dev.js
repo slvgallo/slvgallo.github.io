@@ -1,4 +1,4 @@
-const { createServer } = require('./server');
+const { createServer, listenLocal } = require('./server');
 const path = require('path');
 const chokidar = require('chokidar');
 const { SiteBuilder } = require('./build');
@@ -67,14 +67,11 @@ class DevServer {
     // 初回ビルド
     await this.builder.build();
 
-    // ファイル監視
+    // Start watching only after binding succeeds, so a busy port exits cleanly.
+    this.server = await listenLocal(this.app, this.port);
     this.setupWatcher();
-
-    // サーバー起動
-    this.app.listen(this.port, '127.0.0.1', () => {
-      console.log(`\n🚀 Dev server running at http://127.0.0.1:${this.port}/`);
-      console.log(`   Press Ctrl+C to stop\n`);
-    });
+    console.log(`\n🚀 Dev server running at http://127.0.0.1:${this.server.address().port}/`);
+    console.log('   Press Ctrl+C to stop\n');
   }
 }
 

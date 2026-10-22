@@ -8,4 +8,13 @@ function createServer(root = path.join(__dirname, '..', 'dist')) {
   return app;
 }
 
-module.exports = { createServer };
+function listenLocal(app, port = 8080) {
+  return new Promise((resolve, reject) => {
+    const server = app.listen(port, '127.0.0.1', error => {
+      if (error) reject(error);
+      else resolve(server);
+    });
+  });
+}
+
+module.exports = { createServer, listenLocal };

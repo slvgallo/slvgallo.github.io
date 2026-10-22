@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
+const { checkLinks } = require('./check-links');
 const { generateMediaHTML } = require('./media');
 const { readCustomContent } = require('./custom-content');
 const { escapeHtml, serializeJson, urlAttribute, assertWorkId } = require('./html');
@@ -441,10 +442,17 @@ const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_
     const startTime = Date.now();
     this.stats = { pages: 0, images: 0, errors: [] };
 
+    const outputDir = this.config.distDir;
+    fs.ensureDirSync(path.dirname(outputDir));
+    const workspace = fs.mkdtempSync(outputDir + '.build-');
+    const staging = path.join(workspace, 'next');
+    const previous = path.join(workspace, 'previous');
+    this.config.distDir = staging;
+
     try {
       console.log('\n🚀 Starting build process...\n');
 
-      // distディレクトリをクリア
+      // Generate in a separate directory; keep the last successful output available.
       fs.emptyDirSync(this.config.distDir);
 
       // データ読み込み
@@ -465,6 +473,19 @@ const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_
       this.generateProfilePage();
       this.generateSitemap(works);
       this.copyAssets();
+      const checked = checkLinks(staging);
+      console.log(`   ✓ Checked ${checked.references} local references in ${checked.pages} HTML files`);
+
+      // Both renames stay on the same filesystem. Restore the previous output
+      // if the replacement fails. Generation/validation failures never touch it.
+      if (fs.existsSync(outputDir)) fs.renameSync(outputDir, previous);
+      try {
+        fs.renameSync(staging, outputDir);
+      } catch (error) {
+        if (fs.existsSync(previous)) fs.renameSync(previous, outputDir);
+        throw error;
+      }
+      fs.removeSync(previous);
 
       const duration = Date.now() - startTime;
       this.printStats(duration);
@@ -474,6 +495,10 @@ const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_
     } catch (error) {
       console.error('\n❌ Build failed:', error);
       throw error;
+    } finally {
+      this.config.distDir = outputDir;
+      // Preserve the backup for recovery if restoring it itself failed.
+      if (!fs.existsSync(previous)) fs.removeSync(workspace);
     }
   }
 }

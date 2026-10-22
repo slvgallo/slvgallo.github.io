@@ -71,3 +71,6 @@ jspm_packages/
 
 # Serverless directories
 .serverless
+
+# Temporary build output (kept only if recovery fails)
+/dist.build-*/
