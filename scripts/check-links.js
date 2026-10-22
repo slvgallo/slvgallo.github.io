@@ -64,7 +64,20 @@ function checkLinks(root) {
           if (['href', 'src', 'poster'].includes(attr.name)) check(attr.value, base, source);
           // Responsive candidates without data URLs; data URLs are embedded assets.
           if (attr.name === 'srcset' && !attr.value.includes('data:')) {
-            for (const candidate of attr.value.split(',')) check(candidate.trim().split(/\s+/)[0], base, source);
+            // Commas can be part of a URL (for example Cloudinary transformations).
+            let remaining = attr.value.trim();
+            while (remaining) {
+              remaining = remaining.replace(/^[\s,]+/, '');
+              const match = remaining.match(/^\S+/);
+              if (!match) break;
+              const token = match[0];
+              check(token.replace(/,+$/, ''), base, source);
+              remaining = remaining.slice(token.length);
+              if (!token.endsWith(',')) {
+                const separator = remaining.indexOf(',');
+                remaining = separator === -1 ? '' : remaining.slice(separator + 1);
+              }
+            }
           }
         }
       }

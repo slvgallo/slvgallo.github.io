@@ -185,7 +185,7 @@ export function restoreScrollState() {
     const grid = document.getElementById("works-grid");
     const existingItems = grid.querySelectorAll('.index-post');
     
-    if (existingItems.length > 0 && state.data.currentFilter === 'all') {
+    if (existingItems.length >= savedState.displayedCount && state.data.currentFilter === 'all') {
       // 既存のDOM要素を使って復元
       const countToShow = Math.min(savedState.displayedCount, existingItems.length);
       
