@@ -1,5 +1,3 @@
-console.log('🚀 page-common.js loaded');
-
 import { state } from './state.js';
 import { applyFilter, restoreScrollState, setupInfiniteScroll, setupStateSaving } from './filter.js';
 import { initNavigation } from './navigation.js';
@@ -37,22 +35,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // インデックスページ固有の処理
   if (isIndexPage && document.getElementById('works-grid')) {
     try {
-      // 埋め込みデータをチェック
-      const embeddedDataScript = document.getElementById('works-data');
-      if (embeddedDataScript) {
-        // 本番環境：埋め込みデータを使用
-        try {
-          state.data.allWorks = JSON.parse(embeddedDataScript.textContent);
-        } catch (error) {
-          console.error('Failed to parse embedded works data:', error);
-          throw error;
-        }
-      } else {
-        // 開発環境：data.jsから読み込み
-        const { loadWorks } = await import('./data.js');
-        state.data.allWorks = await loadWorks();
-      }
-      
+      const { loadWorks } = await import('./data.js');
+      state.data.allWorks = await loadWorks();
+
       // 無限スクロールと状態保存のセットアップ
       setupInfiniteScroll();
       setupStateSaving();

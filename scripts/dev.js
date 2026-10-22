@@ -1,4 +1,4 @@
-const express = require('express');
+const { createServer } = require('./server');
 const path = require('path');
 const chokidar = require('chokidar');
 const { SiteBuilder } = require('./build');
@@ -6,7 +6,7 @@ const { SiteBuilder } = require('./build');
 class DevServer {
   constructor(port = 8080) {
     this.port = port;
-    this.app = express();
+    this.app = createServer();
     this.builder = new SiteBuilder();
     this.isBuilding = false;
     this.buildQueue = false;
@@ -63,29 +63,16 @@ class DevServer {
     console.log();
   }
 
-  setupMiddleware() {
-    // 静的ファイル配信
-    this.app.use(express.static(path.join(__dirname, '..', 'dist')));
-
-    // SPAフォールバック
-    this.app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
-    });
-  }
-
   async start() {
     // 初回ビルド
     await this.builder.build();
-
-    // ミドルウェア設定
-    this.setupMiddleware();
 
     // ファイル監視
     this.setupWatcher();
 
     // サーバー起動
-    this.app.listen(this.port, () => {
-      console.log(`\n🚀 Dev server running at http://localhost:${this.port}/`);
+    this.app.listen(this.port, '127.0.0.1', () => {
+      console.log(`\n🚀 Dev server running at http://127.0.0.1:${this.port}/`);
       console.log(`   Press Ctrl+C to stop\n`);
     });
   }

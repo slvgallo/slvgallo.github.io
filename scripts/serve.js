@@ -1,10 +1,5 @@
-const express = require('express');
-const path = require('path');
-const app = express();
-const port = 8080;
+const { createServer } = require('./server');
 
-app.use(express.static(path.join(__dirname, '../dist')));
-
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}/`);
+createServer().listen(8080, '127.0.0.1', () => {
+  console.log('Preview running at http://127.0.0.1:8080/');
 });

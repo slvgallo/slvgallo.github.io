@@ -1,4 +1,4 @@
-import { extractYouTubeId, getOptimizedImageUrl } from './utils.js';
+import { extractYouTubeId } from './youtube.mjs';
 
 export async function loadWorks() {
   // Check for embedded data first
@@ -27,12 +27,10 @@ export async function loadWorks() {
       work.thumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
       work.isYoutubeThumb = true;
     } else {
-      work.thumb = getOptimizedImageUrl(work.thumb, false);
+      // Non-YouTube thumbnail URLs are already usable as-is.
       work.isYoutubeThumb = false;
     }
   });
   
   return works;
 }
-
-export { getOptimizedImageUrl };

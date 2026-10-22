@@ -6,19 +6,7 @@
  * YouTube
  * ========================= */
 
-function extractYouTubeId(url) {
-  if (!url) return null;
-  const patterns = [
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
-    /(?:youtube\.com\/vi\/)([^&\n?#]+)/,
-    /(?:youtube\.com\/shorts\/)([^&\n?#]+)/,
-  ];
-  for (const p of patterns) {
-    const m = url.match(p);
-    if (m) return m[1];
-  }
-  return null;
-}
+const { extractYouTubeId } = require('../js/youtube.mjs');
 
 /* =========================
  * Cloudinary URL 最適化
@@ -117,33 +105,9 @@ function generateOGPImageUrl(imageSource) {
     imageUrl;
 }
 
-/**
- * YouTubeサムネイルも透かし付きOGPへ
- */
-function generateYouTubeOGPImageUrl(videoId) {
-  if (!videoId) return null;
-  const thumb = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-  return generateOGPImageUrl(thumb);
-}
-
-/* =========================
- * Export
- * ========================= */
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    extractYouTubeId,
-    optimizeCloudinaryUrl,
-    optimizeCloudinaryIndexUrl,
-    generateOGPImageUrl,
-    generateYouTubeOGPImageUrl
-  };
-}
-
-if (typeof exports !== 'undefined') {
-  exports.extractYouTubeId = extractYouTubeId;
-  exports.optimizeCloudinaryUrl = optimizeCloudinaryUrl;
-  exports.optimizeCloudinaryIndexUrl = optimizeCloudinaryIndexUrl;
-  exports.generateOGPImageUrl = generateOGPImageUrl;
-  exports.generateYouTubeOGPImageUrl = generateYouTubeOGPImageUrl;
-}
+module.exports = {
+  extractYouTubeId,
+  optimizeCloudinaryUrl,
+  optimizeCloudinaryIndexUrl,
+  generateOGPImageUrl
+};

@@ -1,5 +1,3 @@
-import { getOptimizedImageUrl, getOptimizedIndexImageUrl } from './utils.js';
-
 /**
  * 作品アイテム（記事）のHTML要素を作成する
  * @param {Object} work - 作品データ
@@ -25,7 +23,7 @@ export function createWorkItem(work, index = 100) {
   thumbContainer.className = "post-photo-thumb";
   
   // 通常の画像サムネイル（Cloudinary画像を含む）
-  const thumbUrl = getOptimizedIndexImageUrl(work.thumb, work.isYoutubeThumb);
+  const thumbUrl = work.thumb;
   
   const img = document.createElement('img');
   img.src = thumbUrl;
