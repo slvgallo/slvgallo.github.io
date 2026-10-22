@@ -1,3 +1,4 @@
+import { thumbnailSources } from './thumbnails.mjs';
 /**
  * 作品アイテム（記事）のHTML要素を作成する
  * @param {Object} work - 作品データ
@@ -26,14 +27,16 @@ export function createWorkItem(work, index = 100) {
   const thumbUrl = work.thumb;
   
   const img = document.createElement('img');
-  img.src = thumbUrl;
+  const sources = thumbnailSources(thumbUrl);
+  if (sources.srcset) { img.srcset = sources.srcset; img.sizes = sources.sizes; }
+  img.src = sources.src;
   img.alt = work.title;
   
   // LCP最適化
   if (index < 4) {
     img.loading = "eager";
     img.fetchPriority = "high";
-    img.decoding = "sync";
+    img.decoding = "async";
   } else {
     img.loading = "lazy";
     img.decoding = "async";

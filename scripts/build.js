@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
+const { thumbnailSources } = require('../js/thumbnails.mjs');
 const { checkLinks } = require('./check-links');
 const { generateMediaHTML } = require('./media');
 const { readCustomContent } = require('./custom-content');
@@ -84,9 +85,11 @@ class SiteBuilder {
     const imgStyle = thumbInfo.isYoutube ? 'style="transform: scale(1.02);"' : '';
     const loading = isPriority ? '' : 'loading="lazy"';
     const priority = isPriority ? 'fetchpriority="high"' : '';
-    const decoding = isPriority ? 'decoding="sync"' : 'decoding="async"';
+    const decoding = 'decoding="async"';
+    const sources = thumbnailSources(thumbInfo.url);
+    const responsive = sources.srcset ? `srcset="${escapeHtml(sources.srcset)}" sizes="${escapeHtml(sources.sizes)}"` : '';
 
-    return `<img src="${urlAttribute(thumbInfo.url)}" ${imgStyle} alt="${escapeHtml(work.title)}" ${loading} ${priority} ${decoding}>`;
+    return `<img src="${urlAttribute(sources.src)}" ${responsive} ${imgStyle} alt="${escapeHtml(work.title)}" ${loading} ${priority} ${decoding}>`;
   }
 
   /**
@@ -264,7 +267,7 @@ ${serializeJson(processedWorks)}
 const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_1200,h_630,b_white/l_slvgallo_txf9dz,w_600/fl_layer_apply,g_center/f_auto,q_auto/v1770820480/ogp_blank_ghjrxq.png';
 
     let worksGrid = '';
-    works.forEach((work, index) => {
+    works.slice(0, 16).forEach((work, index) => {
       const thumbInfo = this.getProcessedThumb(work.thumb);
       const isPriority = index < 4;
       const isSoundCloud = work.media?.some(mediaItem => mediaItem.type === 'soundcloud');
@@ -280,6 +283,8 @@ const ogpImageUrl = 'https://res.cloudinary.com/ddwxt9vnm/image/upload/c_fill,w_
         </div>
       </article>`;
     });
+
+    worksGrid += `<noscript><ul>${works.slice(16).map(work => `<li><a href="works/${work.id}.html">${escapeHtml(work.title)}</a></li>`).join('')}</ul></noscript>`;
 
     let html = indexTemplate.replace('{{WORKS_GRID}}', () => worksGrid);
 
