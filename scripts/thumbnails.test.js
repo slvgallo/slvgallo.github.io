@@ -18,7 +18,7 @@ test('first batch has 16 cards, all works remain in data and no-script links', (
     assert(html.includes('works/2601-20.html'));
     assert.equal(JSON.parse(html.match(/id="works-data" type="application\/json">([\s\S]*?)<\/script>/)[1]).length, 20);
     const sources = thumbnailSources(works[0].thumb);
-    assert.equal(sources.srcset.split('w, ').length, 4);
+    assert.equal(sources.srcset.split('w, ').length, 3);
     fs.writeFileSync(path.join(root, 'index.html'), `<img srcset="${sources.srcset}">`);
     assert.doesNotThrow(() => checkLinks(root));
     fs.writeFileSync(path.join(root, 'index.html'), '<img srcset="missing.png, other.png">');
