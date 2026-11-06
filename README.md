@@ -1,3 +1,3 @@
 # slvgallo
 
-個人サイト [slvgallo.github.io](https://slvgallo.github.io/) をGitHub Pagesで公開するためのリポジトリです。
+Personal website hosted on GitHub Pages: [slvgallo.github.io](https://slvgallo.github.io/).
