@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>STEP SEQUENCER Ver. 3.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.1.1/dist/css/yakuhanjp.css">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f2f2f2; --text: #373b38;
+    --accent: #52654b;
+    --panel-width: 225;
+    --panel-height: 125;
+    --grid-pitch: 25;
+    --dock-button-size: 38px;
+    --viewport-inset: 18px;
+    --menu-gap: 16px;
+    --menu-inset: 16px;
+    --menu-bottom: calc(var(--viewport-inset) + var(--dock-button-size) + var(--menu-gap) + env(safe-area-inset-bottom, 0px));
+    --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-body: YakuHanJP, "Noto Sans", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; color: var(--text); font-family: var(--font-body); -webkit-tap-highlight-color: transparent; }
+  body { min-height: 100svh; display: grid; place-items: center; padding: 64px 24px; background: var(--bg); }
+  .stage { position: relative; width: min(1240px, 100%, calc((100svh - 160px) * 2.4)); margin: 0 auto; }
+  .machines { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+  .work-title { position: fixed; top: calc(var(--viewport-inset) + env(safe-area-inset-top, 0px)); left: calc(var(--viewport-inset) + env(safe-area-inset-left, 0px)); z-index: 2; margin: 0; font-family: var(--font-display); font-size: 15px; font-weight: 500; line-height: 1.4; letter-spacing: .08em; color: #111; }
+  button, select, input, textarea { font-family: var(--font-body); }
+
+  .machine-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 9fr) minmax(0, 1.5fr); gap: 0; align-items: stretch; }
+  .rack { grid-column: 2; grid-row: 1; }
+  .rack {
+    position: relative; padding: 0; width: 100%; min-width: 0;
+    --rack-unit: 4px;
+    border-radius: 8.8889% / 16%;
+    border: 1px solid #dddeda;
+    background: linear-gradient(115deg, #e9eae7 0%, #f1f1ee 46%, #e1e2de 100%);
+    box-shadow: 0 28px 40px -18px #26292255, 0 8px 18px #34383018, inset 0 2px 3px #ffffffc0, inset 0 -2px 4px #c8cbc455;
+  }
+
+  .rack::before { content: ''; display: block; padding-top: calc(100% * var(--panel-height) / var(--panel-width)); pointer-events: none; }
+  .row { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); column-gap: 10px; align-items: start; }
+  .rack .row { position: absolute; left: calc(50% * var(--grid-pitch) / var(--panel-width)); right: calc(50% * var(--grid-pitch) / var(--panel-width)); column-gap: 0; align-items: center; transform: translateY(-50%); margin: 0; }
+  .rack .row:nth-child(1) { top: calc(100% * var(--grid-pitch) * 1 / var(--panel-height)); }
+  .rack .row:nth-child(2) { top: calc(100% * var(--grid-pitch) * 2 / var(--panel-height)); }
+  .rack .row:nth-child(3) { top: calc(100% * var(--grid-pitch) * 3 / var(--panel-height)); }
+  .rack .row:nth-child(4) { top: calc(100% * var(--grid-pitch) * 4 / var(--panel-height)); }
+  .rack .cell, .rack .knob-wrap { gap: 0; }
+  .rack .knob-dial { width: calc(6 * var(--rack-unit)); height: calc(6 * var(--rack-unit)); }
+  .rack .knob-dial svg { width: 100%; height: 100%; }
+  .rack .led { width: calc(1.3333 * var(--rack-unit)); height: calc(1.3333 * var(--rack-unit)); }
+  .cell { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
+  .knob-wrap { position: relative; display: flex; flex-direction: column; align-items: center; gap: 7px; width: 100%; user-select: none; }
+  .knob-label { display: none; position: absolute; top: calc(100% + 6px); left: 0; width: 100%; color: #62695f; font-size: clamp(8px, calc(var(--rack-unit) * 1.2), 11px); line-height: 1.3; text-align: center; white-space: nowrap; pointer-events: none; }
+  .show-labels .knob-label { display: block; }
+  .knob-value { display: none; position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); width: 100%; color: #62695f; font-size: clamp(7px, calc(var(--rack-unit) * 1.1), 10px); line-height: 1.3; text-align: center; overflow-wrap: anywhere; pointer-events: none; }
+  .show-parameters .knob-value { display: block; }
+  .show-labels.show-parameters .knob-value { top: calc(100% + 6px + clamp(8px, calc(var(--rack-unit) * 1.2), 11px) * 1.3); }
+  .display-options { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,.28); }
+  .knob-dial {
+    position: relative; cursor: ns-resize; touch-action: none; border-radius: 50%;
+    background: linear-gradient(135deg, #eeeeeb, #dadcd6);
+    box-shadow: -2px -2px 5px #ffffffc0, 2px 3px 5px #62685f48;
+  }
+  .knob-dial::after { content: ''; position: absolute; left: 50%; top: 50%; width: min(44px, calc(var(--rack-unit) * 10)); height: max(44px, 100%); transform: translate(-50%, -50%); }
+  .knob-dial svg { display: block; pointer-events: none; }
+  .knob-dial svg > circle:first-child { fill: transparent; stroke: #b2b6ae; stroke-width: 1; }
+  .knob-dial:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+  .led { width: 10px; height: 10px; border-radius: 50%; background: #dfdfc9; border: 1px solid #a8ad9b; box-shadow: inset 0 1px 2px #62685644, 0 1px 1px #fff; }
+  .led.active { background: #ffffff; border-color: #d2d6ce; box-shadow: 0 0 10px #ffffffd0, 0 0 4px #ffffff, inset 0 1px 2px #ffffff; }
+  .step-toggle {
+    position: relative; width: 44px; height: 46px; padding: 0; border: 0;
+    background: transparent; cursor: pointer; color: transparent; font-size: 0;
+    touch-action: manipulation;
+  }
+
+  .step-toggle::before {
+    content: ''; position: absolute; left: 50%; top: 50%;
+    width: 42.5px; height: 51px;
+    background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22100%22%20height%3D%22120%22%20viewBox%3D%220%200%20100%20120%22%3E%0A%3Cdefs%3E%0A%20%3ClinearGradient%20id%3D%22rim%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220.8%22%20y2%3D%221%22%3E%0A%20%20%3Cstop%20stop-color%3D%22%23b7bab5%22%2F%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%23a9aea7%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23bfc3bc%22%2F%3E%0A%20%3C%2FlinearGradient%3E%0A%20%3ClinearGradient%20id%3D%22washer%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%22.8%22%20y2%3D%221%22%3E%0A%20%20%3Cstop%20stop-color%3D%22%23e0e2dc%22%2F%3E%3Cstop%20offset%3D%22.48%22%20stop-color%3D%22%23d4d7d0%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23dfe1db%22%2F%3E%0A%20%3C%2FlinearGradient%3E%0A%20%3CradialGradient%20id%3D%22socket%22%20cx%3D%22.48%22%20cy%3D%22.62%22%20r%3D%22.6%22%3E%0A%20%20%3Cstop%20stop-color%3D%22%2392988f%22%2F%3E%3Cstop%20offset%3D%22.6%22%20stop-color%3D%22%23999f96%22%2F%3E%3Cstop%20offset%3D%22.84%22%20stop-color%3D%22%23afb5ab%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23c1c6bd%22%2F%3E%0A%20%3C%2FradialGradient%3E%0A%20%3ClinearGradient%20id%3D%22stem%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%22.12%22%3E%0A%20%20%3Cstop%20stop-color%3D%22%23a3aaa0%22%2F%3E%3Cstop%20offset%3D%22.2%22%20stop-color%3D%22%23c3c9bf%22%2F%3E%3Cstop%20offset%3D%22.46%22%20stop-color%3D%22%23d5dad1%22%2F%3E%3Cstop%20offset%3D%22.7%22%20stop-color%3D%22%23c7cdc2%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23aab2a5%22%2F%3E%0A%20%3C%2FlinearGradient%3E%0A%20%3CradialGradient%20id%3D%22cap%22%20cx%3D%22.38%22%20cy%3D%22.3%22%20r%3D%22.85%22%3E%0A%20%20%3Cstop%20stop-color%3D%22%23dfe2da%22%2F%3E%3Cstop%20offset%3D%22.56%22%20stop-color%3D%22%23d1d6cb%22%2F%3E%3Cstop%20offset%3D%22.85%22%20stop-color%3D%22%23bdc5b7%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a9b2a1%22%2F%3E%0A%20%3C%2FradialGradient%3E%0A%20%3Cfilter%20id%3D%22shadow%22%20x%3D%22-.6%22%20y%3D%22-.5%22%20width%3D%222.2%22%20height%3D%222%22%3E%0A%20%20%3CfeDropShadow%20dx%3D%221.2%22%20dy%3D%222%22%20stdDeviation%3D%222%22%20flood-color%3D%22%23434a40%22%20flood-opacity%3D%22.17%22%2F%3E%0A%20%3C%2Ffilter%3E%0A%3C%2Fdefs%3E%0A%3Cg%20filter%3D%22url(%23shadow)%22%3E%0A%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2260%22%20r%3D%2231%22%20fill%3D%22url(%23rim)%22%2F%3E%0A%20%3Cpath%20d%3D%22M46%2088.72%20A29%2029%200%201%201%2054%2088.72%20L54%2083.66%20A24%2024%200%201%200%2046%2083.66%20Z%22%20fill%3D%22url(%23washer)%22%2F%3E%0A%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2260%22%20r%3D%2221%22%20fill%3D%22url(%23socket)%22%2F%3E%0A%20%3Cellipse%20cx%3D%2250%22%20cy%3D%2263%22%20rx%3D%2212%22%20ry%3D%2211%22%20fill%3D%22%23c5ccbf%22%2F%3E%0A%20%3Cellipse%20cx%3D%2250%22%20cy%3D%2265%22%20rx%3D%229%22%20ry%3D%227%22%20fill%3D%22%23d1d7ca%22%2F%3E%0A%3C%2Fg%3E%0A%3Cg%20filter%3D%22url(%23shadow)%22%3E%0A%20%3Cpath%20d%3D%22M35.5%2027%20C35.5%2021%2064.5%2021%2064.5%2027%20C64%2039%2061%2054%2059.5%2063%20C58.5%2069%2041.5%2069%2040.5%2063%20C39%2054%2036%2039%2035.5%2027%20Z%22%20fill%3D%22url(%23stem)%22%2F%3E%0A%20%3Cellipse%20cx%3D%2250%22%20cy%3D%2227%22%20rx%3D%2214.5%22%20ry%3D%2214.5%22%20fill%3D%22url(%23cap)%22%2F%3E%0A%20%3Cellipse%20cx%3D%2250%22%20cy%3D%2227.5%22%20rx%3D%2210.2%22%20ry%3D%2210.8%22%20fill%3D%22none%22%20stroke%3D%22%23aab3a3%22%20stroke-opacity%3D%22.45%22%20stroke-width%3D%221.1%22%2F%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E") center / contain no-repeat;
+    transform: translate(-50%, -50%) rotate(180deg);
+    pointer-events: none;
+  }
+  .step-toggle.on::before { transform: translate(-50%, -50%); }
+  .rack .step-toggle { width: calc(9 * var(--rack-unit)); height: calc(9 * var(--rack-unit)); }
+  .rack .step-toggle::before { width: calc(4.573 * var(--rack-unit)); height: calc(5.4876 * var(--rack-unit)); }
+  .step-toggle:focus-visible { outline: 2px solid var(--accent); border-radius: 8px; outline-offset: 2px; }
+  .step-toggle:hover::before { filter: brightness(1.025); }
+  .dock-transport {
+    position: fixed; bottom: calc(var(--viewport-inset) + env(safe-area-inset-bottom, 0px));
+    left: calc(var(--viewport-inset) + env(safe-area-inset-left, 0px)); z-index: 4; display: flex; align-items: center; gap: 12px;
+  }
+  .volume-slider {
+    appearance: none; -webkit-appearance: none; display: block;
+    width: 120px; height: var(--dock-button-size); margin: 0; padding: 0; border: 0; border-radius: 0;
+    background: linear-gradient(rgba(0,0,0,.28), rgba(0,0,0,.28)) center / 100% 2px no-repeat;
+    cursor: pointer; touch-action: pan-x;
+  }
+  .volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 12px; height: 12px; border: 0; border-radius: 50%; background: #111;
+  }
+  .volume-slider::-moz-range-track { height: 2px; background: transparent; }
+  .volume-slider::-moz-range-thumb { width: 12px; height: 12px; border: 0; border-radius: 50%; background: #111; }
+  .volume-slider:focus-visible { outline: 2px solid #111; outline-offset: 2px; }
+  .transport-button {
+    appearance: none; position: relative; display: block; width: var(--dock-button-size); height: var(--dock-button-size); min-width: var(--dock-button-size);
+    margin: 0; padding: 0; border: 1px solid #111; border-radius: 50%;
+    color: #111; background: transparent; box-shadow: none; cursor: pointer; opacity: .72;
+    transition: background-color 120ms linear, border-color 120ms linear, opacity 120ms linear;
+    touch-action: manipulation; user-select: none; -webkit-touch-callout: none;
+  }
+  .transport-button:not(:disabled):hover, .transport-button:not(:disabled):focus-visible { opacity: 1; border-color: #111; background: rgba(0,0,0,.08); }
+  .transport-button:focus-visible { outline: 2px solid #111; outline-offset: 2px; }
+  .transport-button:disabled { opacity: .35; cursor: default; }
+  .play-button::before { content: ''; position: absolute; top: 50%; left: 53%; width: 30%; height: 42%; background: currentColor; clip-path: polygon(0 0,100% 50%,0 100%); transform: translate(-50%,-50%); }
+  .play-button[aria-pressed="true"]::before { left: 50%; width: 34%; height: 42%; background: linear-gradient(to right,currentColor 0 32%,transparent 32% 68%,currentColor 68% 100%); clip-path: none; }
+  #audioStatus:empty { display: none; }
+  @media (max-width: 900px), (pointer: coarse) and (max-height: 500px) {
+    html, body { overflow: hidden; overscroll-behavior: none; }
+    body {
+      position: fixed; inset: 0; min-height: 0; height: 100svh;
+      touch-action: none;
+      padding: 0 max(14px, env(safe-area-inset-right), env(safe-area-inset-left));
+    }
+    .stage {
+      width: 100%; min-width: 0;
+
+      max-width: min(100%, calc((100svh - 200px) * 1.8));
+    }
+    .machines { padding: 0; }
+    .machine-layout {
+      position: relative; min-width: 0; width: 100%; justify-self: center;
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .rack { grid-column: 1; grid-row: 1; }
+  }
+  @media (max-width: 580px) {
+    body {
+      padding: 0 max(8px, env(safe-area-inset-right), env(safe-area-inset-left));
+    }
+  }
+  @media (max-width: 900px) and (orientation: landscape), (pointer: coarse) and (max-height: 500px) and (orientation: landscape) {
+    body { padding-block: 8px; }
+    .stage { max-width: min(100%, calc((100svh - 160px) * 1.8)); }
+    .machines { padding: 0; }
+  }
+  .dock-menu { position: fixed; bottom: calc(var(--viewport-inset) + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); z-index: 4; }
+  #editor-toggle { appearance: none; display: flex; align-items: center; justify-content: center; width: var(--dock-button-size); height: var(--dock-button-size); padding: 0; color: #111; border: 1px solid #888; border-radius: 50%; background: transparent; cursor: pointer; transition: background-color .18s ease, border-color .18s ease, color .18s ease, transform .18s ease; }
+  #editor-toggle:hover { background: #111; border-color: #111; color: #fff; transform: scale(1.08); }
+  #editor-toggle:active { transform: scale(.96); }
+  #editor-toggle:focus-visible { outline: 2px solid #111; outline-offset: 2px; }
+  .menu-icon { display: block; position: relative; width: 15px; height: 11px; }
+  .menu-icon span { display: block; position: absolute; left: 0; width: 15px; height: 1px; border-radius: 0; background: currentColor; transition: transform .3s, opacity .3s; }
+  .menu-icon span:nth-child(1) { top: 0; }
+  .menu-icon span:nth-child(2) { top: 5px; }
+  .menu-icon span:nth-child(3) { top: 10px; }
+  #editor-toggle[aria-expanded="true"] .menu-icon span:nth-child(1) { transform: translateY(5px) rotate(-45deg); }
+  #editor-toggle[aria-expanded="true"] .menu-icon span:nth-child(2) { opacity: 0; }
+  #editor-toggle[aria-expanded="true"] .menu-icon span:nth-child(3) { transform: translateY(-5px) rotate(45deg); }
+  .operation-guide { position: fixed; bottom: var(--menu-bottom); left: 50%; transform: translateX(-50%); z-index: 3; width: min(560px, calc(100vw - 2 * var(--menu-inset))); max-height: calc(100svh - var(--menu-bottom) - var(--menu-inset) - env(safe-area-inset-top, 0px)); overflow: auto; padding: 16px; color: #111; background: rgba(255,255,255,.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); touch-action: pan-y; }
+  .profile-menu-link { min-height: 44px; margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,.28); display: flex; align-items: center; justify-content: center; }
+  .profile-menu-link img { display: block; width: 44px; height: auto; opacity: .82; transition: opacity .18s ease, transform .18s ease; }
+  .profile-menu-link:hover img { opacity: 1; transform: scale(1.06); }
+  .profile-menu-link:focus-visible { outline: 2px solid #888; outline-offset: 2px; }
+  .operation-guide h2 { margin: 0 0 10px; font: 500 12px var(--font-display); letter-spacing: .05em; text-transform: uppercase; }
+  .label-option { display: flex; align-items: center; gap: 8px; min-height: 38px; margin: 0; font-size: 12px; cursor: pointer; }
+  .label-option input { width: 16px; height: 16px; margin: 0; accent-color: #111; }
+  .label-option input:focus-visible { outline: 2px solid #111; outline-offset: 3px; }
+  .operation-guide dl { display: grid; grid-template-columns: 76px minmax(0,1fr); gap: 5px 10px; margin: 0; font-size: 10px; line-height: 1.45; }
+  .operation-guide dt { font-weight: 500; letter-spacing: .02em; }
+  .operation-guide dd { margin: 0; }
+  @media (max-width: 480px) { .volume-slider { width: max(44px, calc(50vw - 110px)); } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<h1 class="work-title">STEP SEQUENCER Ver. 3.0</h1>
+<div class="stage" id="stage">
+  <p class="sr-only" id="audioStatus" role="status" aria-live="polite"></p>
+
+  <div class="machines">
+  <div class="machine-layout">
+  <section class="rack" aria-label="Melody sequencer">
+    <div class="row" id="chRow"></div>
+
+    <div class="row" id="ledRow"></div>
+
+    <div class="row" id="toggleRow"></div>
+
+    <div class="row" id="pitchRow"></div>
+  </section>
+  </div>
+
+  </div>
+</div>
+
+<div class="dock-transport"><button id="dock-play" class="transport-button play-button" type="button" aria-label="Play / Stop. Hold while playing to restart from step 1" aria-pressed="false"></button>
+  <input id="volumeSlider" class="volume-slider" type="range" min="0" max="1023" step="1" aria-label="Master Level">
+</div>
+
+<div class="dock-menu"><button id="editor-toggle" type="button" aria-label="Show controls" title="Show controls" aria-controls="operation-guide" aria-expanded="false"><span class="menu-icon" aria-hidden="true"><span></span><span></span><span></span></span></button></div>
+<section id="operation-guide" class="operation-guide" lang="en" aria-labelledby="guide-title" hidden>
+  <div class="display-options">
+    <h2 id="guide-title">Labels &amp; Parameters</h2>
+    <label class="label-option"><input id="showLabels" type="checkbox">Show labels</label>
+    <label class="label-option"><input id="showParameters" type="checkbox">Show parameter values</label>
+  </div>
+  <h2>Controls</h2>
+  <dl class="control-guide">
+    <dt>Play button</dt><dd>Play / Stop · Hold or Shift+Click while playing: restart from step 1</dd>
+    <dt>Master Level</dt><dd>Drag slider: adjust volume</dd>
+    <dt>Knobs</dt><dd>Drag up / down or Scroll: adjust value · Arrow keys: adjust focused knob</dd>
+    <dt>Top row</dt><dd>Left to right: Pitch1 · Decay1 · Pitch2 · Decay2 · Grain · Length · Scale · Tempo</dd>
+    <dt>LEDs</dt><dd>Show the current step</dd>
+    <dt>Switches</dt><dd>Click: enable / disable each step</dd>
+    <dt>Bottom row</dt><dd>Adjust pitch for each of the 8 steps · Arrow keys / Scroll: one scale degree · Lowest setting: rest; low notes may be below hearing range</dd>
+    <dt>Menu button</dt><dd>Show / Hide Panel</dd>
+    <dt>Esc key</dt><dd>Close Panel</dd>
+  </dl>
+  <a class="profile-menu-link" href="../2611-1.html" aria-label="Open the STEP SEQUENCER Ver. 3.0 work page">
+    <img src="https://res.cloudinary.com/ddwxt9vnm/image/upload/v1770835387/slv_dvvrdo.svg" alt="">
+  </a>
+</section>
+
+<script>
+(function(){
+  "use strict";
+
+  const antilogTable = [64830,64132,63441,62757,62081,61413,60751,60097,59449,58809,58176,57549,56929,56316,55709,55109,
+    54515,53928,53347,52773,52204,51642,51085,50535,49991,49452,48920,48393,47871,47356,46846,46341,
+    45842,45348,44859,44376,43898,43425,42958,42495,42037,41584,41136,40693,40255,39821,39392,38968,
+    38548,38133,37722,37316,36914,36516,36123,35734,35349,34968,34591,34219,33850,33486,33125,32768];
+
+  const midiTable = [
+    0,18,19,20,22,23,24,26,27,29,31,32,
+    34,36,38,41,43,46,48,51,54,58,61,65,
+    69,73,77,82,86,92,97,103,109,115,122,129,
+    137,145,154,163,173,183,194,206,218,231,244,259,
+    274,291,308,326,346,366,388,411,435,461,489,518,
+    549,581,616,652,691,732,776,822,871,923,978,1036,
+    1097,1163,1232,1305,1383,1465,1552,1644,1742,1845,1955,2071,
+    2195,2325,2463,2610,2765,2930,3104,3288,3484,3691,3910,4143,
+    4389,4650,4927,5220,5530,5859,6207,6577,6968,7382,7821,8286,
+    8779,9301,9854,10440,11060,11718,12415,13153,13935,14764,15642,16572,
+    17557,18601,19708,20879,22121,23436,24830,26306
+  ];
+
+  const SCALES = [
+    { id: 'minor-pent', name: 'Minor Pentatonic', intervals: [3,2,2,3,2] },
+    { id: 'hirajoshi',  name: 'Hirajoshi',           intervals: [2,1,4,1,4] },
+    { id: 'major-pent', name: 'Major Pentatonic', intervals: [2,2,3,2,3] },
+    { id: 'ryukyu',     name: 'Ryukyu',             intervals: [4,1,2,4,1] },
+    { id: 'whole-tone', name: 'Whole Tone',       intervals: [2,2,2,2,2,2] }
+  ];
+  const SCALE_NAMES = SCALES.map(s => s.name);
+
+  function scaleNote(input, scaleIdx){
+    const scale = SCALES[scaleIdx] || SCALES[0];
+    const maxNote = 108;
+    let count = 1, note = 0, intervalIndex = 0;
+    while (note + scale.intervals[intervalIndex % scale.intervals.length] <= maxNote){
+      note += scale.intervals[intervalIndex % scale.intervals.length];
+      intervalIndex++;
+      count++;
+    }
+    const degree = Math.min(count - 1, Math.floor(Math.max(0, Math.min(1023, input)) * count / 1024));
+    note = 0;
+    for (let i = 0; i < degree; i++) note += scale.intervals[i % scale.intervals.length];
+    return note;
+  }
+  function noteToPhaseInc(note){
+    let idx = note;
+    if (idx >= midiTable.length) idx = midiTable.length - 1;
+    if (idx < 0) idx = 0;
+    return midiTable[idx];
+  }
+
+  // Auduino timer rate; resampled for browser output.
+  const ORIGINAL_FS = 16000000 / 510;
+  let audioCtx = null, outputGain = null, suspendPending = null;
+  let stopping = false, stopTimer = null, transportVersion = 0;
+  let resamplePhase = 0, heldSample = 0;
+  let syncPhaseAcc = 0, syncPhaseInc = 0;
+  let grainPhaseAcc = 0, grainPhaseInc = 0, grainAmp = 0, grainDecay = 256;
+  let grain2PhaseAcc = 0, grain2PhaseInc = 0, grain2Amp = 0, grain2Decay = 256;
+  let decayRemainder1 = 0, decayRemainder2 = 0;
+  let densityDivider = 1, densityCounter = 0, melodyDC = 0;
+  let stepOnFlag = true, samplesLeft = 0;
+  let gateSamplesLeft = 65535, fullGate = true;
+
+  function triangleUnsigned(phase){
+    let value = (phase >> 7) & 255;
+    if (phase & 0x8000) value = (~value) & 255;
+    return value;
+  }
+  function resetMelody(){
+    syncPhaseAcc = grainPhaseAcc = grain2PhaseAcc = 0;
+    grainAmp = grain2Amp = 0;
+    decayRemainder1 = decayRemainder2 = 0;
+    densityCounter = melodyDC = 0;
+  }
+  function enterStep(){
+    activeScale = state.scale;
+    pushSync(); pushStepOn();
+
+    samplesLeft = Math.round(tempoToMs(state.tempo) * ORIGINAL_FS / 1000);
+    fullGate = state.noteLength === 1023;
+    gateSamplesLeft = Math.max(1, Math.floor(samplesLeft * (1023 + state.noteLength * 9) / 10230));
+  }
+  function renderMelodyPwm(){
+    syncPhaseAcc = (syncPhaseAcc + syncPhaseInc) & 65535;
+    if (syncPhaseAcc < syncPhaseInc && stepOnFlag && gateSamplesLeft > 0){
+      if (densityCounter === 0){
+        grainPhaseAcc = grain2PhaseAcc = 0;
+        grainAmp = grain2Amp = 0x7fff;
+        decayRemainder1 = decayRemainder2 = 0;
+        densityCounter = densityDivider;
+      }
+      densityCounter--;
+    }
+    grainPhaseAcc = (grainPhaseAcc + grainPhaseInc) & 65535;
+    grain2PhaseAcc = (grain2PhaseAcc + grain2PhaseInc) & 65535;
+    let output = triangleUnsigned(grainPhaseAcc) * (grainAmp >> 8);
+    output += triangleUnsigned(grain2PhaseAcc) * (grain2Amp >> 8);
+
+    // Q8 decay preserves fractional rates.
+    const d1 = (grainAmp >> 8) * grainDecay + decayRemainder1;
+    const d2 = (grain2Amp >> 8) * grain2Decay + decayRemainder2;
+    grainAmp -= d1 >> 8; decayRemainder1 = d1 & 255;
+    grain2Amp -= d2 >> 8; decayRemainder2 = d2 & 255;
+    return Math.min(255, output >> 9);
+  }
+  function renderSample(){
+    if (!playing && !stopping) return 0;
+    if (samplesLeft <= 0){
+      state.currentStep = (state.currentStep + 1) & 7;
+      enterStep();
+    }
+    samplesLeft--;
+    const pwm = renderMelodyPwm();
+
+    // DC removal and a 64-sample release prevent clicks.
+    melodyDC += ((pwm << 8) - melodyDC) >> 9;
+    let melody = stepOnFlag && gateSamplesLeft > 0 ? pwm - (melodyDC >> 8) : 0;
+
+    if (!fullGate) melody = (melody * Math.min(64, gateSamplesLeft)) >> 6;
+    if (gateSamplesLeft > 0 && --gateSamplesLeft === 0 && !fullGate){
+      grainAmp = grain2Amp = melodyDC = densityCounter = 0;
+    }
+
+    const mix = melody * 2 * (state.volume >> 2);
+    return Math.max(-128, Math.min(127, mix >> 10));
+  }
+  function audioTick(e){
+    const out = e.outputBuffer.getChannelData(0);
+    const ratio = ORIGINAL_FS / audioCtx.sampleRate;
+    for (let i = 0; i < out.length; i++){
+      resamplePhase += ratio;
+      while (resamplePhase >= 1){
+        heldSample = renderSample();
+        resamplePhase--;
+      }
+      out[i] = playing || stopping ? heldSample / 128 : 0;
+    }
+  }
+  async function ensureAudio(){
+    if (!audioCtx){
+      const Context = window.AudioContext || window.webkitAudioContext;
+      if (!Context) throw new Error('Audio playback is not supported in this browser.');
+      const ctx = new Context();
+      try {
+        const node = ctx.createScriptProcessor(1024, 0, 1);
+        node.onaudioprocess = audioTick;
+        outputGain = ctx.createGain();
+        node.connect(outputGain);
+        outputGain.connect(ctx.destination);
+        audioCtx = ctx;
+        pushGrain1(); pushGrain2();
+      } catch (error){
+        await ctx.close();
+        throw error;
+      }
+    }
+    if (suspendPending) await suspendPending;
+    if (audioCtx.state === 'suspended') await audioCtx.resume();
+  }
+  function mapPhaseInc(input){ return antilogTable[input & 63] >> (input >> 6); }
+  function clampPot(v){ return Math.max(0, Math.min(1023, Math.round(v))); }
+  function grainIncrement(v){
+
+    return mapPhaseInc(465 - Math.floor(clampPot(v) * 405 / 1023)) >> 1;
+  }
+  function knobToGrainFreq(v){ return grainIncrement(v) * ORIGINAL_FS / 65536; }
+  function decayRate(v){
+
+    return mapPhaseInc(639 - Math.floor(clampPot(v) * 448 / 1023));
+  }
+  function densityTarget(v){
+
+    return mapPhaseInc(576 - Math.floor(clampPot(v) * 512 / 1023)) >> 1;
+  }
+  function pushDensity(){
+    densityDivider = Math.max(1, Math.ceil(syncPhaseInc / Math.max(1, densityTarget(state.grain))));
+    densityCounter = Math.min(densityCounter, densityDivider - 1);
+  }
+  function pushSync(){
+    syncPhaseInc = noteToPhaseInc(scaleNote(state.steps[state.currentStep], activeScale));
+    pushDensity();
+    if (!syncPhaseInc) grainAmp = grain2Amp = 0;
+  }
+  function pushStepOn(){
+    stepOnFlag = !!state.stepsOn[state.currentStep];
+    if (!stepOnFlag){
+      grainAmp = grain2Amp = melodyDC = 0;
+      densityCounter = 0;
+    }
+  }
+  function pushGrain1(){
+    grainPhaseInc = grainIncrement(state.g1pitch);
+    grainDecay = decayRate(state.g1decay);
+  }
+  function pushGrain2(){
+    grain2PhaseInc = grainIncrement(state.g2pitch);
+    grain2Decay = decayRate(state.g2decay);
+  }
+
+  function tempoToBpm(v){ return 58 + Math.round(clampPot(v) * 370 / 1023); }
+  function bpmToTempo(bpm){ return Math.round((Math.max(58, Math.min(428, Math.round(bpm))) - 58) * 1023 / 370); }
+  function tempoToMs(v){ return 30000 / tempoToBpm(v); }
+
+  const DEFAULTS = {
+    steps: [180,420,300,620,180,760,420,900],
+    stepsOn: [true,true,true,true,true,true,true,true],
+    scale: 2,
+    tempo: 171,
+    grain: 1023,
+    g1pitch: 300, g1decay: 500,
+    g2pitch: 700, g2decay: 300,
+    volume: 700,
+    noteLength: 1023,
+  };
+  let state = loadState();
+  let activeScale = state.scale;
+  function loadState(){
+    try {
+      const raw = localStorage.getItem('auduino-web-state');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        const merged = JSON.parse(JSON.stringify(DEFAULTS));
+        const number = (v, fallback, max = 1023) =>
+          typeof v === 'number' && Number.isFinite(v) ? Math.max(0, Math.min(max, Math.round(v))) : fallback;
+        for (const key of Object.keys(DEFAULTS)){
+          const fallback = DEFAULTS[key];
+          const value = parsed && parsed[key];
+          if (Array.isArray(fallback)){
+            merged[key] = fallback.map((item, i) => {
+              const saved = Array.isArray(value) ? value[i] : undefined;
+              return typeof item === 'boolean' ? (typeof saved === 'boolean' ? saved : item) : number(saved, item);
+            });
+          } else merged[key] = number(value, fallback, key === 'scale' ? SCALES.length - 1 : 1023);
+        }
+
+        // Preserve older saved scale and tempo settings.
+        if (parsed && typeof parsed.scaleId === 'string'){
+          const index = SCALES.findIndex(scale => scale.id === parsed.scaleId);
+          const previousModes = {
+            minor: 0, dorian: 0, mixolydian: 2, major: 2, lydian: 4,
+            'mixo-pent': 2, 'major-b-pent': 2, 'lydian-b-pent': 4
+          };
+          merged.scale = index >= 0 ? index : (Object.prototype.hasOwnProperty.call(previousModes, parsed.scaleId)
+            ? previousModes[parsed.scaleId] : DEFAULTS.scale);
+        } else {
+
+          const legacy = [2,2,0,4,2,2,0,0,1,1,1,0,4,1,1,3,2];
+          merged.scale = parsed && Number.isInteger(parsed.scale) && parsed.scale >= 0 && parsed.scale < legacy.length
+            ? legacy[parsed.scale] : DEFAULTS.scale;
+        }
+
+        if (parsed && parsed.tempoUnit !== 'bpm' && typeof parsed.tempo === 'number' && Number.isFinite(parsed.tempo)){
+          merged.tempo = bpmToTempo(30000 / (520 - Math.floor(clampPot(parsed.tempo) * 450 / 1023)));
+        }
+        return merged;
+      }
+    } catch(e) {  }
+    return JSON.parse(JSON.stringify(DEFAULTS));
+  }
+  function saveState(){
+    const saved = Object.fromEntries(Object.keys(DEFAULTS).map(key => [key, state[key]]));
+    saved.tempoUnit = 'bpm';
+    saved.scaleId = SCALES[state.scale].id;
+    try { localStorage.setItem('auduino-web-state', JSON.stringify(saved)); } catch(e) {  }
+  }
+  state.currentStep = 0;
+
+  function createKnob({label, min, max, value, formatValue, discrete, keyStep, nextValue, onChange}){
+    const wrap = document.createElement('div');
+    wrap.className = 'knob-wrap';
+
+    const dial = document.createElement('div');
+    dial.className = 'knob-dial';
+    dial.tabIndex = 0;
+    dial.setAttribute('role','slider');
+    dial.setAttribute('aria-label', label);
+    dial.setAttribute('aria-valuemin', min);
+    dial.setAttribute('aria-valuemax', max);
+
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS,'svg');
+    svg.setAttribute('viewBox','0 0 64 64');
+
+    const track = document.createElementNS(svgNS,'circle');
+    track.setAttribute('cx',32); track.setAttribute('cy',32); track.setAttribute('r',31);
+    track.setAttribute('fill','transparent');
+
+    const pointer = document.createElementNS(svgNS,'circle');
+    pointer.setAttribute('cx',32); pointer.setAttribute('cy',9);
+    pointer.setAttribute('r',2.2);
+    pointer.setAttribute('fill','#41463e');
+
+    svg.appendChild(track); svg.appendChild(pointer);
+    dial.appendChild(svg);
+
+    wrap.appendChild(dial);
+    const labelEl = document.createElement('span');
+    labelEl.className = 'knob-label';
+    labelEl.textContent = label;
+    labelEl.setAttribute('aria-hidden', 'true');
+    wrap.appendChild(labelEl);
+    const valueEl = document.createElement('span');
+    valueEl.className = 'knob-value';
+    valueEl.setAttribute('aria-hidden', 'true');
+    wrap.appendChild(valueEl);
+
+    let current = value;
+    const inputStep = keyStep || (discrete ? 1 : Math.max(1, Math.round((max-min)/100)));
+    function angleFor(v){
+      const t = (v - min) / (max - min);
+      return -135 + t * 270;
+    }
+    function render(){
+      const a = angleFor(current);
+      pointer.setAttribute('transform', 'rotate(' + a + ' 32 32)');
+      dial.setAttribute('aria-valuenow', Math.round(current));
+      const valueText = String(formatValue ? formatValue(current) : Math.round(current));
+      dial.setAttribute('aria-valuetext', valueText);
+      valueEl.textContent = valueText;
+    }
+    function setValue(v){
+      v = Math.min(max, Math.max(min, v));
+      v = Math.round(v);
+      current = v;
+      render();
+      if (onChange) onChange(current);
+    }
+
+    let dragStartY = 0, dragStartVal = 0, dragging = false;
+    function endDrag(){
+      dragging = false;
+    }
+    dial.addEventListener('pointerdown', (e) => {
+      dragging = true; dragStartY = e.clientY; dragStartVal = current;
+      try { dial.setPointerCapture(e.pointerId); } catch(err) {  }
+    });
+    dial.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const dy = dragStartY - e.clientY;
+      const range = max - min;
+      const sensitivity = discrete ? 32 * range : 160;
+      const delta = (dy / sensitivity) * range;
+      setValue(dragStartVal + delta);
+    });
+    dial.addEventListener('pointerup', (e) => {
+      try { dial.releasePointerCapture(e.pointerId); } catch(err) {  }
+      endDrag();
+    });
+    dial.addEventListener('pointercancel', endDrag);
+    dial.addEventListener('lostpointercapture', endDrag);
+
+    // Clear dragging even when pointer capture is lost.
+    window.addEventListener('pointerup', endDrag, {passive:true});
+    window.addEventListener('pointercancel', endDrag, {passive:true});
+    window.addEventListener('blur', endDrag);
+    dial.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp' || e.key === 'ArrowRight') { adjust(1); e.preventDefault(); }
+      if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') { adjust(-1); e.preventDefault(); }
+    });
+    function adjust(direction){
+      setValue(nextValue ? nextValue(current, direction) : current + direction * inputStep);
+    }
+    let wheelDelta = 0, lastWheel = 0;
+    dial.addEventListener('wheel', e => {
+      e.preventDefault();
+      if (e.timeStamp - lastWheel > 200 || Math.sign(e.deltaY) !== Math.sign(wheelDelta)) wheelDelta = 0;
+      lastWheel = e.timeStamp;
+      wheelDelta += e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 160 : 1);
+      const steps = Math.min(4, Math.floor(Math.abs(wheelDelta) / 40));
+      for (let i = 0; i < steps; i++) adjust(-Math.sign(wheelDelta));
+      if (steps) wheelDelta %= 40;
+    }, {passive:false});
+    wrap.refreshValue = render;
+
+    render();
+    return wrap;
+  }
+
+  function makeCell(element){
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.appendChild(element);
+    return cell;
+  }
+
+  const chRow = document.getElementById('chRow');
+
+  function fmtHz(v){
+    const f = knobToGrainFreq(v);
+    return f >= 1000 ? (f/1000).toFixed(1)+'kHz' : Math.round(f)+'Hz';
+  }
+  function fmtDecayMs(v){
+    let amp = 0x7fff, remainder = 0, samples = 0;
+    const rate = decayRate(v);
+    while ((amp >> 8) > 0){
+      const drop = (amp >> 8) * rate + remainder;
+      amp -= drop >> 8; remainder = drop & 255; samples++;
+    }
+    return (samples * 1000 / ORIGINAL_FS).toFixed(1) + 'ms';
+  }
+
+  function createStateKnob({key, toControl = v => v, fromControl = Math.round, onChange, ...options}){
+    return createKnob({
+      min: 0, max: 1023, ...options,
+      value: toControl(state[key]),
+      onChange: value => {
+        state[key] = fromControl(value);
+        if (onChange) onChange();
+        saveState();
+      }
+    });
+  }
+
+  const masterControls = [
+    { key: 'g1pitch', label: 'Pitch1', formatValue: fmtHz, onChange: pushGrain1 },
+    { key: 'g1decay', label: 'Decay1', formatValue: fmtDecayMs, onChange: pushGrain1 },
+    { key: 'g2pitch', label: 'Pitch2', formatValue: fmtHz, onChange: pushGrain2 },
+    { key: 'g2decay', label: 'Decay2', formatValue: fmtDecayMs, onChange: pushGrain2 },
+    { key: 'grain', label: 'Grain',
+      formatValue: v => v === 1023 ? 'FULL' : '≤' + Math.round(densityTarget(v) * ORIGINAL_FS / 65536) + '/s',
+      onChange: pushDensity },
+    { key: 'noteLength', label: 'Length', formatValue: v => Math.round(10 + v * 90 / 1023) + '%' },
+    { key: 'scale', label: 'Scale', max: SCALE_NAMES.length - 1, discrete: true,
+      formatValue: v => SCALE_NAMES[Math.round(v)],
+      onChange: () => {
+        if (!playing){ activeScale = state.scale; pushSync(); }
+        document.querySelectorAll('#pitchRow .knob-wrap').forEach(knob => knob.refreshValue());
+      } },
+    { key: 'tempo', label: 'Tempo', min: 58, max: 428, keyStep: 1,
+      toControl: tempoToBpm, fromControl: bpmToTempo, formatValue: v => v + ' BPM' }
+  ];
+  masterControls.forEach(control => {
+    chRow.appendChild(makeCell(createStateKnob(control)));
+  });
+  const formatVolume = v => Math.round(v / 1023 * 100) + '%';
+  const volumeSlider = document.getElementById('volumeSlider');
+  volumeSlider.value = state.volume;
+  volumeSlider.setAttribute('aria-valuetext', formatVolume(state.volume));
+  volumeSlider.addEventListener('input', () => {
+    state.volume = clampPot(Number(volumeSlider.value));
+    volumeSlider.setAttribute('aria-valuetext', formatVolume(state.volume));
+    saveState();
+  });
+
+  const playBtn = document.getElementById('dock-play');
+
+  function createToggleRow(row, label, values, onChange){
+    values.forEach((_, step) => {
+      const button = document.createElement('button');
+      button.className = 'step-toggle' + (values[step] ? ' on' : '');
+      button.textContent = String(step + 1);
+      button.setAttribute('aria-label', label + ' step ' + (step + 1));
+      button.setAttribute('aria-pressed', String(!!values[step]));
+      button.addEventListener('click', () => {
+        values[step] = !values[step];
+        button.classList.toggle('on', values[step]);
+        button.setAttribute('aria-pressed', String(values[step]));
+        if (onChange) onChange(step);
+        saveState();
+      });
+      row.appendChild(makeCell(button));
+    });
+  }
+
+  function formatStepPitch(value){
+    const note = scaleNote(value, state.scale);
+    const increment = noteToPhaseInc(note);
+    if (!increment) return 'Rest';
+    const name = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'][note % 12];
+    return `${name}${Math.floor(note / 12) - 1}, ${(increment * ORIGINAL_FS / 65536).toFixed(1)} Hz`;
+  }
+  function nextStepPitch(value, direction){
+    const note = scaleNote(value, state.scale);
+    for (let v = value + direction; v >= 0 && v <= 1023; v += direction){
+      if (scaleNote(v, state.scale) !== note) return v;
+    }
+    return value;
+  }
+  function createPatternKnobs(row, key, label, formatValue, onChange){
+    state[key].forEach((value, step) => {
+      const knob = createKnob({
+        label: label + ' ' + (step + 1), min: 0, max: 1023, value, formatValue, nextValue: nextStepPitch,
+        onChange: value => {
+          state[key][step] = Math.round(value);
+          if (onChange) onChange(step);
+          saveState();
+        }
+      });
+      row.appendChild(makeCell(knob));
+    });
+  }
+
+  const ledRow = document.getElementById('ledRow');
+  const leds = state.steps.map(() => {
+    const led = document.createElement('div');
+    led.className = 'led';
+    ledRow.appendChild(makeCell(led));
+    return led;
+  });
+  createToggleRow(document.getElementById('toggleRow'), 'Melody', state.stepsOn,
+    step => { if (state.currentStep === step) pushStepOn(); });
+  createPatternKnobs(document.getElementById('pitchRow'), 'steps', 'Step', formatStepPitch,
+    step => { if (state.currentStep === step) pushSync(); });
+
+  let playing = false, animationId = null;
+  function setRunning(running){
+    playing = running;
+    playBtn.setAttribute('aria-pressed', String(running));
+  }
+  function highlightStep(i){
+    for (let j = 0; j < 8; j++) leds[j].classList.toggle('active', j === i);
+  }
+  function animate(){
+    highlightStep(playing ? state.currentStep : -1);
+    if (playing) animationId = requestAnimationFrame(animate);
+  }
+  async function startOrSync(){
+    playBtn.disabled = true;
+    const version = ++transportVersion;
+    clearTimeout(stopTimer);
+    const status = document.getElementById('audioStatus');
+    try {
+      if (!playing){
+        await ensureAudio();
+        if (version !== transportVersion) return;
+        stopping = false;
+        outputGain.gain.cancelScheduledValues(audioCtx.currentTime);
+        outputGain.gain.setValueAtTime(1, audioCtx.currentTime);
+        resetMelody();
+        resamplePhase = 0; heldSample = 0;
+        state.currentStep = 0;
+        setRunning(true);
+        enterStep();
+        animate();
+      } else {
+        // Re-sync without interrupting the sounding voice.
+        state.currentStep = 0;
+        enterStep();
+        highlightStep(0);
+      }
+      status.textContent = '';
+    } catch (error){
+      status.textContent = 'Unable to start audio. Press Play to try again.';
+    } finally {
+      playBtn.disabled = false;
+    }
+  }
+  function stopTransport(){
+    setRunning(false);
+    stopping = true;
+    const version = ++transportVersion;
+    const now = audioCtx.currentTime;
+    outputGain.gain.cancelScheduledValues(now);
+    outputGain.gain.setValueAtTime(1, now);
+    outputGain.gain.linearRampToValueAtTime(0, now + 0.008);
+    cancelAnimationFrame(animationId);
+    highlightStep(-1);
+    // Let the fade reach the output before suspending; ignore stale stops.
+    stopTimer = setTimeout(() => {
+      if (version !== transportVersion) return;
+      stopping = false;
+      resetMelody();
+      heldSample = 0;
+      suspendPending = audioCtx.suspend().catch(() => {}).finally(() => { suspendPending = null; });
+    }, 40);
+  }
+
+  let pressedAt = null, suppressClick = false;
+  playBtn.addEventListener('pointerdown', event => {
+    suppressClick = false;
+    pressedAt = event.button === 0 && playing ? event.timeStamp : null;
+  });
+  playBtn.addEventListener('pointerup', event => {
+    if (pressedAt !== null && event.timeStamp - pressedAt >= 600 && playing){
+      suppressClick = true;
+      startOrSync();
+    }
+    pressedAt = null;
+  });
+  playBtn.addEventListener('pointercancel', () => { pressedAt = null; suppressClick = false; });
+  playBtn.addEventListener('pointerleave', () => { pressedAt = null; });
+  playBtn.addEventListener('click', event => {
+    if (suppressClick){ suppressClick = false; return; }
+    if (playing && !event.shiftKey) return stopTransport();
+    return startOrSync();
+  });
+
+  const panel = document.querySelector('.rack');
+  function sizePanel(width){
+    if (width > 0) panel.style.setProperty('--rack-unit', `${width / 100}px`);
+  }
+  sizePanel(panel.clientWidth);
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(entries => sizePanel(entries[0].contentRect.width)).observe(panel);
+  } else {
+    window.addEventListener('resize', () => sizePanel(panel.clientWidth));
+  }
+  for (const [id, className, storageKey] of [
+    ['showLabels', 'show-labels', 'auduino-show-labels'],
+    ['showParameters', 'show-parameters', 'auduino-show-parameters']
+  ]) {
+    const checkbox = document.getElementById(id);
+    const apply = () => document.getElementById('stage').classList.toggle(className, checkbox.checked);
+    try { checkbox.checked = localStorage.getItem(storageKey) === 'true'; } catch(e) {}
+    apply();
+    checkbox.addEventListener('change', () => {
+      apply();
+      try { localStorage.setItem(storageKey, String(checkbox.checked)); } catch(e) {}
+    });
+  }
+  const menuToggle = document.getElementById('editor-toggle');
+  const guide = document.getElementById('operation-guide');
+  function setGuideOpen(open) {
+    guide.hidden = !open;
+    menuToggle.setAttribute('aria-expanded', String(open));
+    const label = open ? 'Hide controls' : 'Show controls';
+    menuToggle.setAttribute('aria-label', label);
+    menuToggle.title = label;
+  }
+  menuToggle.addEventListener('click', () => setGuideOpen(guide.hidden));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !guide.hidden) {
+      setGuideOpen(false);
+      menuToggle.focus();
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
