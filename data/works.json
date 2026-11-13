@@ -1,5 +1,31 @@
 [
   {
+    "id": "2611-1",
+    "title": "STEP SEQUENCER Ver. 3.0",
+    "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1794542557/STSQ_yut5mq.jpg",
+    "tags": [
+      "sound",
+      "code",
+      "object"
+    ],
+    "desc": "<p>現在開発中</p>",
+    "desc_en": "<p>Currently in development.</p>",
+    "media": [
+      {
+        "type": "html",
+        "src": "/works/2611-1/STSQv3.html",
+        "aspectRatio": "6 / 4"
+      },
+      {
+        "type": "link-card",
+        "src": "/works/2611-1/StepSequencerVer3.html",
+        "title": "STEP SEQUENCER Ver. 3.0",
+        "label": "Open Full Version",
+        "placement": "full"
+      }
+    ]
+  },
+  {
     "id": "2610-1",
     "title": "GRAPHONEME",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1792090018/GRAPHONEME_p5uybt.png",
