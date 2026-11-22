@@ -1,5 +1,19 @@
 [
   {
+    "id": "2611-2",
+    "title": "Three Positions",
+    "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1795373948/3_ytkwsv.jpg",
+    "tags": ["image"],
+    "desc": "<p>Acrylic gouache on Kent paper<br>29.7 × 21 cm (each), triptych</p>",
+    "desc_en": "<p>Acrylic gouache on Kent paper<br>29.7 × 21 cm (each), triptych</p>",
+    "media": [
+      {
+        "type": "image",
+        "src": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1795373948/3_ytkwsv.jpg"
+      }
+    ]
+  },
+  {
     "id": "2611-1",
     "title": "STEP SEQUENCER Ver. 3.0",
     "thumb": "https://res.cloudinary.com/ddwxt9vnm/image/upload/v1794542557/STSQ_yut5mq.jpg",
